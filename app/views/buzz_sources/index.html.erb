@@ -1,0 +1,27 @@
+<h1>Listing buzz_sources</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Uri</th>
+    <th>Buzz weight</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @buzz_sources.each do |buzz_source| %>
+  <tr>
+    <td><%= buzz_source.name %></td>
+    <td><%= buzz_source.uri %></td>
+    <td><%= buzz_source.buzz_weight %></td>
+    <td><%= link_to 'Show', buzz_source %></td>
+    <td><%= link_to 'Edit', edit_buzz_source_path(buzz_source) %></td>
+    <td><%= link_to 'Destroy', buzz_source, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Buzz source', new_buzz_source_path %>

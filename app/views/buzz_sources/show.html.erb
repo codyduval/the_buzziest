@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @buzz_source.name %>
+</p>
+
+<p>
+  <b>Uri:</b>
+  <%= @buzz_source.uri %>
+</p>
+
+<p>
+  <b>Buzz weight:</b>
+  <%= @buzz_source.buzz_weight %>
+</p>
+
+
+<%= link_to 'Edit', edit_buzz_source_path(@buzz_source) %> |
+<%= link_to 'Back', buzz_sources_path %>

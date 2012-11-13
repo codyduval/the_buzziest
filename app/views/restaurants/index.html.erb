@@ -1,0 +1,37 @@
+<h1>Listing restaurants</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Rank</th>
+    <th>Rank previous</th>
+    <th>Style</th>
+    <th>Weeks on list</th>
+    <th>Neighborhood</th>
+    <th>Reserve</th>
+    <th>Description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @restaurants.each do |restaurant| %>
+  <tr>
+    <td><%= restaurant.name %></td>
+    <td><%= restaurant.rank %></td>
+    <td><%= restaurant.rank_previous %></td>
+    <td><%= restaurant.style %></td>
+    <td><%= restaurant.weeks_on_list %></td>
+    <td><%= restaurant.neighborhood %></td>
+    <td><%= restaurant.reserve %></td>
+    <td><%= restaurant.description %></td>
+    <td><%= link_to 'Show', restaurant %></td>
+    <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
+    <td><%= link_to 'Destroy', restaurant, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Restaurant', new_restaurant_path %>

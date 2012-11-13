@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ScappleDocument Version="1.0" ID="6FE8F0BB-95A6-46A7-B549-55D2206F1075">
+    <Notes>
+        <Note ID="0" FontSize="12.0" Position="53.148438,60.800781" Width="200.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+            </Appearance>
+            <String>Restaurant Model
+	Names of restaurants etc
+	Total Buzz Score 
+
+New Restaurant Sources Model (TO DO LATER)
+	Name
+	URI
+	Node
+
+Buzz Sources Model
+	Name
+	URI for RSS Feed
+	Buzz Weight
+
+Buzz Posts Model
+	Buzz Source Name
+	Post Date and Time
+	Post URI
+	Post Title
+	Post Content
+	Scanned Flag</String>
+        </Note>
+        <Note ID="2" FontSize="12.0" Position="333.0,169.0" Width="122.0">
+            <Appearance></Appearance>
+            <String>Restaurant Sources
+Name
+URI
+Node</String>
+            <Formatting>
+                <FormatRange Bold="Yes">0,19</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="3" FontSize="12.0" Position="612.011719,235.953125" Width="87.0">
+            <Appearance></Appearance>
+            <String>Buzz Sources
+Website Name
+URI
+Buzz Weight</String>
+            <ConnectedNoteIDs>7</ConnectedNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,13</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="5" FontSize="12.0" Position="137.855469,511.957031" Width="96.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+            </Appearance>
+            <String>Restaurant Name
+Neighborhood
+Description
+OpenTable Link
+Phone
+Style
+Rank
+Rank Last Week
+Absolute Score 
+Time Weighted Score</String>
+            <ConnectedNoteIDs>8</ConnectedNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,10</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="6" FontSize="12.0" Position="602.085938,485.042969" Width="112.0">
+            <Appearance></Appearance>
+            <String>Buzz Posts
+Website Name [FK]
+Post Date/Time
+Post URI
+Post Title
+Post Content
+Scanned Flag
+Post Weight</String>
+            <ConnectedNoteIDs>7-8</ConnectedNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,11</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="7" FontSize="12.0" Position="538.910156,382.308594" Width="238.0">
+            <Appearance></Appearance>
+            <String>Buzz Sources HAS MANY Buzz Posts
+Buzz Posts HAS ONE Buzz Source</String>
+            <ConnectedNoteIDs>3, 6</ConnectedNoteIDs>
+        </Note>
+        <Note ID="8" FontSize="12.0" Position="347.949219,645.796875" Width="156.0">
+            <Appearance></Appearance>
+            <String>Buzz Mentions (join table)
+Restaurant Name [FK]
+Buzz Post ID [FK]
+Absolute Score</String>
+            <ConnectedNoteIDs>5-6</ConnectedNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,27</FormatRange>
+            </Formatting>
+        </Note>
+    </Notes>
+    <NoteStyles>
+        <Style Name="Title Text" ID="776B1247-6FA7-43AB-A961-7A7F157431AA" AffectFontStyle="Yes" AffectsAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
+            <FontSize>28.0</FontSize>
+            <IsBold>Yes</IsBold>
+        </Style>
+        <Style Name="Red Text" ID="564B77C2-AD3A-4D60-A191-6C247B80E582" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
+            <TextColor>1.0 0.0 0.0</TextColor>
+        </Style>
+        <Style Name="Brown Bubble" ID="4518B0E8-C8B8-4D26-BBA0-7F0FC5DB4C1D" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.290055 0.1523 0.182215</BorderColor>
+            <FillColor>0.940019 0.892907 0.779716</FillColor>
+        </Style>
+        <Style Name="Yellow Bubble" ID="0616A307-1E3E-437E-8A19-CD5914A20562" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.756763 0.785592 0.373258</BorderColor>
+            <FillColor>0.906773 0.910625 0.634363</FillColor>
+        </Style>
+        <Style Name="Green Bubble" ID="BF6F92CA-CE5F-49C1-93FF-1A0939ACEBBF" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.331867 0.609932 0.356197</BorderColor>
+            <FillColor>0.790123 0.882327 0.80198</FillColor>
+        </Style>
+        <Style Name="Blue Bubble" ID="2A4AC8E7-ABC9-422E-B5E6-242AC058997B" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.477193 0.557066 0.76433</BorderColor>
+            <FillColor>0.840969 0.866828 0.925903</FillColor>
+        </Style>
+        <Style Name="Pink Bubble" ID="234683D5-E951-47D9-ADB9-C9BAC20FF081" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.747881 0.366532 0.542813</BorderColor>
+            <FillColor>0.918452 0.807302 0.863467</FillColor>
+        </Style>
+    </NoteStyles>
+    <UISettings>
+        <BackgroundColor>0.999476 0.972773 0.859012</BackgroundColor>
+        <DefaultFont>Helvetica</DefaultFont>
+        <DefaultTextColor>0.0 0.0 0.0</DefaultTextColor>
+    </UISettings>
+    <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="na-letter" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
+</ScappleDocument>

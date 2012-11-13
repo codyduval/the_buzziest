@@ -1,6 +1,11 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.3'
+gem 'resque'
+gem 'nokogiri'
+gem 'sunspot_rails'
+gem 'sunspot_solr'
+gem 'colorize'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

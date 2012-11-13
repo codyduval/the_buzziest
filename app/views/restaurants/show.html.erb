@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @restaurant.name %>
+</p>
+
+<p>
+  <b>Rank:</b>
+  <%= @restaurant.rank %>
+</p>
+
+<p>
+  <b>Rank previous:</b>
+  <%= @restaurant.rank_previous %>
+</p>
+
+<p>
+  <b>Style:</b>
+  <%= @restaurant.style %>
+</p>
+
+<p>
+  <b>Weeks on list:</b>
+  <%= @restaurant.weeks_on_list %>
+</p>
+
+<p>
+  <b>Neighborhood:</b>
+  <%= @restaurant.neighborhood %>
+</p>
+
+<p>
+  <b>Reserve:</b>
+  <%= @restaurant.reserve %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @restaurant.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
+<%= link_to 'Back', restaurants_path %>

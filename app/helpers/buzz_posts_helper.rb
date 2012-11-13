@@ -1,0 +1,2 @@
+module BuzzPostsHelper
+end

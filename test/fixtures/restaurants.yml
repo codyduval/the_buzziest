@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  rank: 1
+  rank_previous: 1
+  style: MyString
+  weeks_on_list: 1
+  neighborhood: MyString
+  reserve: MyString
+  description: MyText
+
+two:
+  name: MyString
+  rank: 1
+  rank_previous: 1
+  style: MyString
+  weeks_on_list: 1
+  neighborhood: MyString
+  reserve: MyString
+  description: MyText

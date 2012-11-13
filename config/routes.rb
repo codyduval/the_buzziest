@@ -1,4 +1,10 @@
 TheBuzziest::Application.routes.draw do
+  resources :buzz_posts
+
+  resources :buzz_sources
+
+  resources :restaurants
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
