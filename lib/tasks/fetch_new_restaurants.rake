@@ -21,11 +21,13 @@ task :fetch_new_restaurants => :environment do
   tasting_table_node = '//h5[@class="opened"]/following-sibling::div[@class="copy"]/h1'
   ny_mag_url = "http://nymag.com/srch?t=restaurant&N=265+334&No=0&Ns=nyml_sort_name"
   ny_mag_node = '//dl[@class="result"]/dt/a'
+  thrillist_url = 'http://www.thrillist.com/NY/browse/food/'
+  thrillist_node = '//h3[@class="item_header"]/a'
   added_count = 0
   skipped_count = 0
 
 
-  console_input_which_source = ask('Get new restaurants from (1) Tasting Table, (2) Eater, or (3) NY Mag? (Enter 1, 2, or 3; anything else to cancel) '.light_white)
+  console_input_which_source = ask('Get new restaurants from (1) Tasting Table, (2) Eater, or (3) NY Mag, (4) Thrillist? (Enter 1, 2, or 3; anything else to cancel) '.light_white)
 
 
   if console_input_which_source == '1'
@@ -37,6 +39,9 @@ task :fetch_new_restaurants => :environment do
   elsif console_input_which_source == '3'
     single_page_url = ny_mag_url
     node = ny_mag_node
+  elsif console_input_which_source == '4'
+    single_page_url = thrillist_url
+    node = thrillist_node
   else
     break
   end
@@ -69,32 +74,15 @@ task :fetch_new_restaurants => :environment do
         skipped_count = skipped_count + 1
       end
     end
-
-    total_count = skipped_count + added_count
-    total_restaurants_in_db = Restaurant.count
-    puts "\r \r"
-    puts "#{total_count}".light_cyan + " restaurants found"
-    puts "#{added_count}".light_green + " successfully added"
-    puts "#{skipped_count}".light_yellow + " skipped (duplicates)"
-    puts "#{total_restaurants_in_db}".green + " total restaurants in database"
-
   end
 
-# restaurant_names = doc.xpath('//h1[preceding-sibling::h5[1][.="date"]]')
-
-  # restaurant_names = doc.xpath('h5[@class="opened"]/following-sibling::h1')
-  # restaurant_names.each do |name|
-  #   name = name.text
-  #   puts name
-  # end
-
-  # doc.xpath('//div[@class="article short"]').each do |article_short|
-
-#   restaurant_names = doc.css(".copy h1 a")
-#   restaurant_names.each do |name|
-#     name = name.text
-#     Restaurant.create(:name => name)
-#   end
+  total_count = skipped_count + added_count
+  total_restaurants_in_db = Restaurant.count
+  puts "\r \r"
+  puts "#{total_count}".light_cyan + " restaurants found"
+  puts "#{added_count}".light_green + " successfully added"
+  puts "#{skipped_count}".light_yellow + " skipped (duplicates)"
+  puts "#{total_restaurants_in_db}".green + " total restaurants in database"
 
 end
 

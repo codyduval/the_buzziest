@@ -42,7 +42,8 @@ Node</String>
             <String>Buzz Sources
 Website Name
 URI
-Buzz Weight</String>
+Buzz Weight
+City Name</String>
             <ConnectedNoteIDs>7</ConnectedNoteIDs>
             <Formatting>
                 <FormatRange Bold="Yes">0,13</FormatRange>
@@ -61,7 +62,8 @@ Style
 Rank
 Rank Last Week
 Absolute Score 
-Time Weighted Score</String>
+Time Weighted Score
+City Name</String>
             <ConnectedNoteIDs>8</ConnectedNoteIDs>
             <Formatting>
                 <FormatRange Bold="Yes">0,10</FormatRange>
@@ -76,7 +78,8 @@ Post URI
 Post Title
 Post Content
 Scanned Flag
-Post Weight</String>
+Post Weight
+City Name</String>
             <ConnectedNoteIDs>7-8</ConnectedNoteIDs>
             <Formatting>
                 <FormatRange Bold="Yes">0,11</FormatRange>
@@ -98,6 +101,14 @@ Absolute Score</String>
             <Formatting>
                 <FormatRange Bold="Yes">0,27</FormatRange>
             </Formatting>
+        </Note>
+        <Note ID="9" FontSize="12.0" Position="327.203125,407.714844" Width="29.0">
+            <Appearance></Appearance>
+            <String>City</String>
+        </Note>
+        <Note ID="10" FontSize="12.0" Position="332.867188,431.261719" Width="41.0">
+            <Appearance></Appearance>
+            <String>Name</String>
         </Note>
     </Notes>
     <NoteStyles>

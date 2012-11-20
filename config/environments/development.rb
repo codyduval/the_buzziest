@@ -34,4 +34,10 @@ TheBuzziest::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  ENV['TWITTER_CONSUMER_KEY'] = "ORDAqa2iuj7gEkyaPtt8Lg"
+  ENV['TWITTER_CONSUMER_SECRET'] = "ubmzHRDii1gAlp9t77rRZ4YGZhthFL82tlkYaVpyRCk"
+  ENV['TWITTER_OAUTH_TOKEN'] = "1161511-CN33E2ujCWkpGsA1gt1wjhEdnY0aAhk70fZD5OfspY"
+  ENV['TWITTER_OAUTH_TOKEN_SECRET'] ="7a9HX6W8TbWnoyal08DCXAtQLzfE9zXf74PqEoaNQyk"
+
 end

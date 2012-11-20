@@ -6,6 +6,9 @@ gem 'nokogiri'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'colorize'
+gem 'feedzirra'
+gem 'postmark-mitt'
+gem 'twitter'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

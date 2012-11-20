@@ -7,5 +7,6 @@ class Restaurant < ActiveRecord::Base
 
    has_many :buzz_mentions, :dependent => :destroy
    has_many :buzz_posts, :through => :buzz_mentions
+   belongs_to :city
 
 end

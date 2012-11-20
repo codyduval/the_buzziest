@@ -1,0 +1,12 @@
+The Buzziest To Do
+
+Add new column to BuzzSource to indicate type (feed/twitter/newsletter/html)
+Add new column to Restaurant table to indicate city (also add column for twitter handle)
+Add new column to BuzzPost to indicate city?
+Add new cities table and model
+Add in Postmark into app to parse newsletters
+Add Twitter into app to parse Twitter feeds
+	Q: How do you scan twitter feed for retaurant mentions when twitter handle is often used instead of restaurant name
+	A: store twitter handle in Restaurant table
+		Q: Enter manually? or is there a way to automatically find?
+Restaurant model = how to auto fill in data for restaurant like URL, twitter handle, etc?
