@@ -1,5 +1,5 @@
 class Restaurant < ActiveRecord::Base
-  attr_accessible :description, :name, :neighborhood, :rank, :rank_previous, :reserve, :style, :weeks_on_list
+  attr_accessible :description, :name, :neighborhood, :twitter_handle, :reserve, :style, :skip_scan, :exact_match
 
   searchable do
     text :name

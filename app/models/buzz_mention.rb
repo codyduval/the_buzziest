@@ -3,5 +3,6 @@ class BuzzMention < ActiveRecord::Base
 
   belongs_to :buzz_post
   belongs_to :restaurant
+  has_many :buzz_sources, :through => :buzz_posts
 
 end

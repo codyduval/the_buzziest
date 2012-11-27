@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121118185218) do
+ActiveRecord::Schema.define(:version => 20121126212704) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
@@ -34,15 +34,21 @@ ActiveRecord::Schema.define(:version => 20121118185218) do
     t.string   "post_title"
   end
 
+  create_table "buzz_source_types", :force => true do |t|
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "source_type"
+  end
+
   create_table "buzz_sources", :force => true do |t|
     t.string   "name"
     t.string   "uri"
     t.decimal  "buzz_weight"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
     t.string   "source_id_tag"
     t.integer  "city_id"
-    t.string   "source_type"
+    t.integer  "buzz_source_type_id"
   end
 
   create_table "cities", :force => true do |t|
@@ -53,15 +59,16 @@ ActiveRecord::Schema.define(:version => 20121118185218) do
 
   create_table "restaurants", :force => true do |t|
     t.string   "name"
-    t.integer  "rank"
-    t.integer  "rank_previous"
     t.string   "style"
     t.integer  "weeks_on_list"
     t.string   "neighborhood"
     t.string   "reserve"
     t.text     "description"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.string   "twitter_handle"
+    t.boolean  "exact_match"
+    t.boolean  "skip_scan"
   end
 
 end

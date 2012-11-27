@@ -44,7 +44,7 @@ Website Name
 URI
 Buzz Weight
 City Name</String>
-            <ConnectedNoteIDs>7</ConnectedNoteIDs>
+            <ConnectedNoteIDs>7, 9, 13</ConnectedNoteIDs>
             <Formatting>
                 <FormatRange Bold="Yes">0,13</FormatRange>
             </Formatting>
@@ -85,7 +85,7 @@ City Name</String>
                 <FormatRange Bold="Yes">0,11</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="7" FontSize="12.0" Position="538.910156,382.308594" Width="238.0">
+        <Note ID="7" FontSize="9.0" Position="558.699219,382.0" Width="168.0">
             <Appearance></Appearance>
             <String>Buzz Sources HAS MANY Buzz Posts
 Buzz Posts HAS ONE Buzz Source</String>
@@ -102,13 +102,34 @@ Absolute Score</String>
                 <FormatRange Bold="Yes">0,27</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="9" FontSize="12.0" Position="327.203125,407.714844" Width="29.0">
+        <Note ID="9" FontSize="12.0" Position="625.101562,95.414062" Width="41.0">
             <Appearance></Appearance>
-            <String>City</String>
+            <String>City
+Name</String>
+            <ConnectedNoteIDs>3</ConnectedNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,4</FormatRange>
+            </Formatting>
         </Note>
-        <Note ID="10" FontSize="12.0" Position="332.867188,431.261719" Width="41.0">
+        <Note ID="11" FontSize="12.0" Position="346.511719,334.222656" Width="113.0">
             <Appearance></Appearance>
-            <String>Name</String>
+            <String>BuzzSourceType
+type</String>
+            <ConnectedNoteIDs>13</ConnectedNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,14</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="13" FontSize="9.0" Position="386.339844,248.789062" Width="184.0">
+            <Appearance></Appearance>
+            <String>BuzzSourceType HAS MANY Buzz Sources
+BuzzSources HAS ONE BuzzSourceType</String>
+            <ConnectedNoteIDs>3, 11</ConnectedNoteIDs>
+        </Note>
+        <Note ID="14" FontSize="9.0" Position="548.546875,171.605469" Width="129.0">
+            <Appearance></Appearance>
+            <String>City HAS MANY BuzzSources
+BuzzSources HAS ONE City</String>
         </Note>
     </Notes>
     <NoteStyles>

@@ -3,8 +3,6 @@
 <table>
   <tr>
     <th>Name</th>
-    <th>Rank</th>
-    <th>Rank previous</th>
     <th>Style</th>
     <th>Weeks on list</th>
     <th>Neighborhood</th>
@@ -18,8 +16,6 @@
 <% @restaurants.each do |restaurant| %>
   <tr>
     <td><%= restaurant.name %></td>
-    <td><%= restaurant.rank %></td>
-    <td><%= restaurant.rank_previous %></td>
     <td><%= restaurant.style %></td>
     <td><%= restaurant.weeks_on_list %></td>
     <td><%= restaurant.neighborhood %></td>

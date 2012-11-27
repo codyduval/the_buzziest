@@ -2,6 +2,10 @@ desc "Fetch new restaurants"
 task :fetch_new_restaurants => :environment do
   require 'nokogiri'
   require 'open-uri'
+  require 'benchmark'
+
+ 
+time_elapsed = Benchmark.realtime do
 
   def self.fuzzy_match(new_restaurant_from_source)
     Restaurant.search do
@@ -83,6 +87,10 @@ task :fetch_new_restaurants => :environment do
   puts "#{added_count}".light_green + " successfully added"
   puts "#{skipped_count}".light_yellow + " skipped (duplicates)"
   puts "#{total_restaurants_in_db}".green + " total restaurants in database"
+
+end
+puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+
 
 end
 

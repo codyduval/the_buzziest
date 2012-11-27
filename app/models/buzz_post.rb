@@ -2,7 +2,7 @@ class BuzzPost < ActiveRecord::Base
   attr_accessible :post_title, :post_guid, :post_content, :post_date_time, :post_uri, :post_weight, :scanned_flag, :buzz_source_id
 
   belongs_to :buzz_source
-  has_many :buzz_mentions
+  has_many :buzz_mentions, :dependent => :destroy
   has_many :restaurants, :through => :buzz_mentions
 
   searchable do
