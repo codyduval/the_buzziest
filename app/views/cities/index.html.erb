@@ -3,6 +3,7 @@
 <table>
   <tr>
     <th>Name</th>
+    <th>Short Name</th>
     <th></th>
     <th></th>
     <th></th>
@@ -11,6 +12,7 @@
 <% @cities.each do |city| %>
   <tr>
     <td><%= city.name %></td>
+    <td><%= city.short_name %></td>
     <td><%= link_to 'Show', city %></td>
     <td><%= link_to 'Edit', edit_city_path(city) %></td>
     <td><%= link_to 'Destroy', city, confirm: 'Are you sure?', method: :delete %></td>

@@ -2,6 +2,7 @@
 
 <table>
   <tr>
+    <th>ID Number</th>
     <th>Buzz source name</th>
     <th>Post date time</th>
     <th>Post uri</th>
@@ -15,6 +16,7 @@
 
 <% @buzz_posts.each do |buzz_post| %>
   <tr>
+    <td><%= buzz_post.id%></td>
     <td><%= buzz_post.post_date_time %></td>
     <td><%= buzz_post.post_uri %></td>
     <td><%= buzz_post.post_content %></td>

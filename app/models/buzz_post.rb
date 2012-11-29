@@ -5,9 +5,8 @@ class BuzzPost < ActiveRecord::Base
   has_many :buzz_mentions, :dependent => :destroy
   has_many :restaurants, :through => :buzz_mentions
 
-  searchable do
-    text :post_title, :post_content
-  end
+  include PgSearch
+  pg_search_scope :search_by_post, :against => [:post_title, :post_content]
 
   def self.create_from_postmark(mitt)
     BuzzPost.create(
@@ -18,13 +17,12 @@ class BuzzPost < ActiveRecord::Base
   end
 
   def self.assign_buzz_source_id(city)
-    if city == 'nyc'
-      return "6"
-    elsif city == 'la'
-      return "7"
-    else
-      return "999"
-    end
+    matched_city = City.find_by_short_name(city)
+    matched_city_id = matched_city[:id]
+    matched_source_type = BuzzSourceType.find_by_source_type("email")
+    matched_source_type_id = matched_source_type[:id]
+    buzz_source = BuzzSource.find_by_city_id_and_buzz_source_type_id(matched_city_id, matched_source_type_id)
+    buzz_source_id = buzz_source[:id]
   end
 
 

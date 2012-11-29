@@ -3,17 +3,13 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.3'
 gem 'resque'
 gem 'nokogiri'
-gem 'sunspot_rails'
-gem 'sunspot_solr'
 gem 'colorize'
 gem 'feedzirra'
 gem 'postmark-mitt'
 gem 'twitter'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 gem 'pg'
+gem 'pg_search'
 
 
 # Gems used only for assets and not required

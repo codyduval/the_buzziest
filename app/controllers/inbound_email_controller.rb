@@ -5,9 +5,9 @@ class InboundEmailController < ApplicationController
   def create
     @buzz_post = BuzzPost.create_from_postmark(Postmark::Mitt.new(request.body.read))
     @buzz_post.buzz_source_id = BuzzPost.assign_buzz_source_id(params[:city])
-    @buzz_post.post_weight = "1"
+    @buzz_post.post_weight = @buzz_post.buzz_source.buzz_weight
     @buzz_post.scanned_flag = false
-    @buzz_post.post_uri = "http://"
+    @buzz_post.post_uri = "not applicable - inbound emailr"
     @buzz_post.post_date_time = DateTime.now
     @buzz_post.save
     if @buzz_post.present?

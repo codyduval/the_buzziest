@@ -30,9 +30,9 @@ time_elapsed = Benchmark.realtime do
     buzz_feed_sources.each do |buzz_source|
       twitter_screen_name = buzz_source[:uri]
       Twitter.user_timeline(twitter_screen_name).each do |tweet|
-        unless BuzzPost.exists?(:post_guid => tweet.id)
+        unless BuzzPost.exists?(:post_guid => tweet.id.to_s)
           BuzzPost.create(
-            :post_guid => tweet.id,
+            :post_guid => tweet.id.to_s,
             :buzz_source_id => buzz_source[:id],
             :post_content => tweet.text,
             :post_uri => "https://twiter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
@@ -40,6 +40,7 @@ time_elapsed = Benchmark.realtime do
             :post_weight => buzz_source[:buzz_weight],
             :scanned_flag => false
           )
+          puts "Added ".light_green + tweet.text.light_green + " from " + tweet.user.screen_name
         end
       end
     end
@@ -67,7 +68,6 @@ time_elapsed = Benchmark.realtime do
               :scanned_flag => false
             )
             puts "added ".light_green + entry.title.light_green + " " + entry.url
-            Sunspot.commit
           else
             puts "skipped ".light_yellow + entry.title.light_yellow+ " " + entry.url
           end
@@ -81,13 +81,12 @@ time_elapsed = Benchmark.realtime do
     all_buzz_feed_sources = BuzzSource.where("buzz_source_type_id = '1'")
     update_from_feed(all_buzz_feed_sources)
   elsif console_input_which_source_type == '2'
-    all_buzz_twitter_sources = BuzzSource.where("source_type = '3'")
-    puts all_buzz_twitter_sources
+    all_buzz_twitter_sources = BuzzSource.where("buzz_source_type_id = '3'")
     update_from_twitter(all_buzz_twitter_sources)
   elsif console_input_which_source_type == '3'
-    all_buzz_feed_sources = BuzzSource.where("source_type = '1'")
+    all_buzz_feed_sources = BuzzSource.where("buzz_source_type_id = '1'")
     update_from_feed(all_buzz_feed_sources)
-    all_buzz_feed_sources = BuzzSource.where("source_type = '3'")
+    all_buzz_feed_sources = BuzzSource.where("buzz_source_type_id = '3'")
     update_from_twitter(all_buzz_feed_sources)
   else
     break

@@ -6,20 +6,14 @@ require 'benchmark'
  
 time_elapsed = Benchmark.realtime do
 
-  def self.scan_posts(restaurant_name)
-
-      if restaurant_name.exact_match == true
-        puts "Scanning all posts for an exact match of ".light_yellow + restaurant_name.name
-        BuzzPost.search do
-          fulltext '#{restaurant_name.name}'
-        end
-      else
-        puts "Scanning all posts for a regular match on ".light_white+ restaurant_name.name
-        BuzzPost.search do
-          fulltext restaurant_name.name
-        end
-      end
-
+  def self.scan_posts(restaurant)
+    if restaurant.exact_match == true
+      puts "Scanning all posts for an exact match of ".light_yellow + restaurant.name
+      BuzzPost.search_by_post(restaurant.name)
+    else
+      puts "Scanning all posts for a regular match on ".light_white+ restaurant.name
+      BuzzPost.search_by_post(restaurant.name)
+    end
   end
 
   def self.mark_as_scanned
@@ -37,30 +31,30 @@ time_elapsed = Benchmark.realtime do
     end
   end
 
-  def self.scan_restaurants(restaurant_names)
-    restaurant_names.each do |restaurant_name|
-      unless restaurant_name.skip_scan == true
-        scan_results = scan_posts(restaurant_name).results
+  def self.scan_restaurants(restaurants)
+    restaurants.each do |restaurant|
+      unless restaurant.skip_scan == true
+        scan_results = scan_posts(restaurant)
         scan_results.each do |result|
-          restaurant= Restaurant.find_by_name(restaurant_name.name)
+          restaurant = Restaurant.find_by_name(restaurant.name)
           unless BuzzMention.exists?(:buzz_post_id => result[:id], :restaurant_id => restaurant[:id])
             @buzz_mention = BuzzMention.create(
               :restaurant_id => restaurant[:id],
               :buzz_post_id => result[:id],
               :buzz_score => result[:post_weight]
             )
-            puts "Found new buzz for #{restaurant.name} in post id #{result.id} posted on #{@buzz_mention.buzz_post.buzz_source.name}"
+            puts "Found new buzz for #{restaurant.name} in post id #{result.id} posted on #{@buzz_mention.buzz_post.buzz_source.name}".light_green
           end
         end
       else
-        puts "Skipping ".light_yellow + restaurant_name.name
+        puts "Skipping ".light_yellow + restaurant.name
       end
     end
   end
 
 all_restaurants = Restaurant.all
-all_restaurant_names = get_restaurant_names(all_restaurants)
-scan_restaurants(all_restaurant_names)
+# all_restaurant_names = get_restaurant_names(all_restaurants)
+scan_restaurants(all_restaurants)
 
 
 end

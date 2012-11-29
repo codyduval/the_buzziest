@@ -8,9 +8,7 @@ task :fetch_new_restaurants => :environment do
 time_elapsed = Benchmark.realtime do
 
   def self.fuzzy_match(new_restaurant_from_source)
-    Restaurant.search do
-      fulltext new_restaurant_from_source
-    end
+    Restaurant.search_by_restaurant_name(new_restaurant_from_source)
   end
 
   def ask message
@@ -32,7 +30,6 @@ time_elapsed = Benchmark.realtime do
 
 
   console_input_which_source = ask('Get new restaurants from (1) Tasting Table, (2) Eater, or (3) NY Mag, (4) Thrillist? (Enter 1, 2, or 3; anything else to cancel) '.light_white)
-
 
   if console_input_which_source == '1'
     single_page_url = tasting_table_url
@@ -66,11 +63,10 @@ time_elapsed = Benchmark.realtime do
       new_restaurant_from_source = name.text
       puts new_restaurant_from_source.light_white
       searched_restaurant = fuzzy_match(new_restaurant_from_source)
-      if searched_restaurant.results.empty?
+      if searched_restaurant.empty?
         restaurant = Restaurant.find_or_initialize_by_name(new_restaurant_from_source)
         restaurant.save
         puts '*added to db*'.light_green
-        Sunspot.commit
         puts '*added to index*'.light_green
         added_count = added_count + 1
       else

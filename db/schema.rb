@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121126212704) do
+ActiveRecord::Schema.define(:version => 20121129184609) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
@@ -55,6 +55,15 @@ ActiveRecord::Schema.define(:version => 20121126212704) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "short_name"
+  end
+
+  create_table "pg_search_documents", :force => true do |t|
+    t.text     "content"
+    t.integer  "searchable_id"
+    t.string   "searchable_type"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "restaurants", :force => true do |t|

@@ -5,10 +5,6 @@ class BuzzSource < ActiveRecord::Base
   belongs_to :city
   belongs_to :buzz_source_type
 
-  searchable do
-    text :source_id_tag
-  end
-
   def city_name
     self.city.name if self.city.present?
   end
