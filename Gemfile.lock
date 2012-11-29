@@ -69,6 +69,7 @@ GEM
     multi_json (1.3.7)
     multipart-post (1.1.5)
     nokogiri (1.5.5)
+    pg (0.14.1)
     polyglot (0.3.3)
     postmark-mitt (0.0.9)
       json_pure
@@ -127,7 +128,6 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sqlite3 (1.3.6)
     sunspot (1.3.3)
       pr_geohash (~> 1.0)
       rsolr (~> 1.0.7)
@@ -160,11 +160,11 @@ DEPENDENCIES
   feedzirra
   jquery-rails
   nokogiri
+  pg
   postmark-mitt
   rails (= 3.2.3)
   resque
   sass-rails (~> 3.2.3)
-  sqlite3
   sunspot_rails
   sunspot_solr
   twitter
