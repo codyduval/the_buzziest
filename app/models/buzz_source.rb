@@ -1,5 +1,5 @@
 class BuzzSource < ActiveRecord::Base
-  attr_accessible :buzz_weight, :name, :uri, :city_name, :source_type, :source_id_tag, :buzz_source_type_id
+  attr_accessible :buzz_weight, :name, :uri, :city_name, :source_type, :source_id_tag, :buzz_source_type_id, :x_path_nodes
 
   has_many :buzz_posts, :dependent => :destroy
   belongs_to :city

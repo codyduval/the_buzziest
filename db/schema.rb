@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121129184609) do
+ActiveRecord::Schema.define(:version => 20121130160920) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20121129184609) do
     t.string   "source_id_tag"
     t.integer  "city_id"
     t.integer  "buzz_source_type_id"
+    t.string   "x_path_nodes"
   end
 
   create_table "cities", :force => true do |t|
@@ -78,6 +79,7 @@ ActiveRecord::Schema.define(:version => 20121129184609) do
     t.string   "twitter_handle"
     t.boolean  "exact_match"
     t.boolean  "skip_scan"
+    t.integer  "city_id"
   end
 
 end
