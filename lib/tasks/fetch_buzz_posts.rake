@@ -1,33 +1,56 @@
 desc "Fetch posts that contain restaurant buzz"
-task :fetch_buzz_posts => :environment do
+task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
+  args.with_defaults(:city => "nyc", :source_type => "all")
 
   include ActionView::Helpers::SanitizeHelper
   require 'benchmark'
 
- 
-  def ask message
-    print message
-    STDIN.gets.chomp
-  end
-  
-  console_input_which_source_type = '0'
-  console_input_which_source_type = ask('Get new posts from (1) RSS feeds (2) Twitter or (3) All? (Enter 1, 2, or 3; anything else to cancel) '.light_white)
 
 time_elapsed = Benchmark.realtime do
-   
-  def self.get_feed_urls(buzz_feed_sources)
-    feed_urls = Array.new
-    buzz_feed_sources.each do |buzz_source|
-      feed_url = buzz_source[:uri]
-      feed_urls = feed_urls.push(feed_url)
+
+def self.get_buzz_source_types(args)
+  unless args.source_type == 'all'
+    buzz_source_types = BuzzSourceType.where(:source_type=> args.source_type)
+  else
+    buzz_source_types = BuzzSourceType.where("source_type = 'feed' OR source_type = 'twitter'")
+  end
+end
+
+def self.get_buzz_sources(buzz_source_types)
+  buzz_sources = Array.new
+  buzz_source_types.each do |buzz_source_type|
+    buzz_source = BuzzSource.where(:buzz_source_type_id => buzz_source_type.id)
+    buzz_sources.push(buzz_source)
+  end
+  buzz_sources
+end
+
+def get_posts_from_source(buzz_sources_array)
+  buzz_sources_array.each do |buzz_sources|
+    buzz_sources.each do |buzz_source|
+      if buzz_source.buzz_source_type.source_type == 'feed'
+          update_from_feed(buzz_source)
+      elsif buzz_source.buzz_source_type.source_type == 'twitter'
+          update_from_twitter(buzz_source)
+      # elsif buzz_source.buzz_source_type.source_type == 'html'
+      #     update_from_html(buzz_source)
+      end
     end
   end
+end
 
-  def self.update_from_newsletter
-  end
+   
+  # def self.get_feed_urls(buzz_feed_sources)
+  #   feed_urls = Array.new
+  #   buzz_feed_sources.each do |buzz_source|
+  #     feed_url = buzz_source[:uri]
+  #     feed_urls = feed_urls.push(feed_url)
+  #   end
+  # end
 
-  def self.update_from_twitter(buzz_feed_sources)
-    buzz_feed_sources.each do |buzz_source|
+
+  def self.update_from_twitter(buzz_source)
+    # buzz_feed_sources.each do |buzz_source|
       twitter_screen_name = buzz_source[:uri]
       Twitter.user_timeline(twitter_screen_name).each do |tweet|
         unless BuzzPost.exists?(:post_guid => tweet.id.to_s)
@@ -43,14 +66,14 @@ time_elapsed = Benchmark.realtime do
           puts "Added ".light_green + tweet.text.light_green + " from " + tweet.user.screen_name
         end
       end
-    end
+    # end
   end
 
   def self.update_from_html
   end
 
-  def self.update_from_feed(buzz_feed_sources)
-    buzz_feed_sources.each do |buzz_source|
+  def self.update_from_feed(buzz_source)
+    # buzz_feed_sources.each do |buzz_source|
       feed_url = buzz_source[:uri]
       feed = Feedzirra::Feed.fetch_and_parse(feed_url)
       unless feed.nil?
@@ -73,27 +96,18 @@ time_elapsed = Benchmark.realtime do
           end
         end
       end
-    end
+    # end
   end
 
-
-  if console_input_which_source_type == '1'
-    all_buzz_feed_sources = BuzzSource.where("buzz_source_type_id = '1'")
-    update_from_feed(all_buzz_feed_sources)
-  elsif console_input_which_source_type == '2'
-    all_buzz_twitter_sources = BuzzSource.where("buzz_source_type_id = '3'")
-    update_from_twitter(all_buzz_twitter_sources)
-  elsif console_input_which_source_type == '3'
-    all_buzz_feed_sources = BuzzSource.where("buzz_source_type_id = '1'")
-    update_from_feed(all_buzz_feed_sources)
-    all_buzz_feed_sources = BuzzSource.where("buzz_source_type_id = '3'")
-    update_from_twitter(all_buzz_feed_sources)
-  else
-    break
-  end
+buzz_source_types = get_buzz_source_types(args)
+buzz_sources_array = get_buzz_sources(buzz_source_types)
+buzz_posts = get_posts_from_source(buzz_sources_array)
 
 end
+
 puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+
+
 
 end
 
