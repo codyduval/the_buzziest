@@ -1,5 +1,7 @@
 desc "Fetch new restaurants"
-task :fetch_new_restaurants => :environment do
+task :fetch_new_restaurants, [:city, :source, :pages] => :environment do |t,args|
+  args.with_defaults(:city => "ny", :source => "all", :pages => "5")
+
   require 'nokogiri'
   require 'open-uri'
   require 'benchmark'
@@ -49,15 +51,23 @@ time_elapsed = Benchmark.realtime do
     break
   end
 
-  console_input_how_many_pages = ask('How many pages to scan? (1 to 10, anything else to cancel) '.light_white)
-  console_input_how_many_pages = console_input_how_many_pages.to_i
-
-  unless (console_input_how_many_pages >= 1) && (console_input_how_many_pages <= 10)
+  if args.source == 'tasting_table'
+    restaurant_list_sources = BuzzSource.where(:name => "Tasting Table NY - New Restaurants")
+  elsif args.source == 'eater'
+    restaurant_list_sources = BuzzSource.where(:name => "Eater NY - New Restaurants")
+  elsif args.source == 'ny_mag'
+    restaurant_list_sources = BuzzSource.where(:name => "NY Mag - New Restaurants")
+  elsif args.source == 'all'
+    restaurant_source = BuzzSourceType.where(:source_type => "restaurant_list")
+    restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)
+  else
     break
   end
 
-  (1..console_input_how_many_pages).each do |page|
-    url = single_page_url + "#{(page)}"
+restaurant_list_sources.each do |restaurant_list_source|
+  (1..args.pages).each do |page|
+    url = restaurant_list_source.uri + "#{(page)}"
+    node = restaurant_list_source.x_path_nodes
     puts "Visting #{url}".cyan
     doc = Nokogiri::HTML(open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' ))
     restaurant_names = doc.xpath(node)
