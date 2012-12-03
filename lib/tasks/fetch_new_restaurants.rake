@@ -1,5 +1,5 @@
 desc "Fetch new restaurants"
-task :fetch_new_restaurants, [:city, :source, :pages] => :environment do |t,args|
+task :fetch_new_restaurants_local, [:city, :source, :pages] => :environment do |t,args|
   args.with_defaults(:city => "nyc", :source => "all", :pages => 5)
 
   require 'nokogiri'

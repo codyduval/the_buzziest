@@ -1,5 +1,5 @@
 desc "Fetch posts that contain restaurant buzz"
-task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
+task :fetch_buzz_posts_local, [:city, :source_type] => :environment do |t, args|
   args.with_defaults(:city => "nyc", :source_type => "all")
 
   include ActionView::Helpers::SanitizeHelper

@@ -1,5 +1,5 @@
 desc "Scan BuzzPosts for restaurant mentions"
-task :scan_posts_for_buzz => :environment do
+task :scan_posts_for_buzz_local => :environment do
 
 require 'benchmark'
 
