@@ -6,12 +6,14 @@ class BuzzPost < ActiveRecord::Base
   has_many :restaurants, :through => :buzz_mentions
 
   include PgSearch
+
   pg_search_scope :search_by_post, :against => [:post_title, :post_content]
 
   def self.create_from_postmark(mitt)
+    stripped_email_body_content = ActionController::Base.helpers.strip_tags(mitt.text_body)
     BuzzPost.create(
       :post_title => mitt.subject,
-      :post_content => mitt.text_body,
+      :post_content => stripped_email_body_content,
       :post_guid => mitt.message_id
     )
   end
