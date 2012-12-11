@@ -13,8 +13,11 @@ task :fetch_new_restaurants, [:city, :source, :pages] => :environment do |t,args
 
   time_elapsed = Benchmark.realtime do
 
-    @added_count = 0
-    @skipped_count = 0
+  @added_count = 0
+  @skipped_count = 0
+  pages = args.pages.to_i
+  city = City.where(:short_name => args.city)
+
 
   if args.source == 'tasting_table'
     restaurant_list_sources = BuzzSource.where(:name => "Tasting Table NY - New Restaurants")
@@ -23,41 +26,73 @@ task :fetch_new_restaurants, [:city, :source, :pages] => :environment do |t,args
   elsif args.source == 'ny_mag'
     restaurant_list_sources = BuzzSource.where(:name => "NY Mag - New Restaurants")
   elsif args.source == 'all'
-    restaurant_source = BuzzSourceType.where(:source_type => "restaurant_list")
+    restaurant_sources = BuzzSourceType.where(:source_type => "restaurant_list")
     city = City.where(:short_name => args.city)
-    if args.city == 'all'
-      restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)
-    else
-      restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id, :city_id => city.first.id)
-    end
+  if args.city == 'all'
+    restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)
+  else
+    restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id, :city_id => city.first.id)
+  end
   else
     break
   end
 
-  restaurant_list_sources.each do |restaurant_list_source|
-    (1..args.pages.to_i).each do |page|
+  def self.fetch_restaurant_names(pages,restaurant_list_source)
+    @full_restaurant_name_list = Array.new
+    (1..pages).each do |page|
       url = restaurant_list_source.uri + "#{(page)}"
       node = restaurant_list_source.x_path_nodes
       puts "Visting #{url}".cyan
       doc = Nokogiri::HTML(open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' ))
       restaurant_names = doc.xpath(node)
-      restaurant_names.each do |name|
-        new_restaurant_from_source = name.text
-        puts new_restaurant_from_source.light_white
-        searched_restaurant = fuzzy_match(new_restaurant_from_source)
-        if searched_restaurant.empty?
-          restaurant = Restaurant.find_or_initialize_by_name(new_restaurant_from_source)
-          restaurant.city_id = restaurant_list_source.city_id
-          restaurant.save
-          puts '*added to db*'.light_green
-          @added_count = @added_count + 1
-        else
-          puts '**skipped - already in db**'.light_yellow
-          @skipped_count = @skipped_count + 1
-        end
+      restaurant_names.each do |restaurant_name|
+        puts restaurant_name.text
+        @full_restaurant_name_list.push(restaurant_name.text)
       end
     end
   end
+
+  def self.add_restaurant_names_to_db(full_restaurant_name_list,city)
+    full_restaurant_name_list.each do |name|
+      new_restaurant_from_source = name
+      puts new_restaurant_from_source.light_white
+      searched_restaurant = fuzzy_match(new_restaurant_from_source)
+      if searched_restaurant.empty?
+        @restaurant = Restaurant.find_or_initialize_by_name(new_restaurant_from_source)
+        @restaurant.city_id = city
+        fetch_restaurant_twitter_handle(@restaurant)
+        @restaurant.save
+        puts '*added to db*'.light_green
+        @added_count = @added_count + 1
+      else
+        puts '**skipped - already in db**'.light_yellow
+        @skipped_count = @skipped_count + 1
+      end
+    end
+  end
+
+  def self.fetch_restaurant_twitter_handle(restaurant)
+    stripped_restaurant_name=restaurant.name.gsub(/[^0-9a-z ]/i, '')
+    stripped_restaurant_name_no_spaces=stripped_restaurant_name.gsub(/ /, '%20')
+    url = "https://twitter.com/search/users?q=#{(stripped_restaurant_name_no_spaces)}"
+    node = "//@data-screen-name"
+    puts "Visting #{url}".cyan
+    doc = Nokogiri::HTML(open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' ))
+    twitter_handle = doc.at_xpath(node)
+    unless twitter_handle.nil?
+      valid_twitter_handle = "@" + twitter_handle.value
+      restaurant.twitter_handle = valid_twitter_handle
+      restaurant.save
+    end
+  end
+
+  restaurant_list_sources.each do |restaurant_list_source|
+    fetch_restaurant_names(pages,restaurant_list_source)
+  end
+
+  add_restaurant_names_to_db(@full_restaurant_name_list,city)
+
+  
 
   total_count = @skipped_count + @added_count
   total_restaurants_in_db = Restaurant.count
@@ -133,6 +168,37 @@ require 'benchmark'
   end
 
   puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+end
+
+
+task :fetch_all_twitter_handles_local => :environment do
+
+  require 'nokogiri'
+  require 'open-uri'
+
+
+  def self.fetch_restaurant_twitter_handle(restaurant)
+    stripped_restaurant_name=restaurant.name.gsub(/[^0-9a-z ]/i, '')
+    stripped_restaurant_name_no_spaces=stripped_restaurant_name.gsub(/ /, '%20')
+    puts "Getting " + stripped_restaurant_name
+    url = "https://twitter.com/search/users?q=#{(stripped_restaurant_name_no_spaces)}"
+    node = "//@data-screen-name"
+    puts "Visting #{url}".cyan
+    doc = Nokogiri::HTML(open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' ))
+    twitter_handle = doc.at_xpath(node)
+    unless twitter_handle.nil?
+      valid_twitter_handle = "@" + twitter_handle.value
+      restaurant.twitter_handle = valid_twitter_handle
+      restaurant.save
+    end
+  end
+
+  restaurants = Restaurant.all
+  restaurants.each do |restaurant|
+    if restaurant.twitter_handle.blank?
+      fetch_restaurant_twitter_handle(restaurant)
+    end
+  end
 end
 
 
