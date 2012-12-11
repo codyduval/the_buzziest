@@ -171,7 +171,7 @@ require 'benchmark'
 end
 
 
-task :fetch_all_twitter_handles_local => :environment do
+task :fetch_all_twitter_handles => :environment do
 
   require 'nokogiri'
   require 'open-uri'
