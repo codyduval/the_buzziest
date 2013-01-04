@@ -1,8 +1,7 @@
 desc "This task is called by the Heroku scheduler add-on"
 
-task :fetch_new_restaurants, [:city, :source, :pages] => :environment do |t,args|
-  args.with_defaults(:city => "nyc", :source => "all", :pages => 5)
-
+task :fetch_new_restaurants => :environment do 
+  
   require 'nokogiri'
   require 'open-uri'
   require 'benchmark'
@@ -15,28 +14,11 @@ task :fetch_new_restaurants, [:city, :source, :pages] => :environment do |t,args
 
   @added_count = 0
   @skipped_count = 0
-  pages = args.pages.to_i
-  city = City.where(:short_name => args.city)
-
-
-  if args.source == 'tasting_table'
-    restaurant_list_sources = BuzzSource.where(:name => "Tasting Table NY - New Restaurants")
-  elsif args.source == 'eater'
-    restaurant_list_sources = BuzzSource.where(:name => "Eater NY - New Restaurants")
-  elsif args.source == 'ny_mag'
-    restaurant_list_sources = BuzzSource.where(:name => "NY Mag - New Restaurants")
-  elsif args.source == 'all'
-    restaurant_sources = BuzzSourceType.where(:source_type => "restaurant_list")
-    city = City.where(:short_name => args.city)
-  if args.city == 'all'
-    restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)
-  else
-    restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id, :city_id => city.first.id)
-  end
-  else
-    break
-  end
-
+  pages = 20
+  city = City.where(:short_name => "nyc")
+  restaurant_source = BuzzSourceType.where(:source_type => "restaurant_list")
+  restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)
+    
   def self.fetch_restaurant_names(pages,restaurant_list_source)
     @full_restaurant_name_list = Array.new
     (1..pages).each do |page|

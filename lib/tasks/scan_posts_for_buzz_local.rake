@@ -14,6 +14,7 @@ time_elapsed = Benchmark.realtime do
       puts "Scanning all posts for a regular match on ".light_white+ restaurant.name
       BuzzPost.search_by_post(restaurant.name)
     end
+    BuzzPost.search_by_post(restaurant.twitter_handle)
   end
 
   def self.mark_as_scanned
