@@ -15,7 +15,7 @@ task :fetch_new_restaurants => :environment do
   @added_count = 0
   @skipped_count = 0
   @full_restaurant_name_list = Array.new
-  pages = 3
+  pages = 8
   city = City.where(:short_name => "nyc")
   restaurant_source = BuzzSourceType.where(:source_type => "restaurant_list")
   restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)
