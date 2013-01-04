@@ -14,13 +14,13 @@ task :fetch_new_restaurants => :environment do
 
   @added_count = 0
   @skipped_count = 0
-  pages = 20
+  @full_restaurant_name_list = Array.new
+  pages = 3
   city = City.where(:short_name => "nyc")
   restaurant_source = BuzzSourceType.where(:source_type => "restaurant_list")
   restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)
     
   def self.fetch_restaurant_names(pages,restaurant_list_source)
-    @full_restaurant_name_list = Array.new
     (1..pages).each do |page|
       url = restaurant_list_source.uri + "#{(page)}"
       node = restaurant_list_source.x_path_nodes
@@ -35,6 +35,7 @@ task :fetch_new_restaurants => :environment do
   end
 
   def self.add_restaurant_names_to_db(full_restaurant_name_list,city)
+    puts "Attempting to add ".light_green + full_restaurant_name_list.count.to_s + " restaurants into to the database.".light_green
     full_restaurant_name_list.each do |name|
       new_restaurant_from_source = name
       puts new_restaurant_from_source.light_white
@@ -72,6 +73,8 @@ task :fetch_new_restaurants => :environment do
     fetch_restaurant_names(pages,restaurant_list_source)
   end
 
+  
+  
   add_restaurant_names_to_db(@full_restaurant_name_list,city)
 
   
