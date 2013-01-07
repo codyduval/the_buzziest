@@ -5,6 +5,8 @@ TheBuzziest::Application.routes.draw do
 
   resources :buzz_sources
 
+  resources :buzz_mentions
+
   resources :restaurants
  
   match '/inbound_email/:city' => 'inbound_email#create'

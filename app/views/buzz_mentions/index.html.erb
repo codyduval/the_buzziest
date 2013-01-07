@@ -1,0 +1,29 @@
+<h1>Listing buzz_mentions</h1>
+
+<table>
+  <tr>
+    <th>Buzz Mention ID</th>
+    <th>Restaurant Name</th>
+    <th>Buzz Post Title</th>
+    <th>Buzz Post Source</th>
+    <th>Created At</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @buzz_mentions.each do |buzz_mention| %>
+  <tr>
+    <td><%= buzz_mention.id%></td>
+    <td><%= buzz_mention.restaurant.name %></td>
+    <td><%= buzz_mention.buzz_post.post_title %></td>
+    <td><%= buzz_mention.buzz_post.buzz_source.name %></td>
+    <td><%= buzz_mention.created_at %></td>
+    <td><%= link_to 'Show', buzz_mention %></td>
+    <td><%= link_to 'Destroy', buzz_mention, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Buzz mention id:</b>
+  <%= @buzz_mention.id %>
+</p>
+
+<p>
+  <b>Restaurant:</b>
+  <%= @buzz_mention.restaurant.name %>
+</p>
+
+<p>
+  <b>Buzz Post Title:</b>
+  <%= @buzz_mention.buzz_post.post_title %>
+</p>
+
+<p>
+  <b>Buzz Post Source:</b>
+  <%= @buzz_mention.buzz_post.buzz_source.name %>
+</p>
+
+<p>
+  <b>Buzz Post Content:</b>
+  <%= @buzz_mention.buzz_post.post_content %>
+</p>
+
+<p>
+  <b>Created At:</b>
+  <%= @buzz_mention.created_at %>
+</p>
+
+
+<%= link_to 'Back', buzz_mentions_path %>

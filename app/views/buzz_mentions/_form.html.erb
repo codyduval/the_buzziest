@@ -1,0 +1,41 @@
+<%= form_for(@buzz_post) do |f| %>
+  <% if @buzz_post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@buzz_post.errors.count, "error") %> prohibited this buzz_post from being saved:</h2>
+
+      <ul>
+      <% @buzz_post.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :buzz_source_name %><br />
+    <%= f.text_field :buzz_source_name %>
+  </div>
+  <div class="field">
+    <%= f.label :post_date_time %><br />
+    <%= f.datetime_select :post_date_time %>
+  </div>
+  <div class="field">
+    <%= f.label :post_uri %><br />
+    <%= f.text_field :post_uri %>
+  </div>
+  <div class="field">
+    <%= f.label :post_content %><br />
+    <%= f.text_area :post_content %>
+  </div>
+  <div class="field">
+    <%= f.label :scanned_flag %><br />
+    <%= f.check_box :scanned_flag %>
+  </div>
+  <div class="field">
+    <%= f.label :post_weight %><br />
+    <%= f.text_field :post_weight %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
