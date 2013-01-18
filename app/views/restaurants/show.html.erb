@@ -5,7 +5,6 @@
   <%= @restaurant.name %>
 </p>
 
-
 <p>
   <b>Style:</b>
   <%= @restaurant.style %>
@@ -29,6 +28,13 @@
 <p>
   <b>Description:</b>
   <%= @restaurant.description %>
+</p>
+
+<p>
+  <b>Buzz Mentions:</b><br/>
+    <% @restaurant.buzz_mentions.each do |buzz_mention| %>
+      <%= render :partial => 'buzz_mentions/buzz_mentions', :locals => {:buzz_mention => buzz_mention} %>
+    <% end %>
 </p>
 
 

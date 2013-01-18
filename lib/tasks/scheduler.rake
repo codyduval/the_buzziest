@@ -246,6 +246,7 @@ end
             :post_guid => tweet.id.to_s,
             :buzz_source_id => buzz_source[:id],
             :post_content => tweet.text,
+            :post_title => tweet.text,
             :post_uri => "https://twiter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
             :post_date_time => tweet.created_at,
             :post_weight => buzz_source[:buzz_weight],
