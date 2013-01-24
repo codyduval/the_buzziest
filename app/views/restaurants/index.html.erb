@@ -5,11 +5,8 @@
   <tr>
     <th>Name</th>
     <th>Twitter</th>
-    <th>Style</th>
-    <th>Weeks on list</th>
-    <th>Neighborhood</th>
-    <th>Reserve</th>
     <th><%= sortable "buzz_mentions_count", "Buzz Mentions" %></th>
+    <th><%= sortable "created_at" %></th>
     <th></th>
     <th></th>
     <th></th>
@@ -19,11 +16,8 @@
   <tr>
     <td><%= restaurant.name %></td>
     <td><a target="_blank" href=http://www.twitter.com/<%= restaurant.twitter_handle%>><%= restaurant.twitter_handle%></td>
-    <td><%= restaurant.style %></td>
-    <td><%= restaurant.weeks_on_list %></td>
-    <td><%= restaurant.neighborhood %></td>
-    <td><%= restaurant.reserve %></td>
     <td><%= link_to_if restaurant.buzz_mentions.exists?, restaurant.buzz_mentions_count, restaurant%></td>
+    <td><%= restaurant.created_at.strftime("%b %d %y")  %></td>
     <td><%= link_to 'Show', restaurant %></td>
     <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
     <td><%= link_to 'Destroy', restaurant, confirm: 'Are you sure?', method: :delete %></td>

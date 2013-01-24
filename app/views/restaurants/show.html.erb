@@ -31,6 +31,11 @@
 </p>
 
 <p>
+  <b>Make inactive (hide)?:</b>
+  <%= @restaurant.skip_scan %>
+</p>
+
+<p>
   <b>Buzz Mentions:</b><br/>
     <% @restaurant.buzz_mentions.each do |buzz_mention| %>
       <%= render :partial => 'buzz_mentions/buzz_mentions', :locals => {:buzz_mention => buzz_mention} %>
