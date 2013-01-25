@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130125170216) do
+ActiveRecord::Schema.define(:version => 20130125203358) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
@@ -34,12 +34,6 @@ ActiveRecord::Schema.define(:version => 20130125170216) do
     t.string   "post_title"
   end
 
-  create_table "buzz_source_types", :force => true do |t|
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.string   "source_type"
-  end
-
   create_table "buzz_sources", :force => true do |t|
     t.string   "name"
     t.string   "uri"
@@ -52,13 +46,6 @@ ActiveRecord::Schema.define(:version => 20130125170216) do
     t.string   "x_path_nodes"
     t.string   "buzz_source_type"
     t.string   "city",                :default => "nyc"
-  end
-
-  create_table "cities", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "short_name"
   end
 
   create_table "pg_search_documents", :force => true do |t|
