@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ScappleDocument Version="1.0" ID="6FE8F0BB-95A6-46A7-B549-55D2206F1075">
     <Notes>
-        <Note ID="0" FontSize="12.0" Position="53.148438,60.800781" Width="200.0">
+        <Note ID="0" FontSize="12.0" Position="53.0,61.0" Width="200.0">
             <Appearance>
                 <Alignment>Left</Alignment>
             </Appearance>
@@ -38,7 +38,7 @@ Node</String>
                 <FormatRange Bold="Yes">0,19</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="3" FontSize="12.0" Position="612.011719,235.953125" Width="87.0">
+        <Note ID="3" FontSize="12.0" Position="612.0,236.0" Width="87.0">
             <Appearance></Appearance>
             <String>Buzz Sources
 Website Name
@@ -50,7 +50,7 @@ City Name</String>
                 <FormatRange Bold="Yes">0,13</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="5" FontSize="12.0" Position="137.855469,511.957031" Width="96.0">
+        <Note ID="5" FontSize="12.0" Position="138.0,512.0" Width="96.0">
             <Appearance>
                 <Alignment>Left</Alignment>
             </Appearance>
@@ -70,7 +70,7 @@ City Name</String>
                 <FormatRange Bold="Yes">0,10</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="6" FontSize="12.0" Position="602.085938,485.042969" Width="112.0">
+        <Note ID="6" FontSize="12.0" Position="602.0,485.0" Width="112.0">
             <Appearance></Appearance>
             <String>Buzz Posts
 Website Name [FK]
@@ -86,13 +86,13 @@ City Name</String>
                 <FormatRange Bold="Yes">0,11</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="7" FontSize="9.0" Position="558.699219,382.0" Width="168.0">
+        <Note ID="7" FontSize="9.0" Position="559.0,382.0" Width="168.0">
             <Appearance></Appearance>
             <String>Buzz Sources HAS MANY Buzz Posts
 Buzz Posts HAS ONE Buzz Source</String>
             <ConnectedNoteIDs>3, 6</ConnectedNoteIDs>
         </Note>
-        <Note ID="8" FontSize="12.0" Position="347.949219,645.796875" Width="156.0">
+        <Note ID="8" FontSize="12.0" Position="348.0,646.0" Width="156.0">
             <Appearance></Appearance>
             <String>Buzz Mentions (join table)
 Restaurant Name [FK]
@@ -103,7 +103,7 @@ Absolute Score</String>
                 <FormatRange Bold="Yes">0,27</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="9" FontSize="12.0" Position="625.101562,95.414062" Width="41.0">
+        <Note ID="9" FontSize="12.0" Position="625.0,95.0" Width="41.0">
             <Appearance></Appearance>
             <String>City
 Name</String>
@@ -112,7 +112,7 @@ Name</String>
                 <FormatRange Bold="Yes">0,4</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="11" FontSize="12.0" Position="346.511719,334.222656" Width="113.0">
+        <Note ID="11" FontSize="12.0" Position="347.0,334.0" Width="113.0">
             <Appearance></Appearance>
             <String>BuzzSourceType
 type</String>
@@ -121,13 +121,13 @@ type</String>
                 <FormatRange Bold="Yes">0,14</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="13" FontSize="9.0" Position="386.339844,248.789062" Width="184.0">
+        <Note ID="13" FontSize="9.0" Position="386.0,249.0" Width="184.0">
             <Appearance></Appearance>
             <String>BuzzSourceType HAS MANY Buzz Sources
 BuzzSources HAS ONE BuzzSourceType</String>
             <ConnectedNoteIDs>3, 11</ConnectedNoteIDs>
         </Note>
-        <Note ID="14" FontSize="9.0" Position="548.546875,171.605469" Width="129.0">
+        <Note ID="14" FontSize="9.0" Position="549.0,172.0" Width="129.0">
             <Appearance></Appearance>
             <String>City HAS MANY BuzzSources
 BuzzSources HAS ONE City</String>
@@ -146,39 +146,55 @@ BuzzSources HAS ONE City</String>
             <String>New Note</String>
             <ConnectedNoteIDs>15</ConnectedNoteIDs>
         </Note>
+        <Note ID="17" FontSize="12.0" Position="1087.15625,105.0" Width="200.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+            </Appearance>
+            <String>city = City.where(:short_name => "nyc")
+  restaurant_source = BuzzSourceType.where(:source_type => "restaurant_list")
+  restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)</String>
+        </Note>
+        <Note ID="18" FontSize="12.0" Position="1040.929688,322.046875" Width="200.0">
+            <Appearance></Appearance>
+            <String>@cities = [:nyc, :chicago, :la, :sf, :portland]
+
+@buzz_source_types = [:restaurant_list, :
+
+</String>
+        </Note>
     </Notes>
     <NoteStyles>
-        <Style Name="Title Text" ID="776B1247-6FA7-43AB-A961-7A7F157431AA" AffectFontStyle="Yes" AffectsAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
-            <FontSize>28.0</FontSize>
-            <IsBold>Yes</IsBold>
-        </Style>
-        <Style Name="Red Text" ID="564B77C2-AD3A-4D60-A191-6C247B80E582" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
-            <TextColor>1.0 0.0 0.0</TextColor>
-        </Style>
-        <Style Name="Brown Bubble" ID="4518B0E8-C8B8-4D26-BBA0-7F0FC5DB4C1D" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
-            <BorderThickness>1</BorderThickness>
-            <BorderColor>0.290055 0.1523 0.182215</BorderColor>
-            <FillColor>0.940019 0.892907 0.779716</FillColor>
-        </Style>
-        <Style Name="Yellow Bubble" ID="0616A307-1E3E-437E-8A19-CD5914A20562" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
-            <BorderThickness>1</BorderThickness>
-            <BorderColor>0.756763 0.785592 0.373258</BorderColor>
-            <FillColor>0.906773 0.910625 0.634363</FillColor>
-        </Style>
-        <Style Name="Green Bubble" ID="BF6F92CA-CE5F-49C1-93FF-1A0939ACEBBF" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
-            <BorderThickness>1</BorderThickness>
-            <BorderColor>0.331867 0.609932 0.356197</BorderColor>
-            <FillColor>0.790123 0.882327 0.80198</FillColor>
-        </Style>
-        <Style Name="Blue Bubble" ID="2A4AC8E7-ABC9-422E-B5E6-242AC058997B" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+        <Style Name="Blue Bubble" ID="2A4AC8E7-ABC9-422E-B5E6-242AC058997B" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>
             <BorderColor>0.477193 0.557066 0.76433</BorderColor>
             <FillColor>0.840969 0.866828 0.925903</FillColor>
         </Style>
-        <Style Name="Pink Bubble" ID="234683D5-E951-47D9-ADB9-C9BAC20FF081" AffectFontStyle="No" AffectsAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+        <Style Name="Brown Bubble" ID="4518B0E8-C8B8-4D26-BBA0-7F0FC5DB4C1D" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.290055 0.1523 0.182215</BorderColor>
+            <FillColor>0.940019 0.892907 0.779716</FillColor>
+        </Style>
+        <Style Name="Green Bubble" ID="BF6F92CA-CE5F-49C1-93FF-1A0939ACEBBF" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.331867 0.609932 0.356197</BorderColor>
+            <FillColor>0.790123 0.882327 0.80198</FillColor>
+        </Style>
+        <Style Name="Pink Bubble" ID="234683D5-E951-47D9-ADB9-C9BAC20FF081" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>
             <BorderColor>0.747881 0.366532 0.542813</BorderColor>
             <FillColor>0.918452 0.807302 0.863467</FillColor>
+        </Style>
+        <Style Name="Red Text" ID="564B77C2-AD3A-4D60-A191-6C247B80E582" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
+            <TextColor>1.0 0.0 0.0</TextColor>
+        </Style>
+        <Style Name="Title Text" ID="776B1247-6FA7-43AB-A961-7A7F157431AA" AffectFontStyle="Yes" AffectAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
+            <FontSize>28.0</FontSize>
+            <IsBold>Yes</IsBold>
+        </Style>
+        <Style Name="Yellow Bubble" ID="0616A307-1E3E-437E-8A19-CD5914A20562" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.756763 0.785592 0.373258</BorderColor>
+            <FillColor>0.906773 0.910625 0.634363</FillColor>
         </Style>
     </NoteStyles>
     <UISettings>
@@ -186,5 +202,5 @@ BuzzSources HAS ONE City</String>
         <DefaultFont>Helvetica</DefaultFont>
         <DefaultTextColor>0.0 0.0 0.0</DefaultTextColor>
     </UISettings>
-    <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="na-letter" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
+    <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="8 1/2x11" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
 </ScappleDocument>

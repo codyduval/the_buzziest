@@ -20,15 +20,10 @@ class BuzzPost < ActiveRecord::Base
     )
   end
 
-  def self.assign_buzz_source_id(city)
-    matched_city = City.find_by_short_name(city)
-    matched_city_id = matched_city[:id]
-    matched_source_type = BuzzSourceType.find_by_source_type("email")
-    matched_source_type_id = matched_source_type[:id]
-    buzz_source = BuzzSource.find_by_city_id_and_buzz_source_type_id(matched_city_id, matched_source_type_id)
+  def self.assign_buzz_source_id(type,city)
+    buzz_source = BuzzSource.where("buzz_source_type = ? AND city = ?",type, city)
     buzz_source_id = buzz_source[:id]
   end
-
 
 end
 

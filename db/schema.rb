@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130118183844) do
+ActiveRecord::Schema.define(:version => 20130125170216) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
@@ -44,12 +44,14 @@ ActiveRecord::Schema.define(:version => 20130118183844) do
     t.string   "name"
     t.string   "uri"
     t.decimal  "buzz_weight"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.string   "source_id_tag"
     t.integer  "city_id"
     t.integer  "buzz_source_type_id"
     t.string   "x_path_nodes"
+    t.string   "buzz_source_type"
+    t.string   "city",                :default => "nyc"
   end
 
   create_table "cities", :force => true do |t|
@@ -74,13 +76,14 @@ ActiveRecord::Schema.define(:version => 20130118183844) do
     t.string   "neighborhood"
     t.string   "reserve"
     t.text     "description"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.string   "twitter_handle"
     t.boolean  "exact_match"
     t.boolean  "skip_scan"
     t.integer  "city_id"
     t.integer  "buzz_mentions_count", :default => 0
+    t.string   "city",                :default => "nyc"
   end
 
 end

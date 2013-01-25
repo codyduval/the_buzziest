@@ -1,5 +1,4 @@
 TheBuzziest::Application.routes.draw do
-  resources :cities
 
   resources :buzz_posts
 

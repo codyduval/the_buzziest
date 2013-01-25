@@ -6,8 +6,8 @@ task :fetch_new_restaurants => :environment do
   require 'open-uri'
   require 'benchmark'
 
-  def self.fuzzy_match(new_restaurant_from_source)
-    Restaurant.search_by_restaurant_name(new_restaurant_from_source)
+  def self.fuzzy_match(name)
+    Restaurant.search_by_restaurant_name(name)
   end
 
   time_elapsed = Benchmark.realtime do
@@ -15,10 +15,9 @@ task :fetch_new_restaurants => :environment do
   @added_count = 0
   @skipped_count = 0
   @full_restaurant_name_list = Array.new
-  pages = 2
-  city = City.where(:short_name => "nyc")
-  restaurant_source = BuzzSourceType.where(:source_type => "restaurant_list")
-  restaurant_list_sources = BuzzSource.where(:buzz_source_type_id => restaurant_source.first.id)
+  number_of_pages_to_scrape = 2
+  city = MasterCities.get_city(:nyc)
+  restaurant_list_sources = BuzzSource.where("buzz_source_type = ? AND city = ?","restaurant_list", city)
     
   def self.fetch_restaurant_names(pages,restaurant_list_source)
     (1..pages).each do |page|
@@ -37,12 +36,12 @@ task :fetch_new_restaurants => :environment do
   def self.add_restaurant_names_to_db(full_restaurant_name_list,city)
     puts "Attempting to add ".light_green + full_restaurant_name_list.count.to_s + " restaurants into to the database.".light_green
     full_restaurant_name_list.each do |name|
-      new_restaurant_from_source = name
-      puts new_restaurant_from_source.light_white
-      searched_restaurant = fuzzy_match(new_restaurant_from_source)
+      puts name.light_white
+      searched_restaurant = fuzzy_match(name)
       if searched_restaurant.empty?
-        @restaurant = Restaurant.find_or_initialize_by_name(new_restaurant_from_source)
-        @restaurant.city_id = city
+        @restaurant = Restaurant.find_or_initialize_by_name(name)
+        # @restaurant.city_id = city
+        @restaurant.city = city
         fetch_restaurant_twitter_handle(@restaurant)
         @restaurant.save
         puts '*added to db*'.light_green
@@ -70,15 +69,12 @@ task :fetch_new_restaurants => :environment do
   end
 
   restaurant_list_sources.each do |restaurant_list_source|
-    fetch_restaurant_names(pages,restaurant_list_source)
+    fetch_restaurant_names(number_of_pages_to_scrape,restaurant_list_source)
   end
 
-  
-  
   add_restaurant_names_to_db(@full_restaurant_name_list,city)
 
   
-
   total_count = @skipped_count + @added_count
   total_restaurants_in_db = Restaurant.count
   puts "\r \r"
@@ -96,8 +92,6 @@ end
 task :scan_posts_for_buzz => :environment do
 require 'benchmark'
 
-  
-
   def self.scan_posts(restaurant)
     if restaurant.exact_match == true
       puts "Scanning all posts for an exact match of ".light_yellow + restaurant.name
@@ -109,7 +103,7 @@ require 'benchmark'
   end
 
   def self.mark_as_scanned
-    unscanned_posts = BuzzPost.where("scanned_flag = 'f'")
+    unscanned_posts = BuzzPost.where("scanned_flag = 'false'")
     unscanned_posts.each do |unscanned_post|
       unscanned_post.scanned_flag = true
     end
@@ -193,50 +187,38 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
   include ActionView::Helpers::SanitizeHelper
   require 'benchmark'
 
-
-
-
 def self.get_buzz_source_types(args)
-  unless args.source_type == 'all'
-    buzz_source_types = BuzzSourceType.where(:source_type=> args.source_type)
+  unless args.source_type == "all"
+    # buzz_source_types = BuzzSourceType.where(:source_type=> args.source_type)
+    buzz_source_types = args.source_type
   else
-    buzz_source_types = BuzzSourceType.where("source_type = 'feed' OR source_type = 'twitter'")
+    # buzz_source_types = BuzzSourceType.where("source_type = 'feed' OR source_type = 'twitter'")
+    buzz_source_types = ["feed","twitter"]
   end
 end
 
 def self.get_buzz_sources(buzz_source_types)
-  buzz_sources = Array.new
+  buzz_sources_array = Array.new
   buzz_source_types.each do |buzz_source_type|
-    buzz_source = BuzzSource.where(:buzz_source_type_id => buzz_source_type.id)
-    buzz_sources.push(buzz_source)
+    buzz_source = BuzzSource.where(:buzz_source_type  => buzz_source_type)
+    buzz_sources_array.push(buzz_source)
   end
-  buzz_sources
+  return buzz_sources_array
 end
 
 def get_posts_from_source(buzz_sources_array)
   buzz_sources_array.each do |buzz_sources|
     buzz_sources.each do |buzz_source|
-      if buzz_source.buzz_source_type.source_type == 'feed'
+      if buzz_source.buzz_source_type == "feed"
           update_from_feed(buzz_source)
-      elsif buzz_source.buzz_source_type.source_type == 'twitter'
+      elsif buzz_source.buzz_source_type == "twitter"
           update_from_twitter(buzz_source)
-      # elsif buzz_source.buzz_source_type.source_type == 'html'
-      #     update_from_html(buzz_source)
       end
     end
   end
 end
 
    
-  # def self.get_feed_urls(buzz_feed_sources)
-  #   feed_urls = Array.new
-  #   buzz_feed_sources.each do |buzz_source|
-  #     feed_url = buzz_source[:uri]
-  #     feed_urls = feed_urls.push(feed_url)
-  #   end
-  # end
-
-
   def self.update_from_twitter(buzz_source)
     # buzz_feed_sources.each do |buzz_source|
       twitter_screen_name = buzz_source[:uri]
@@ -262,7 +244,6 @@ end
   end
 
   def self.update_from_feed(buzz_source)
-    # buzz_feed_sources.each do |buzz_source|
       feed_url = buzz_source[:uri]
       feed = Feedzirra::Feed.fetch_and_parse(feed_url)
       unless feed.nil?
@@ -285,7 +266,6 @@ end
           end
         end
       end
-    # end
   end
 
   time_elapsed = Benchmark.realtime do

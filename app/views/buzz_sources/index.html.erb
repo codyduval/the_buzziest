@@ -20,9 +20,9 @@
     <td><%= buzz_source.uri %></td>
     <td><%= buzz_source.buzz_weight %></td>
     <% if buzz_source.buzz_source_type.present? %>
-        <td><%= buzz_source.buzz_source_type.source_type %> </td>
+        <td><%= buzz_source.buzz_source_type %> </td>
     <% end %>
-    <td><%= buzz_source.city.name %> </td>
+    <td><%= buzz_source.city %> </td>
     <td><%= link_to 'Show', buzz_source %></td>
     <td><%= link_to 'Edit', edit_buzz_source_path(buzz_source) %></td>
     <td><%= link_to 'Destroy', buzz_source, confirm: 'Are you sure?', method: :delete %></td>

@@ -3,12 +3,9 @@
 <table>
   <tr>
     <th>ID Number</th>
-    <th>Buzz source name</th>
-    <th>Post date time</th>
-    <th>Post uri</th>
-    <th>Post content</th>
-    <th>Scanned flag</th>
-    <th>Post weight</th>
+    <th>Buzz Source</th>
+    <th>Post Date</th>
+    <th>Post Content</th>
     <th></th>
     <th></th>
     <th></th>
@@ -17,11 +14,11 @@
 <% @buzz_posts.each do |buzz_post| %>
   <tr>
     <td><%= buzz_post.id%></td>
-    <td><%= buzz_post.post_date_time %></td>
-    <td><%= buzz_post.post_uri %></td>
-    <td><%= buzz_post.post_content %></td>
-    <td><%= buzz_post.scanned_flag %></td>
-    <td><%= buzz_post.post_weight %></td>
+    <% if buzz_post.buzz_source.present? %>
+        <td><%= buzz_post.buzz_source.name %>
+    <% end %>
+    <td>  <%= buzz_post.created_at.strftime("%m/%d/%y") %>  </td>
+    <td><%= truncate(buzz_post.post_content, :ommision => "...", :length => 200) %></td>
     <td><%= link_to 'Show', buzz_post %></td>
     <td><%= link_to 'Edit', edit_buzz_post_path(buzz_post) %></td>
     <td><%= link_to 'Destroy', buzz_post, confirm: 'Are you sure?', method: :delete %></td>

@@ -11,10 +11,13 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :buzz_source_name %><br />
-    <%= f.text_field :buzz_source_name %>
-  </div>
+ <p>
+  <b>Buzz source name:</b>
+  <%= @buzz_post.buzz_source.name %>
+</p>
+
+
+
   <div class="field">
     <%= f.label :post_date_time %><br />
     <%= f.datetime_select :post_date_time %>

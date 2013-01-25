@@ -1,4 +1,5 @@
 module ApplicationHelper
+
   def title(page_title)
     if Rails.env.development?
       page_title = "LOCAL " + page_title
@@ -17,6 +18,10 @@ module ApplicationHelper
     title ||= column.titleize
     direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
     link_to title, :sort => column, :direction => direction
+  end
+
+  def city_names
+    MasterCities.get_all_city_names
   end
 
 end
