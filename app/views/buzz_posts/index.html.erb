@@ -15,7 +15,7 @@
   <tr>
     <td><%= buzz_post.id%></td>
     <% if buzz_post.buzz_source.present? %>
-        <td><%= buzz_post.buzz_source.name %>
+        <td><%= buzz_post.buzz_source.name %></td>
     <% end %>
     <td>  <%= buzz_post.created_at.strftime("%m/%d/%y") %>  </td>
     <td><%= truncate(buzz_post.post_content, :ommision => "...", :length => 200) %></td>

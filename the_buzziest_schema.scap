@@ -156,9 +156,11 @@ BuzzSources HAS ONE City</String>
         </Note>
         <Note ID="18" FontSize="12.0" Position="1040.929688,322.046875" Width="200.0">
             <Appearance></Appearance>
-            <String>@cities = [:nyc, :chicago, :la, :sf, :portland]
+            <String>@cities = [:nyc => “nyc :chicago, :la, :sf, :portland]
 
-@buzz_source_types = [:restaurant_list, :
+@buzz_source_types = [:restaurant_list, :feed, :email, :twitter, :html]
+
+
 
 </String>
         </Note>
