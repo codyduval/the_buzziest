@@ -1,5 +1,48 @@
 desc "This task is called by the Heroku scheduler add-on"
 
+task :delete_old_posts => :environment do
+
+  def self.old_posts_ids(age_in_weeks)
+    old_posts = BuzzPost.where("created_at < :weeks", {:weeks => age_in_weeks.week.ago})
+    old_posts_ids = []
+
+    old_posts.each do |post|
+      old_posts_ids << post.id
+    end
+
+    return old_posts_ids
+  end
+
+  def self.mentioned_posts_ids
+    mentioned_posts = BuzzMention.all
+    mentioned_posts_ids = []
+    
+    mentioned_posts.each do |post|
+      mentioned_posts_ids << post.buzz_post_id
+    end
+
+    return mentioned_posts_ids
+  end
+
+  def self.find_posts_to_destroy(old_posts_ids, mentioned_posts_ids)
+    post_ids_to_destroy = []
+    post_ids_to_destroy = (old_posts_ids - mentioned_posts_ids)
+    BuzzPost.find_all_by_id(post_ids_to_destroy)
+  end
+
+  def self.destroy_old_posts(posts_to_destroy)
+    puts "Destroying ".light_red + posts_to_destroy.count.to_s.light_red + " posts".light_red
+    BuzzPost.destroy(posts_to_destroy)
+  end
+
+  
+  posts_to_destroy = find_posts_to_destroy(old_posts_ids(1), mentioned_posts_ids)
+  destroy_old_posts(posts_to_destroy)
+
+end
+
+
+
 task :fetch_new_restaurants => :environment do 
   
   require 'nokogiri'
