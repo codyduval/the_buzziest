@@ -163,7 +163,7 @@ require 'benchmark'
       search_phrase_by_post(restaurant.name)
     else
       puts "Scanning all posts for a regular match on ".light_white+ restaurant.name
-      search_by_post(restaurant.name)
+      search_phrase_by_post(restaurant.name)
     end
   end
 

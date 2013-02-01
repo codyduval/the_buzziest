@@ -3,13 +3,14 @@ production:
     hostname: ec2-54-242-28-35.compute-1.amazonaws.com
     port: 8983
     log_level: INFO
-    path: /solr/index
+    path: /solr
     
 development:
   solr:
-    hostname: localhost
-    port: 8982
+    hostname: ec2-54-242-28-35.compute-1.amazonaws.com
+    port: 8983
     log_level: INFO
+    path: /solr/the_buzziest_staging
 
 test:
   solr:
