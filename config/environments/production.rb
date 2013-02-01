@@ -64,4 +64,6 @@ TheBuzziest::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  Sunspot.config.solr.url = 'http://ec2-54-242-28-35.compute-1.amazonaws.com:8983/solr'
 end
