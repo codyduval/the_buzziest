@@ -2,7 +2,7 @@ production:
   solr:
     hostname: ec2-50-19-184-22.compute-1.amazonaws.com
     port: 8983
-    log_level: WARNING
+    log_level: INFO
     path: /solr
 
 development:
