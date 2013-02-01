@@ -7,14 +7,14 @@ gem 'colorize'
 gem 'feedzirra'
 gem 'postmark-mitt'
 gem 'twitter'
-
-gem 'pg'
-gem 'pg_search'
+gem 'sunspot_rails'
 
 group :development do
   gem 'meta_request', '0.2.1'
   gem "better_errors"
   gem "binding_of_caller"
+  gem 'sunspot_solr'
+  gem 'pg'
 end
 
 # Gems used only for assets and not required

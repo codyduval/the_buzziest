@@ -5,11 +5,14 @@ class BuzzPost < ActiveRecord::Base
   has_many :buzz_mentions, :dependent => :destroy
   has_many :restaurants, :through => :buzz_mentions
 
-  include PgSearch
+  # include PgSearch
 
-  pg_search_scope :search_by_post, :against => [:post_title, :post_content],
-                  :using => {:tsearch => {:normalization => 4}}
-                  
+  # pg_search_scope :search_by_post, :against => [:post_title, :post_content],
+                  # :using => {:tsearch => {:normalization => 4}}
+
+  searchable do
+    text :post_title, :post_content
+  end
 
   def self.create_from_postmark(mitt)
     stripped_email_body_content = ActionController::Base.helpers.strip_tags(mitt.text_body)

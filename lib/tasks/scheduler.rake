@@ -50,7 +50,12 @@ task :fetch_new_restaurants => :environment do
   require 'benchmark'
 
   def self.fuzzy_match(name)
-    Restaurant.search_by_restaurant_name(name)
+    fuzzy_match = Restaurant.search do
+      fulltext name
+    end
+    fuzzy_match = fuzzy_match.results
+
+    return fuzzy_match
   end
 
   time_elapsed = Benchmark.realtime do
@@ -83,7 +88,6 @@ task :fetch_new_restaurants => :environment do
       searched_restaurant = fuzzy_match(name)
       if searched_restaurant.empty?
         @restaurant = Restaurant.find_or_initialize_by_name(name)
-        # @restaurant.city_id = city
         @restaurant.city = city
         fetch_restaurant_twitter_handle(@restaurant)
         @restaurant.save
@@ -135,13 +139,31 @@ end
 task :scan_posts_for_buzz => :environment do
 require 'benchmark'
 
+  def self.search_by_post(name)
+    buzz_post_search_results = BuzzPost.search do
+      fulltext name
+    end
+    buzz_post_search_results = buzz_post_search_results.results
+
+    return buzz_post_search_results
+  end
+
+  def self.search_phrase_by_post(name)
+    buzz_post_search_results = BuzzPost.search do
+      fulltext %Q/"#{name}"/ 
+    end
+    buzz_post_search_results = buzz_post_search_results.results
+
+    return buzz_post_search_results
+  end
+
   def self.scan_posts(restaurant)
     if restaurant.exact_match == true
       puts "Scanning all posts for an exact match of ".light_yellow + restaurant.name
-      BuzzPost.search_by_post(restaurant.name)
+      search_phrase_by_post(restaurant.name)
     else
       puts "Scanning all posts for a regular match on ".light_white+ restaurant.name
-      BuzzPost.search_by_post(restaurant.name)
+      search_by_post(restaurant.name)
     end
   end
 

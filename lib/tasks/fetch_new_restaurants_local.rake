@@ -7,7 +7,12 @@ task :fetch_new_restaurants_local, [:city, :source, :pages] => :environment do |
   require 'benchmark'
 
   def self.fuzzy_match(new_restaurant_from_source)
-    Restaurant.search_by_restaurant_name(new_restaurant_from_source)
+    fuzzy_match = Restaurant.search do
+      fulltext name
+    end
+    fuzzy_match = fuzzy_match.results
+
+    return fuzzy_match
   end
 
 time_elapsed = Benchmark.realtime do

@@ -4,8 +4,12 @@ class Restaurant < ActiveRecord::Base
   has_many :buzz_mentions, :dependent => :destroy
   has_many :buzz_posts, :through => :buzz_mentions
 
-  include PgSearch
-  pg_search_scope :search_by_restaurant_name, :against => :name
+  #include PgSearch
+  #pg_search_scope :search_by_restaurant_name, :against => :name
+
+  searchable do
+    text :name
+  end
 
   def buzz_mentions_custom_path(restaurant)
     if restaurant.buzz_mentions.exists?
