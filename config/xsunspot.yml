@@ -1,0 +1,19 @@
+production:
+  solr:
+    hostname: ec2-54-242-28-35.compute-1.amazonaws.com
+    port: 8983
+    log_level: INFO
+    path: /solr
+    
+development:
+  solr:
+    hostname: ec2-54-242-28-35.compute-1.amazonaws.com
+    port: 8983
+    log_level: INFO
+    path: /solr
+
+test:
+  solr:
+    hostname: localhost
+    port: 8981
+    log_level: WARNING
