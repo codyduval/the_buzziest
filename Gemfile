@@ -8,13 +8,13 @@ gem 'feedzirra'
 gem 'postmark-mitt'
 gem 'twitter'
 gem 'sunspot_rails'
+gem 'pg'
 
 group :development do
   gem 'meta_request', '0.2.1'
   gem "better_errors"
   gem "binding_of_caller"
   gem 'sunspot_solr'
-  gem 'pg'
 end
 
 # Gems used only for assets and not required
