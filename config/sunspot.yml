@@ -3,7 +3,7 @@ production:
     hostname: ec2-54-242-28-35.compute-1.amazonaws.com
     port: 8983
     log_level: INFO
-    path: /solr/collection1/index
+    path: /solr/index
     
 development:
   solr:
