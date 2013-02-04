@@ -15,7 +15,8 @@ class BuzzPost < ActiveRecord::Base
   end
 
   def self.create_from_postmark(mitt)
-    stripped_email_body_content = ActionController::Base.helpers.strip_tags(mitt.text_body)
+    stripped_tags_email_body_content = ActionController::Base.helpers.strip_tags(mitt.text_body)
+    stripped_email_body_content = ActionController::Base.helpers.strip_links(stripped_tags_email_body_content)
     BuzzPost.create(
       :post_title => mitt.subject,
       :post_content => stripped_email_body_content,

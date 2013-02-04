@@ -10,7 +10,7 @@ development:
     hostname: ec2-54-242-28-35.compute-1.amazonaws.com
     port: 8983
     log_level: INFO
-    path: /solr/the_buzziest_staging
+    path: /solr/the_buzziest_local
 
 test:
   solr:
