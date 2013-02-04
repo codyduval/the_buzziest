@@ -25,7 +25,7 @@ class BuzzPost < ActiveRecord::Base
 
   def self.assign_buzz_source_id(type,city)
     buzz_source = BuzzSource.where("buzz_source_type = ? AND city = ?",type, city)
-    buzz_source_id = buzz_source[:id]
+    buzz_source_id = buzz_source.first.id
   end
 
 end
