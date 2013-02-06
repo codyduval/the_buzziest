@@ -9,6 +9,7 @@ gem 'postmark-mitt'
 gem 'twitter'
 gem 'sunspot_rails'
 gem 'pg'
+gem 'sanitize'
 
 group :development do
   gem 'meta_request', '0.2.1'

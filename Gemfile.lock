@@ -122,6 +122,9 @@ GEM
       vegas (~> 0.1.2)
     rsolr (1.0.8)
       builder (>= 2.1.2)
+    sanitize (2.0.3)
+      nokogiri (>= 1.4.4, < 1.6)
+      nokogiri (>= 1.4.4, < 1.6)
     sass (3.2.3)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -178,6 +181,7 @@ DEPENDENCIES
   postmark-mitt
   rails (= 3.2.11)
   resque
+  sanitize
   sass-rails (~> 3.2.3)
   sunspot_rails
   sunspot_solr
