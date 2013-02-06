@@ -1,5 +1,36 @@
 desc "This task is called by the Heroku scheduler add-on"
 
+task :update_buzz_scores => :environment do
+  
+  def self.calculate_decayed_scores
+    buzz_mentions = BuzzMention.all
+    buzz_mentions.each do |buzz_mention|
+      decayed_score = buzz_mention.calculate_decayed_buzz_score
+      puts "Decaying score for " + buzz_mention.id.to_s + ". Score to " + decayed_score.to_s
+      buzz_mention.decayed_buzz_score = decayed_score
+      buzz_mention.save
+    end
+  end
+
+  def self.update_restaurants_total_scores
+    restaurants = Restaurant.where("buzz_mentions_count >= 1")
+    restaurants.each do |restaurant|
+      restaurant_id = restaurant.id
+      buzz_mentions = BuzzMention.where(:restaurant_id => restaurant_id)
+      decayed_buzz_scores = buzz_mentions.pluck(:decayed_buzz_score)
+      total_buzz_score = decayed_buzz_scores.inject(:+)
+      restaurant.total_current_buzz = total_buzz_score
+      puts "Updating " + restaurant.name + "'s total score to " + total_buzz_score.to_s
+      restaurant.save
+    end
+  end
+
+  calculate_decayed_scores
+  update_restaurants_total_scores
+end
+
+
+
 task :delete_old_posts => :environment do
 
   def self.old_posts_ids(age_in_weeks)

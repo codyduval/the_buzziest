@@ -11,14 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130125203358) do
+ActiveRecord::Schema.define(:version => 20130205210808) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
     t.integer  "buzz_post_id"
     t.integer  "restaurant_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.decimal  "decayed_buzz_score"
   end
 
   create_table "buzz_posts", :force => true do |t|
@@ -71,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20130125203358) do
     t.integer  "city_id"
     t.integer  "buzz_mentions_count", :default => 0
     t.string   "city",                :default => "nyc"
+    t.decimal  "total_current_buzz",  :default => 0.0
   end
 
 end

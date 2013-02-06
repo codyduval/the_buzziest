@@ -84,7 +84,7 @@ class RestaurantsController < ApplicationController
 
 private
   def sort_column
-    Restaurant.column_names.include?(params[:sort]) ? params[:sort] : "buzz_mentions_count"
+    Restaurant.column_names.include?(params[:sort]) ? params[:sort] : "total_current_buzz"
   end
   
   def sort_direction
