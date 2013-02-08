@@ -164,6 +164,7 @@ GEM
       multi_json (~> 1.0, >= 1.0.2)
     vegas (0.1.11)
       rack (>= 1.0.0)
+    will_paginate (3.0.4)
 
 PLATFORMS
   ruby
@@ -187,3 +188,4 @@ DEPENDENCIES
   sunspot_solr
   twitter
   uglifier (>= 1.0.3)
+  will_paginate (~> 3.0.0)

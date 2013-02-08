@@ -1,10 +1,13 @@
 <h1>Listing buzz_posts</h1>
 
+
+<%= select_tag :per_page, options_for_select([10,50,200,500,1000], @per_page.to_i), :onchange => "if(this.value){window.location='?per_page='+this.value;}" %>
+<br/>
 <table>
   <tr>
-    <th>ID Number</th>
+    <th><%= sortable "id","ID Number" %></th>
     <th>Buzz Source</th>
-    <th>Post Date</th>
+    <th><%= sortable "created_at","Post Date"%></th>
     <th>Post Content</th>
     <th></th>
     <th></th>
@@ -29,5 +32,5 @@
 </table>
 
 <br />
-
+<%= will_paginate @buzz_posts %>
 <%= link_to 'New Buzz post', new_buzz_post_path %>

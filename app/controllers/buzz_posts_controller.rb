@@ -1,8 +1,10 @@
 class BuzzPostsController < ApplicationController
-  # GET /buzz_posts
-  # GET /buzz_posts.json
+  helper_method :sort_column, :sort_direction
+
   def index
-    @buzz_posts = BuzzPost.all
+    # @buzz_posts = BuzzPost.all
+    @buzz_posts = BuzzPost.paginate(:page => params[:page], :per_page => params[:per_page]).order(sort_column + ' ' + sort_direction)
+    BuzzPost.paginated_for_index(per_page, page)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -80,4 +82,22 @@ class BuzzPostsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def sort_column
+    Restaurant.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
+  end
+  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end
+
+  def per_page
+    params[:per_page] ||= 10
+  end
+
+  def page 
+    params[:page] ||= 1
+  end
+
 end
