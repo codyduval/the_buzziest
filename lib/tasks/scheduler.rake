@@ -348,7 +348,11 @@ end
       unless feed.nil?
         feed.entries.each do |entry|
           unless BuzzPost.exists?(:post_guid => entry.id)
-            stripped_summary = strip_tags(entry.summary)
+            if entry.content.nil?
+              stripped_summary = strip_tags(entry.summary)
+            else
+              stripped_summary = strip_tags(entry.content)
+            end
             BuzzPost.create(
               :buzz_source_id => buzz_source[:id],
               :post_title => entry.title,
