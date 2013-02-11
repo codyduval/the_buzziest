@@ -22,7 +22,11 @@
     <% else %>
         <td>Unknown</td>
     <% end %>
-    <td>  <%= buzz_post.post_date_time.strftime("%m/%d/%y") %>  </td>
+    <% if buzz_post.post_date_time.present? %>
+        <td>  <%= buzz_post.post_date_time.strftime("%m/%d/%y") %>  </td>
+    <% else %>
+        <td>???</td>
+    <% end %>
     <td><%= truncate(buzz_post.post_content, :ommision => "...", :length => 200) %></td>
     <td><%= link_to 'Show', buzz_post %></td>
     <td><%= link_to 'Edit', edit_buzz_post_path(buzz_post) %></td>
