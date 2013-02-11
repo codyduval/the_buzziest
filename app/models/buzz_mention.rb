@@ -6,13 +6,14 @@ class BuzzMention < ActiveRecord::Base
   has_many :buzz_sources, :through => :buzz_posts
 
   def calculate_decayed_buzz_score(options = {})
-      options = {:now=> Time.now, :buzz_points=>self.buzz_score, :date=>self.created_at }.merge(options)
+      options = {:now=> Time.now, :buzz_points=>self.buzz_score, :date=>self.created_at, :decay_factor=>self.buzz_post.buzz_source.decay_factor }.merge(options)
       now = options[:now]
       buzz_points  = options[:buzz_points]
       date = options[:date]
+      decay_factor = options[:decay_factor].to_f
       age_in_seconds = now - date
       age_in_days = age_in_seconds/86400
-      decayed_buzz_score = buzz_points*((0.906)**age_in_days)
+      decayed_buzz_score = buzz_points*((decay_factor)**age_in_days)
   end
 
 end

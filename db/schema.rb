@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130205210808) do
+ActiveRecord::Schema.define(:version => 20130208215140) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20130205210808) do
     t.string   "x_path_nodes"
     t.string   "buzz_source_type"
     t.string   "city",                :default => "nyc"
+    t.decimal  "decay_factor",        :default => 0.906
   end
 
   create_table "pg_search_documents", :force => true do |t|
