@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130208215140) do
+ActiveRecord::Schema.define(:version => 20130211201425) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20130208215140) do
 
   create_table "buzz_posts", :force => true do |t|
     t.datetime "post_date_time"
-    t.string   "post_uri"
+    t.text     "post_uri"
     t.text     "post_content"
     t.boolean  "scanned_flag"
     t.decimal  "post_weight"
