@@ -4,7 +4,8 @@
   <tr>
     <th>Name</th>
     <th>Uri</th>
-    <th>Buzz weight</th>
+    <th>Buzz Weight</th>
+    <th>Decay Factor</th>
     <th>Source Type</th>
     <th>City</th>
     <th></th>
@@ -12,13 +13,12 @@
     <th></th>
   </tr>
 
-
-
 <% @buzz_sources.each do |buzz_source| %>
   <tr>
     <td><%= buzz_source.name %></td>
     <td><%= buzz_source.uri %></td>
     <td><%= buzz_source.buzz_weight %></td>
+    <td><%= buzz_source.decay_factor %></td>
     <% if buzz_source.buzz_source_type.present? %>
         <td><%= buzz_source.buzz_source_type %> </td>
     <% end %>

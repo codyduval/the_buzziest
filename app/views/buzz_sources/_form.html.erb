@@ -28,6 +28,11 @@
     <%= f.number_field :buzz_weight %>
   </div>
 
+  <div class="field">
+    <%= f.label :decay_factor %><br />
+    <%= f.number_field :decay_factor %>
+  </div>
+
   <p>
   <%= f.label :buzz_source_type %><br />
   <%= f.select :buzz_source_type, buzz_source_types %>
@@ -37,7 +42,6 @@
   <%= f.label :city %><br />
   <%= f.select :city, city_names %>
   </p>
-
 
   <div class="actions">
     <%= f.submit %>
