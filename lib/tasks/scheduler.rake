@@ -6,7 +6,9 @@ task :update_buzz_scores => :environment do
     buzz_mentions = BuzzMention.all
     buzz_mentions.each do |buzz_mention|
       decayed_score = buzz_mention.calculate_decayed_buzz_score
-      change_in_score_percent = (((buzz_mention.decayed_buzz_score - decayed_score)/decayed_score)*100).round(4)
+      unless buzz_mention.decayed_buzz_score.nil?
+        change_in_score_percent = (((buzz_mention.decayed_buzz_score - decayed_score)/decayed_score)*100).round(4)
+      end
       puts "Decaying score for BuzzMention with id of " + buzz_mention.id.to_s + ". Score went down by " + change_in_score_percent.to_s.light_red + " percent."
       buzz_mention.decayed_buzz_score = decayed_score
       buzz_mention.save
