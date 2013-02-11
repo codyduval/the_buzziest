@@ -85,7 +85,7 @@ class BuzzPostsController < ApplicationController
 
   private
   def sort_column
-    Restaurant.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
+    BuzzPost.column_names.include?(params[:sort]) ? params[:sort] : "id"
   end
   
   def sort_direction
@@ -93,7 +93,7 @@ class BuzzPostsController < ApplicationController
   end
 
   def per_page
-    params[:per_page] ||= 10
+    params[:per_page] ||= 50
   end
 
   def page 

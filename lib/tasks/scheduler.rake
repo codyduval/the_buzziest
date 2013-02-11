@@ -33,11 +33,10 @@ task :update_buzz_scores => :environment do
 end
 
 
-
 task :delete_old_posts => :environment do
 
-  def self.old_posts_ids(age_in_weeks)
-    old_posts = BuzzPost.where("created_at < :weeks", {:weeks => age_in_weeks.week.ago})
+  def self.old_posts_ids(age_in_days)
+    old_posts = BuzzPost.where("created_at < :days", {:days => age_in_days.day.ago})
     old_posts_ids = []
 
     old_posts.each do |post|
@@ -70,11 +69,9 @@ task :delete_old_posts => :environment do
   end
 
   
-  posts_to_destroy = find_posts_to_destroy(old_posts_ids(1), mentioned_posts_ids)
+  posts_to_destroy = find_posts_to_destroy(old_posts_ids(5), mentioned_posts_ids)
   destroy_old_posts(posts_to_destroy)
-
 end
-
 
 
 task :fetch_new_restaurants => :environment do 
