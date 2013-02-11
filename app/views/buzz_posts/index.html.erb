@@ -7,7 +7,7 @@
   <tr>
     <th><%= sortable "id","ID Number" %></th>
     <th>Buzz Source</th>
-    <th><%= sortable "created_at","Post Date"%></th>
+    <th><%= sortable "post_date_time","Pub Date"%></th>
     <th>Post Content</th>
     <th></th>
     <th></th>
@@ -22,7 +22,7 @@
     <% else %>
         <td>Unknown</td>
     <% end %>
-    <td>  <%= buzz_post.created_at.strftime("%m/%d/%y") %>  </td>
+    <td>  <%= buzz_post.post_date_time.strftime("%m/%d/%y") %>  </td>
     <td><%= truncate(buzz_post.post_content, :ommision => "...", :length => 200) %></td>
     <td><%= link_to 'Show', buzz_post %></td>
     <td><%= link_to 'Edit', edit_buzz_post_path(buzz_post) %></td>
