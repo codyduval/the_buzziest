@@ -20,6 +20,7 @@ module ApplicationHelper
     link_to title, :sort => column, :direction => direction
   end
 
+  # MasterCities module is located in initializers
   def city_names
     MasterCities.get_all_city_names
   end
