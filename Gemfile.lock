@@ -45,8 +45,6 @@ GEM
     colorize (0.5.8)
     curb (0.8.3)
     erubis (2.7.0)
-    exception_notification (3.0.1)
-      actionmailer (>= 3.0.4)
     execjs (1.4.0)
       multi_json (~> 1.0)
     faraday (0.8.4)
@@ -176,7 +174,6 @@ DEPENDENCIES
   binding_of_caller
   coffee-rails (~> 3.2.1)
   colorize
-  exception_notification
   feedzirra
   jquery-rails
   meta_request (= 0.2.1)
