@@ -11,6 +11,7 @@ gem 'sunspot_rails'
 gem 'pg'
 gem 'sanitize'
 gem 'will_paginate', '~> 3.0.0'
+gem 'sentry-raven'
 
 group :development do
   gem 'meta_request', '0.2.1'
