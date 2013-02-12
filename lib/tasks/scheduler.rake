@@ -1,8 +1,11 @@
 desc "This task is called by the Heroku scheduler add-on"
 
+Raven.capture do
+  # captures any exceptions which happen in this block
+
 task :update_buzz_scores => :environment do
   
-  def self.calculate_decayed_scores
+  def self.calculatee_decayed_scores
     buzz_mentions = BuzzMention.all
     buzz_mentions.each do |buzz_mention|
       decayed_score = buzz_mention.calculate_decayed_buzz_score
@@ -75,7 +78,7 @@ end
 
 
 task :fetch_new_restaurants => :environment do 
-  
+
   require 'nokogiri'
   require 'open-uri'
   require 'benchmark'
@@ -377,4 +380,6 @@ end
   end
 
   puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+end
+
 end
