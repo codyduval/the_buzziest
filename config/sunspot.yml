@@ -4,6 +4,8 @@ production:
     port: 8983
     log_level: INFO
     path: /solr/the_buzziest_staging
+    read_timeout: 10
+    open_timeout: 10
     
 development:
   solr:
@@ -11,6 +13,8 @@ development:
     port: 8983
     log_level: INFO
     path: /solr/the_buzziest_local
+    read_timeout: 10
+    open_timeout: 10
 
 test:
   solr:
