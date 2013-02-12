@@ -5,7 +5,7 @@ Raven.capture do
 
 task :update_buzz_scores => :environment do
   
-  def self.calculatee_decayed_scores
+  def self.calculate_decayed_scores
     buzz_mentions = BuzzMention.all
     buzz_mentions.each do |buzz_mention|
       decayed_score = buzz_mention.calculate_decayed_buzz_score
