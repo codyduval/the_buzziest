@@ -67,8 +67,4 @@ TheBuzziest::Application.configure do
 
   Sunspot.config.solr.url = 'http://ec2-54-242-28-35.compute-1.amazonaws.com:8983/solr/the_buzziest_staging'
 
-  config.middleware.use ExceptionNotifier,
-  sender_address: 'cody.duval@gmail.com',
-  exception_recipients: 'cody.duval@gmail.com'
-
 end
