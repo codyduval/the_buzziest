@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/getsentry/raven-ruby.git
+  revision: e520389a56d099276c167d8b442967c7fa549ecd
+  specs:
+    sentry-raven (0.4.3)
+      faraday (>= 0.7.6)
+      hashie
+      multi_json (~> 1.0)
+      uuidtools
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -133,11 +143,6 @@ GEM
       tilt (~> 1.3)
     sax-machine (0.1.0)
       nokogiri (> 0.0.0)
-    sentry-raven (0.4.3)
-      faraday (>= 0.7.6)
-      hashie
-      multi_json (~> 1.0)
-      uuidtools
     simple_oauth (0.1.9)
     sinatra (1.3.3)
       rack (~> 1.3, >= 1.3.6)
@@ -191,7 +196,7 @@ DEPENDENCIES
   resque
   sanitize
   sass-rails (~> 3.2.3)
-  sentry-raven
+  sentry-raven!
   sunspot_rails
   sunspot_solr
   twitter
