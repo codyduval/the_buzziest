@@ -1,10 +1,10 @@
 desc "This task is called by the Heroku scheduler add-on"
 
-Raven.capture do
-  # captures any exceptions which happen in this block
-
 task :update_buzz_scores => :environment do
   
+  Raven.capture do
+  # captures any exceptions which happen in this block and notify via Sentry
+
   def self.calculate_decayed_scores
     buzz_mentions = BuzzMention.all
     buzz_mentions.each do |buzz_mention|
@@ -33,10 +33,15 @@ task :update_buzz_scores => :environment do
 
   calculate_decayed_scores
   update_restaurants_total_scores
+
+  end
 end
 
 
 task :delete_old_posts => :environment do
+
+  Raven.capture do
+  # captures any exceptions which happen in this block and notify via Sentry
 
   def self.old_posts_ids(age_in_days)
     old_posts = BuzzPost.where("created_at < :days", {:days => age_in_days.day.ago})
@@ -74,10 +79,14 @@ task :delete_old_posts => :environment do
   
   posts_to_destroy = find_posts_to_destroy(old_posts_ids(5), mentioned_posts_ids)
   destroy_old_posts(posts_to_destroy)
+  end
 end
 
 
 task :fetch_new_restaurants => :environment do 
+
+  Raven.capture do
+  # captures any exceptions which happen in this block and notify via Sentry
 
   require 'nokogiri'
   require 'open-uri'
@@ -165,13 +174,18 @@ task :fetch_new_restaurants => :environment do
   puts "#{total_restaurants_in_db}".green + " total restaurants in database"
 
   end
-puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+  puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+  end
 end
 
 
 
 task :scan_posts_for_buzz => :environment do
-require 'benchmark'
+
+  Raven.capture do
+  # captures any exceptions which happen in this block and notify via Sentry
+
+  require 'benchmark'
 
   def self.search_by_post(name)
     buzz_post_search_results = BuzzPost.search do
@@ -246,10 +260,13 @@ require 'benchmark'
   end
 
   puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+  end
 end
 
 
 task :fetch_all_twitter_handles => :environment do
+  Raven.capture do
+  # captures any exceptions which happen in this block and notify via Sentry
 
   require 'nokogiri'
   require 'open-uri'
@@ -277,98 +294,100 @@ task :fetch_all_twitter_handles => :environment do
       fetch_restaurant_twitter_handle(restaurant)
     end
   end
+
+  end
 end
 
 
 task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
   args.with_defaults(:city => "nyc", :source_type => "all")
 
+  Raven.capture do
+  # captures any exceptions which happen in this block and notify via Sentry
+
   include ActionView::Helpers::SanitizeHelper
   require 'benchmark'
 
-def self.get_buzz_source_types(args)
-  unless args.source_type == "all"
-    # buzz_source_types = BuzzSourceType.where(:source_type=> args.source_type)
-    buzz_source_types = args.source_type
-  else
-    # buzz_source_types = BuzzSourceType.where("source_type = 'feed' OR source_type = 'twitter'")
-    buzz_source_types = ["feed","twitter"]
+  def self.get_buzz_source_types(args)
+    unless args.source_type == "all"
+      # buzz_source_types = BuzzSourceType.where(:source_type=> args.source_type)
+      buzz_source_types = args.source_type
+    else
+      # buzz_source_types = BuzzSourceType.where("source_type = 'feed' OR source_type = 'twitter'")
+      buzz_source_types = ["feed","twitter"]
+    end
   end
-end
 
-def self.get_buzz_sources(buzz_source_types)
-  buzz_sources_array = Array.new
-  buzz_source_types.each do |buzz_source_type|
-    buzz_source = BuzzSource.where(:buzz_source_type  => buzz_source_type)
-    buzz_sources_array.push(buzz_source)
+  def self.get_buzz_sources(buzz_source_types)
+    buzz_sources_array = Array.new
+    buzz_source_types.each do |buzz_source_type|
+      buzz_source = BuzzSource.where(:buzz_source_type  => buzz_source_type)
+      buzz_sources_array.push(buzz_source)
+    end
+    return buzz_sources_array
   end
-  return buzz_sources_array
-end
 
-def get_posts_from_source(buzz_sources_array)
-  buzz_sources_array.each do |buzz_sources|
-    buzz_sources.each do |buzz_source|
-      if buzz_source.buzz_source_type == "feed"
-          update_from_feed(buzz_source)
-      elsif buzz_source.buzz_source_type == "twitter"
-          update_from_twitter(buzz_source)
+  def get_posts_from_source(buzz_sources_array)
+    buzz_sources_array.each do |buzz_sources|
+      buzz_sources.each do |buzz_source|
+        if buzz_source.buzz_source_type == "feed"
+            update_from_feed(buzz_source)
+        elsif buzz_source.buzz_source_type == "twitter"
+            update_from_twitter(buzz_source)
+        end
       end
     end
   end
-end
 
-   
   def self.update_from_twitter(buzz_source)
-    # buzz_feed_sources.each do |buzz_source|
-      twitter_screen_name = buzz_source[:uri]
-      Twitter.user_timeline(twitter_screen_name).each do |tweet|
-        unless BuzzPost.exists?(:post_guid => tweet.id.to_s)
-          BuzzPost.create(
-            :post_guid => tweet.id.to_s,
-            :buzz_source_id => buzz_source[:id],
-            :post_content => tweet.text,
-            :post_title => tweet.text,
-            :post_uri => "https://twiter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
-            :post_date_time => tweet.created_at,
-            :post_weight => buzz_source[:buzz_weight],
-            :scanned_flag => false
-          )
-          puts "Added ".light_green + tweet.text.light_green + " from " + tweet.user.screen_name
-        end
+    twitter_screen_name = buzz_source[:uri]
+    Twitter.user_timeline(twitter_screen_name).each do |tweet|
+      unless BuzzPost.exists?(:post_guid => tweet.id.to_s)
+        BuzzPost.create(
+          :post_guid => tweet.id.to_s,
+          :buzz_source_id => buzz_source[:id],
+          :post_content => tweet.text,
+          :post_title => tweet.text,
+          :post_uri => "https://twiter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
+          :post_date_time => tweet.created_at,
+          :post_weight => buzz_source[:buzz_weight],
+          :scanned_flag => false
+        )
+        puts "Added ".light_green + tweet.text.light_green + " from " + tweet.user.screen_name
       end
-    # end
+    end
   end
 
   def self.update_from_html
   end
 
   def self.update_from_feed(buzz_source)
-      feed_url = buzz_source[:uri]
-      feed = Feedzirra::Feed.fetch_and_parse(feed_url)
-      unless feed.nil?
-        feed.entries.each do |entry|
-          unless BuzzPost.exists?(:post_guid => entry.id)
-            if entry.content.nil?
-              stripped_summary = strip_tags(entry.summary)
-            else
-              stripped_summary = strip_tags(entry.content)
-            end
-            BuzzPost.create(
-              :buzz_source_id => buzz_source[:id],
-              :post_title => entry.title,
-              :post_content => stripped_summary,
-              :post_uri => entry.url,
-              :post_date_time => entry.published,
-              :post_guid => entry.id,
-              :post_weight => "1",
-              :scanned_flag => false
-            )
-            puts "added ".light_green + entry.title.light_green + " " + entry.url
+    feed_url = buzz_source[:uri]
+    feed = Feedzirra::Feed.fetch_and_parse(feed_url)
+    unless feed.nil?
+      feed.entries.each do |entry|
+        unless BuzzPost.exists?(:post_guid => entry.id)
+          if entry.content.nil?
+            stripped_summary = strip_tags(entry.summary)
           else
-            puts "skipped ".light_yellow + entry.title.light_yellow+ " " + entry.url
+            stripped_summary = strip_tags(entry.content)
           end
+          BuzzPost.create(
+            :buzz_source_id => buzz_source[:id],
+            :post_title => entry.title,
+            :post_content => stripped_summary,
+            :post_uri => entry.url,
+            :post_date_time => entry.published,
+            :post_guid => entry.id,
+            :post_weight => "1",
+            :scanned_flag => false
+          )
+          puts "added ".light_green + entry.title.light_green + " " + entry.url
+        else
+          puts "skipped ".light_yellow + entry.title.light_yellow+ " " + entry.url
         end
       end
+    end
   end
 
   time_elapsed = Benchmark.realtime do
@@ -380,6 +399,5 @@ end
   end
 
   puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
-end
-
+  end
 end
