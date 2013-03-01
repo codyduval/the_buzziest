@@ -94,7 +94,7 @@ task :fetch_new_restaurants => :environment do
 
   def self.fuzzy_match(name)
     fuzzy_match = Restaurant.search do
-      fulltext name
+      fulltext %Q/"#{name}"/ 
     end
     fuzzy_match = fuzzy_match.results
 
@@ -106,7 +106,7 @@ task :fetch_new_restaurants => :environment do
   @added_count = 0
   @skipped_count = 0
   @full_restaurant_name_list = Array.new
-  number_of_pages_to_scrape = 2
+  number_of_pages_to_scrape = 5
   city = MasterCities.get_city(:nyc)
   restaurant_list_sources = BuzzSource.where("buzz_source_type = ? AND city = ?","restaurant_list", city)
     
