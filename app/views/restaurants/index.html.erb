@@ -1,32 +1,20 @@
 <% title "Restaurants" %>
+
+<%= form_tag restaurants_path, :method => 'get' do %>
+  <%= hidden_field_tag :direction, params[:direction] %>
+  <%= hidden_field_tag :sort, params[:sort] %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+<% end %>
+
 <h1>Listing restaurants</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Twitter</th>
-    <th><%= sortable "total_current_buzz", "Total Buzz" %></th>
-    <th><%= sortable "buzz_mentions_count", "Buzz Mentions" %></th>
-    <th><%= sortable "created_at" %></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @restaurants.each do |restaurant| %>
-  <tr>
-    <td><%= restaurant.name %></td>
-    <td><a target="_blank" href=http://www.twitter.com/<%= restaurant.twitter_handle%>><%= restaurant.twitter_handle%></td>
-    <td><%= number_with_precision(restaurant.total_current_buzz,:precision => 1) %></td>
-    <td><%= link_to_if restaurant.buzz_mentions.exists?, restaurant.buzz_mentions_count, restaurant%></td>
-    <td><%= restaurant.created_at.strftime("%b %d %y")  %></td>
-    <td><%= link_to 'Show', restaurant %></td>
-    <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
-    <td><%= link_to 'Destroy', restaurant, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
+<div id="restaurants"><%= render 'restaurants' %></div>
 
 <br />
+
+<%= will_paginate @restaurants %>
 
 <%= link_to 'New Restaurant', new_restaurant_path %>

@@ -2,12 +2,13 @@ class RestaurantsController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   def index
-    @restaurants = Restaurant.order(sort_column + ' ' + sort_direction)
+    @restaurants = Restaurant.search(params[:search]).order(sort_column + ' ' + sort_direction).page(params[:page])
 
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @restaurants }
+      
     end
   end
 

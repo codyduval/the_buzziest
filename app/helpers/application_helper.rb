@@ -17,12 +17,15 @@ module ApplicationHelper
   def sortable(column, title = nil)
     title ||= column.titleize
     direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
-    link_to title, :sort => column, :direction => direction
+    link_to title, params.merge(:sort => column, :direction => direction, :page => nil)
+
   end
 
   # MasterCities module is located in initializers
   def city_names
     MasterCities.get_all_city_names
   end
+
+
 
 end
