@@ -1,5 +1,10 @@
 TheBuzziest::Application.routes.draw do
 
+  root :to => 'restaurants#index'
+
+  resources :users
+  resources :sessions
+
   resources :buzz_posts
 
   resources :buzz_sources
@@ -10,7 +15,7 @@ TheBuzziest::Application.routes.draw do
  
   match '/inbound_email/:city' => 'inbound_email#create'
 
-  root :to => 'restaurants#index'
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
