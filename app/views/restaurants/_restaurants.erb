@@ -18,8 +18,12 @@
     <td><%= link_to_if restaurant.buzz_mentions.exists?, restaurant.buzz_mentions_count, restaurant%></td>
     <td><%= restaurant.created_at.strftime("%b %d %y")  %></td>
     <td><%= link_to 'Show', restaurant %></td>
-    <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
-    <td><%= link_to 'Destroy', restaurant, confirm: 'Are you sure?', method: :delete %></td>
+    <% if can? :edit, @restaurant %>
+      <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
+    <% end %>
+    <% if can? :destroy, @restaurant %>
+      <td><%= link_to 'Destroy', restaurant, confirm: 'Are you sure?', method: :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>

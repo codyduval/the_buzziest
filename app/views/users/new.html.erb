@@ -24,5 +24,8 @@
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation %>
   </div>
+
+  <%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
+
   <div class="actions"><%= f.submit "Sign Up" %></div>
 <% end %>

@@ -1,6 +1,8 @@
 class BuzzPostsController < ApplicationController
   helper_method :sort_column, :sort_direction
 
+  load_and_authorize_resource
+
   def index
     # @buzz_posts = BuzzPost.all
     @buzz_posts = BuzzPost.paginate(:page => params[:page], :per_page => params[:per_page]).order(sort_column + ' ' + sort_direction)

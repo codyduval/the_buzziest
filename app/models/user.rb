@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :password, :password_confirmation
+  attr_accessible :email, :password, :password_confirmation, :role
   has_secure_password
+
+  ROLES = %w[admin regular]
   
   validates_presence_of :password, :on => :create
   validates_uniqueness_of :email

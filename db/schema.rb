@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130320222325) do
+ActiveRecord::Schema.define(:version => 20130321173606) do
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(:version => 20130320222325) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.string   "auth_token"
+    t.string   "role"
   end
 
 end
