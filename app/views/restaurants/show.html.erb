@@ -1,48 +1,59 @@
-<p id="notice"><%= notice %></p>
 
 <p>
-  <b>Name:</b>
+  <strong>Name:</strong><br>
   <%= @restaurant.name %>
 </p>
-
-<p>
-  <b>Style:</b>
-  <%= @restaurant.style %>
+<!-- <p>
+  <strong>Style:</strong><br>
+  </%= @restaurant.style %>
 </p>
-
 <p>
-  <b>Weeks on list:</b>
-  <%= @restaurant.weeks_on_list %>
+  <strong>Weeks on List:</strong><br>
+  </%= @restaurant.weeks_on_list %>
 </p>
-
 <p>
-  <b>Neighborhood:</b>
-  <%= @restaurant.neighborhood %>
+  <strong>Neighborhood</strong><br>
+  </%= @restaurant.neighborhood %>
 </p>
-
 <p>
-  <b>Reserve:</b>
-  <%= @restaurant.reserve %>
+  <strong>Reserve:</strong><br>
+  </%= @restaurant.reserve %>
+</p> -->
+<!-- <p>
+  <strong>Description</strong><br>
+  </%= @restaurant.description %>
+</p> -->
+<p>
+  <strong>Twitter</strong><br>
+  <%= @restaurant.twitter_handle %>
 </p>
-
 <p>
-  <b>Description:</b>
-  <%= @restaurant.description %>
+  <strong>Exact Match Only?</strong><br>
+  <%= @restaurant.exact_match %>
 </p>
-
 <p>
-  <b>Make inactive (hide)?:</b>
+  <strong>Make Inactive (hide)?:</strong><br>
   <%= @restaurant.skip_scan %>
 </p>
-
 <p>
+  <strong>City</strong><br>
+  <%= @restaurant.city %>
+</p>
+<p>
+  <strong>Total Current Buzz</strong><br>
+  <%= @restaurant.total_current_buzz %>
+</p>
+
   <b>Buzz Mentions:</b><br/>
     <% @restaurant.buzz_mentions.each do |buzz_mention| %>
       <%= render :partial => 'buzz_mentions/buzz_mentions', :locals => {:buzz_mention => buzz_mention} %>
     <% end %>
-</p>
 
-<% if can? :edit, @restaurant %>
-  <%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
-<% end %>
-<%= link_to 'Back', restaurants_path %>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              restaurants_path, :class => 'btn'  %>
+  <% if can? :edit, @restaurant %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),edit_restaurant_path(@restaurant), :class => 'btn' %>
+  <% end %>
+</div>

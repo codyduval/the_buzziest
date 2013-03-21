@@ -1,20 +1,11 @@
 <% title "Restaurants" %>
 
-<%= form_tag restaurants_path, :method => 'get' do %>
-  <%= hidden_field_tag :direction, params[:direction] %>
-  <%= hidden_field_tag :sort, params[:sort] %>
-  <p>
-    <%= text_field_tag :search, params[:search] %>
-    <%= submit_tag "Search", :name => nil %>
-  </p>
-<% end %>
-
-<h1>Listing restaurants</h1>
-
 <div id="restaurants"><%= render 'restaurants' %></div>
 
 <br />
 
-<%= will_paginate @restaurants %>
+<%= will_paginate @restaurants, :page_links => false %>
 
-<%= link_to 'New Restaurant', new_restaurant_path %>
+<% if can? :create, @restaurant %>
+  <%= link_to 'New Restaurant', new_restaurant_path %>
+<% end %>

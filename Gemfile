@@ -14,7 +14,6 @@ gem 'will_paginate', '~> 3.0.0'
 gem 'sentry-raven', :git => "https://github.com/getsentry/raven-ruby.git"
 gem 'cancan'
 
-
 group :development do
   gem 'meta_request', '0.2.1'
   gem "better_errors"
