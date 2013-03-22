@@ -4,7 +4,7 @@ class RestaurantsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @restaurants = Restaurant.search(params[:search]).order(sort_column + ' ' + sort_direction).page(params[:page])
+    @restaurants = Restaurant.order(sort_column + ' ' + sort_direction).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
