@@ -6,7 +6,7 @@ class UsersController < ApplicationController
     def create
       @user = User.new(params[:user])
       if @user.save
-        session[:user_id] = @user.id
+        cookies[:auth_token] = @user.auth_token
         redirect_to root_url, :notice=> "Thank you for signing up!"
       else
         render "new"
