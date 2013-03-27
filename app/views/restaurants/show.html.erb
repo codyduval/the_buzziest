@@ -46,7 +46,11 @@
 
   <b>Buzz Mentions:</b><br/>
     <% @restaurant.buzz_mentions.each do |buzz_mention| %>
-      <%= render :partial => 'buzz_mentions/buzz_mentions', :locals => {:buzz_mention => buzz_mention} %>
+      <%= render :partial => 'buzz_mentions/buzz_mentions', :locals => {:buzz_mention => buzz_mention} %> 
+      <% buzz_mention.buzz_mention_highlights.each do |buzz_mention_highlight| %>
+        <%= render :partial => 'buzz_mention_highlights/buzz_mention_highlights', :locals => {:buzz_mention_highlight => buzz_mention_highlight} %>
+      <% end %>
+      <br/>
     <% end %>
 
 
