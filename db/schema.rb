@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130321173606) do
+ActiveRecord::Schema.define(:version => 20130327152341) do
+
+  create_table "buzz_mention_highlights", :force => true do |t|
+    t.integer  "buzz_mention_id"
+    t.text     "buzz_mention_highlight_text"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"

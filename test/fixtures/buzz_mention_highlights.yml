@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  buzz_mention_id: 1
+  buzz_mention_highlight_text: MyText
+
+two:
+  buzz_mention_id: 1
+  buzz_mention_highlight_text: MyText

@@ -189,20 +189,24 @@ task :scan_posts_for_buzz => :environment do
 
   def self.search_by_post(name)
     buzz_post_search_results = BuzzPost.search do
-      fulltext name
+      fulltext name do
+        highlight :post_content
+      end
     end
-    buzz_post_search_results = buzz_post_search_results.results
+    buzz_post_search_hits = buzz_post_search_results.hits
 
-    return buzz_post_search_results
+    return buzz_post_search_hits
   end
 
   def self.search_phrase_by_post(name)
     buzz_post_search_results = BuzzPost.search do
-      fulltext %Q/"#{name}"/ 
+      fulltext %Q/"#{name}"/ do
+        highlight :post_content
+      end
     end
-    buzz_post_search_results = buzz_post_search_results.results
+    buzz_post_search_hits = buzz_post_search_results.hits
 
-    return buzz_post_search_results
+    return buzz_post_search_hits
   end
 
   def self.scan_posts(restaurant)
@@ -233,16 +237,24 @@ task :scan_posts_for_buzz => :environment do
   def self.scan_restaurants(restaurants)
     restaurants.each do |restaurant|
       unless restaurant.skip_scan == true
-        scan_results = scan_posts(restaurant)
-        scan_results.each do |result|
+        scan_results_hits = scan_posts(restaurant)
+        scan_results_hits.each do |hit|
           restaurant = Restaurant.find_by_name(restaurant.name)
-          unless BuzzMention.exists?(:buzz_post_id => result[:id], :restaurant_id => restaurant[:id])
+          unless BuzzMention.exists?(:buzz_post_id => hit.primary_key.to_i, :restaurant_id => restaurant[:id])
             @buzz_mention = BuzzMention.create(
               :restaurant_id => restaurant[:id],
-              :buzz_post_id => result[:id],
-              :buzz_score => result[:post_weight]
+              :buzz_post_id => hit.primary_key.to_i,
+              :buzz_score => BuzzPost.where(:id => hit.primary_key.to_i).first.post_weight
             )
-            puts "Found new buzz for #{restaurant.name} in post id #{result.id} posted on #{@buzz_mention.buzz_post.buzz_source.name}".light_green
+            puts "Found new buzz for #{restaurant.name} in post id #{hit.primary_key.to_i} posted on #{@buzz_mention.buzz_post.buzz_source.name}".light_green
+            hit.highlights(:post_content).each do |highlight|
+              @buzz_mention_highlight = BuzzMentionHighlight.create(
+              :buzz_mention_highlight_text => highlight.format, 
+              :buzz_mention_id => @buzz_mention.id
+              )
+              puts "Creating highlight for #{restaurant.name} in buzz mention id #{@buzz_mention.id} which says: #{highlight.format}".light_green
+            end
+            
           end
         end
       else

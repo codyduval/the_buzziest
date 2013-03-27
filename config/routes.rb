@@ -1,5 +1,8 @@
 TheBuzziest::Application.routes.draw do
 
+  resources :buzz_mention_highlights
+
+
   root :to => 'restaurants#index'
 
   get 'signup', to: 'users#new', as: 'signup'

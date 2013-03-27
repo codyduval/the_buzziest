@@ -1,0 +1,2 @@
+class BuzzMentionHighlightsController < ApplicationController
+end
