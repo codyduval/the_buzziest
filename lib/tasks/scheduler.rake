@@ -6,7 +6,7 @@ task :update_buzz_scores => :environment do
   # captures any exceptions which happen in this block and notify via Sentry
 
   def self.calculate_decayed_scores
-    buzz_mentions = BuzzMention.all
+    buzz_mentions = BuzzMention.where(:ignore => false)
     buzz_mentions.each do |buzz_mention|
       decayed_score = buzz_mention.calculate_decayed_buzz_score
       unless buzz_mention.decayed_buzz_score.nil?
@@ -22,7 +22,7 @@ task :update_buzz_scores => :environment do
     restaurants = Restaurant.where("buzz_mentions_count >= 1")
     restaurants.each do |restaurant|
       restaurant_id = restaurant.id
-      buzz_mentions = BuzzMention.where(:restaurant_id => restaurant_id)
+      buzz_mentions = BuzzMention.where(:restaurant_id => restaurant_id, :ignore => false)
       decayed_buzz_scores = buzz_mentions.pluck(:decayed_buzz_score)
       total_buzz_score = decayed_buzz_scores.inject(:+)
       restaurant.total_current_buzz = total_buzz_score
