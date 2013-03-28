@@ -1,0 +1,15 @@
+$("#ignore_link_<%= @buzz_mention.id %>").text("<%= ignore_link_text(@buzz_mention) %>");
+
+if($("a#buzz_mention_<%= @buzz_mention.id %>").hasClass("ignore_true")) {
+	$("a#buzz_mention_<%= @buzz_mention.id %> ").hide().fadeIn('fast');
+	$("a#buzz_mention_<%= @buzz_mention.id %> ").css("textDecoration", "none");
+	$("a#buzz_mention_<%= @buzz_mention.id %> ").removeClass("ignore_true");
+	$("a#buzz_mention_<%= @buzz_mention.id %> ").addClass("ignore_false");
+}
+else {
+	$("a#buzz_mention_<%= @buzz_mention.id %> ").hide().fadeIn('fast');
+	$("a#buzz_mention_<%= @buzz_mention.id %> ").css("textDecoration", "line-through");
+	$("a#buzz_mention_<%= @buzz_mention.id %> ").removeClass("ignore_false");
+	$("a#buzz_mention_<%= @buzz_mention.id %> ").addClass("ignore_true");
+}
+

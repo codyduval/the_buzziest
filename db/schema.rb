@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130327152341) do
+ActiveRecord::Schema.define(:version => 20130328142855) do
 
   create_table "buzz_mention_highlights", :force => true do |t|
     t.integer  "buzz_mention_id"
@@ -24,9 +24,10 @@ ActiveRecord::Schema.define(:version => 20130327152341) do
     t.decimal  "buzz_score"
     t.integer  "buzz_post_id"
     t.integer  "restaurant_id"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.decimal  "decayed_buzz_score"
+    t.boolean  "ignore",             :default => false
   end
 
   create_table "buzz_posts", :force => true do |t|

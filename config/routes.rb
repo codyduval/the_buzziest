@@ -16,7 +16,9 @@ TheBuzziest::Application.routes.draw do
 
   resources :buzz_sources
 
-  resources :buzz_mentions
+  resources :buzz_mentions do  
+    get 'toggle_ignore', :on => :member  
+  end
 
   resources :restaurants
  

@@ -1,5 +1,5 @@
 class BuzzMention < ActiveRecord::Base
-  attr_accessible :buzz_post, :buzz_score, :restaurant_name, :restaurant_id, :buzz_post_id, :decayed_buzz_score
+  attr_accessible :buzz_post, :buzz_score, :restaurant_name, :restaurant_id, :buzz_post_id, :decayed_buzz_score, :ignore
 
   belongs_to :buzz_post
   belongs_to :restaurant, :counter_cache => true

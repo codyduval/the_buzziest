@@ -26,6 +26,8 @@ module ApplicationHelper
     MasterCities.get_all_city_names
   end
 
-
+  def ignore_link_text(ignorable)  
+    ignorable.ignore? ? 'Ignored' : 'Valid'  
+  end
 
 end
