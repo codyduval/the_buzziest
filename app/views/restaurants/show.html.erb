@@ -47,10 +47,10 @@
   <b>Buzz Mentions:</b><br/>
     <% @restaurant.buzz_mentions.each do |buzz_mention| %>
     <div id="buzz_mention_<%=buzz_mention.id%>">
+    <% if can? :edit, @buzz_mention %>
+      <%= link_to ignore_link_text(buzz_mention),toggle_ignore_buzz_mention_path(buzz_mention),:remote => true, :id => "ignore_link_#{buzz_mention.id}" %> - 
+    <% end %>
     <% if buzz_mention.buzz_mention_highlights.exists? %>
-      <% if can? :edit, @buzz_mention %>
-        <%= link_to ignore_link_text(buzz_mention),toggle_ignore_buzz_mention_path(buzz_mention),:remote => true, :id => "ignore_link_#{buzz_mention.id}" %> - 
-      <% end %>
       <%= render :partial => 'buzz_mentions/buzz_mentions_with_highlights', :locals => {:buzz_mention => buzz_mention} %>
     <% else %>
       <%= render :partial => 'buzz_mentions/buzz_mentions', :locals => {:buzz_mention => buzz_mention} %>
