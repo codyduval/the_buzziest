@@ -25,6 +25,9 @@ task :update_buzz_scores => :environment do
       buzz_mentions = BuzzMention.where(:restaurant_id => restaurant_id, :ignore => false)
       decayed_buzz_scores = buzz_mentions.pluck(:decayed_buzz_score)
       total_buzz_score = decayed_buzz_scores.inject(:+)
+      if total_buzz_score == nil
+        total_buzz_score = 0
+      end
       restaurant.total_current_buzz = total_buzz_score
       puts "Updating " + restaurant.name + "'s total score to " + total_buzz_score.to_s
       restaurant.save
