@@ -1,9 +1,10 @@
 class RestaurantsController < ApplicationController
   helper_method :sort_column, :sort_direction
 
-  def index
-    @restaurants = Restaurant.search(params[:search]).order(sort_column + ' ' + sort_direction).page(params[:page])
+  load_and_authorize_resource
 
+  def index
+    @restaurants = Restaurant.order(sort_column + ' ' + sort_direction).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -12,8 +13,6 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  # GET /restaurants/1
-  # GET /restaurants/1.json
   def show
     @restaurant = Restaurant.find(params[:id])
 
@@ -23,8 +22,6 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  # GET /restaurants/new
-  # GET /restaurants/new.json
   def new
     @restaurant = Restaurant.new
 
@@ -34,13 +31,10 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  # GET /restaurants/1/edit
   def edit
     @restaurant = Restaurant.find(params[:id])
   end
 
-  # POST /restaurants
-  # POST /restaurants.json
   def create
     @restaurant = Restaurant.new(params[:restaurant])
 
@@ -55,8 +49,6 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  # PUT /restaurants/1
-  # PUT /restaurants/1.json
   def update
     @restaurant = Restaurant.find(params[:id])
 
@@ -71,8 +63,6 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  # DELETE /restaurants/1
-  # DELETE /restaurants/1.json
   def destroy
     @restaurant = Restaurant.find(params[:id])
     @restaurant.destroy

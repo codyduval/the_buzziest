@@ -11,15 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130211201425) do
+ActiveRecord::Schema.define(:version => 20130328142855) do
+
+  create_table "buzz_mention_highlights", :force => true do |t|
+    t.integer  "buzz_mention_id"
+    t.text     "buzz_mention_highlight_text"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
 
   create_table "buzz_mentions", :force => true do |t|
     t.decimal  "buzz_score"
     t.integer  "buzz_post_id"
     t.integer  "restaurant_id"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.decimal  "decayed_buzz_score"
+    t.boolean  "ignore",             :default => false
   end
 
   create_table "buzz_posts", :force => true do |t|
@@ -74,6 +82,15 @@ ActiveRecord::Schema.define(:version => 20130211201425) do
     t.integer  "buzz_mentions_count", :default => 0
     t.string   "city",                :default => "nyc"
     t.decimal  "total_current_buzz",  :default => 0.0
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "email"
+    t.string   "password_digest"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "auth_token"
+    t.string   "role"
   end
 
 end

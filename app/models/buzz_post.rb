@@ -11,7 +11,8 @@ class BuzzPost < ActiveRecord::Base
                   # :using => {:tsearch => {:normalization => 4}}
 
   searchable do
-    text :post_title, :post_content
+    text :post_title, :stored => true
+    text :post_content, :stored => true
   end
 
   def self.create_from_postmark(mitt)

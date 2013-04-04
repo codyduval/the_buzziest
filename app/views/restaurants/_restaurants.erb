@@ -1,25 +1,35 @@
-<table>
-  <tr>
+<table class="table table-striped">
+  <thead>
+    <tr>
     <th>Name</th>
     <th>Twitter</th>
-    <th><%= sortable "total_current_buzz", "Total Buzz" %></th>
-    <th><%= sortable "buzz_mentions_count", "Buzz Mentions" %></th>
-    <th><%= sortable "created_at" %></th>
-    <th></th>
-    <th></th>
+    <th class="buzz_mentions_score">Buzz Score</th>
+    <th class="buzz_mentions_count">Buzz Mentions</th>
+    <th>Opened On</th>
     <th></th>
   </tr>
-
-<% @restaurants.each do |restaurant| %>
-  <tr>
-    <td><%= restaurant.name %></td>
-    <td><a target="_blank" href=http://www.twitter.com/<%= restaurant.twitter_handle%>><%= restaurant.twitter_handle%></td>
-    <td><%= number_with_precision(restaurant.total_current_buzz,:precision => 1) %></td>
-    <td><%= link_to_if restaurant.buzz_mentions.exists?, restaurant.buzz_mentions_count, restaurant%></td>
-    <td><%= restaurant.created_at.strftime("%b %d %y")  %></td>
-    <td><%= link_to 'Show', restaurant %></td>
-    <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
-    <td><%= link_to 'Destroy', restaurant, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+  </thead>
+  <tbody>
+    <% @restaurants.each do |restaurant| %>
+      <tr>
+        <td><%= restaurant.name %></td>
+        <td><a target="_blank" href=http://www.twitter.com/<%= restaurant.twitter_handle%>><%= restaurant.twitter_handle%></td>
+        <td class="buzz_mentions_score"><%= number_with_precision(restaurant.total_current_buzz,:precision => 1) %></td>
+        <td class="buzz_mentions_count"><%= restaurant.buzz_mentions_count if restaurant.buzz_mentions.exists? %></td>
+        <td><%= restaurant.created_at.strftime("%b %d %y")  %></td>
+        <td>
+          <% if can? :edit, @restaurant %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_restaurant_path(restaurant), :class => 'btn btn-mini' %>
+            <%= link_to "Show", restaurant_path(restaurant),:class => 'btn btn-mini' %>
+          <% end %>
+          <% if can? :destroy, @restaurant %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")), restaurant_path(restaurant), :method => :delete, :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-mini btn-danger' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
+<% if can? :create, @restaurant %>
+  <%= link_to t('.new', :default => t("helpers.links.new")), new_restaurant_path, :class => 'btn btn-primary' %>
+<% end %>

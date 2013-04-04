@@ -30,6 +30,7 @@
   <%= @buzz_post.post_weight %>
 </p>
 
-
+<% if can? :edit, @buzz_post %>
 <%= link_to 'Edit', edit_buzz_post_path(@buzz_post) %> |
+<% end %>
 <%= link_to 'Back', :back %>

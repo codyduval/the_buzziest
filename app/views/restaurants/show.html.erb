@@ -1,47 +1,70 @@
-<p id="notice"><%= notice %></p>
 
 <p>
-  <b>Name:</b>
+  <strong>Name:</strong><br>
   <%= @restaurant.name %>
 </p>
-
+<!-- <p>
+  <strong>Style:</strong><br>
+  </%= @restaurant.style %>
+</p>
 <p>
-  <b>Style:</b>
-  <%= @restaurant.style %>
+  <strong>Weeks on List:</strong><br>
+  </%= @restaurant.weeks_on_list %>
+</p>
+<p>
+  <strong>Neighborhood</strong><br>
+  </%= @restaurant.neighborhood %>
+</p>
+<p>
+  <strong>Reserve:</strong><br>
+  </%= @restaurant.reserve %>
+</p> -->
+<!-- <p>
+  <strong>Description</strong><br>
+  </%= @restaurant.description %>
+</p> -->
+<!-- <p>
+  <strong>Twitter</strong><br>
+  </%= @restaurant.twitter_handle %>
+</p>
+<p>
+  <strong>Exact Match Only?</strong><br>
+  </%= @restaurant.exact_match %>
+</p>
+<p>
+  <strong>Make Inactive (hide)?:</strong><br>
+  </%= @restaurant.skip_scan %>
+</p> -->
+<p>
+  <strong>City</strong><br>
+  <%= @restaurant.city %>
+</p>
+<p>
+  <strong>Total Current Buzz</strong><br>
+  <%= @restaurant.total_current_buzz %>
 </p>
 
-<p>
-  <b>Weeks on list:</b>
-  <%= @restaurant.weeks_on_list %>
-</p>
-
-<p>
-  <b>Neighborhood:</b>
-  <%= @restaurant.neighborhood %>
-</p>
-
-<p>
-  <b>Reserve:</b>
-  <%= @restaurant.reserve %>
-</p>
-
-<p>
-  <b>Description:</b>
-  <%= @restaurant.description %>
-</p>
-
-<p>
-  <b>Make inactive (hide)?:</b>
-  <%= @restaurant.skip_scan %>
-</p>
-
-<p>
   <b>Buzz Mentions:</b><br/>
     <% @restaurant.buzz_mentions.each do |buzz_mention| %>
+    <div id="buzz_mention_<%=buzz_mention.id%>">
+    <% if can? :edit, @buzz_mention %>
+      <%= link_to ignore_link_text(buzz_mention),toggle_ignore_buzz_mention_path(buzz_mention),:remote => true, :id => "ignore_link_#{buzz_mention.id}" %> - 
+    <% end %>
+    <% if buzz_mention.buzz_mention_highlights.exists? %>
+      <%= render :partial => 'buzz_mentions/buzz_mentions_with_highlights', :locals => {:buzz_mention => buzz_mention} %>
+    <% else %>
       <%= render :partial => 'buzz_mentions/buzz_mentions', :locals => {:buzz_mention => buzz_mention} %>
     <% end %>
-</p>
+     - <%=buzz_mention.buzz_post.post_date_time%>
+    <br/>
+    </div>
+  <% end %>
 
 
-<%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
-<%= link_to 'Back', restaurants_path %>
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              restaurants_path, :class => 'btn'  %>
+  <% if can? :edit, @restaurant %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),edit_restaurant_path(@restaurant), :class => 'btn' %>
+  <% end %>
+</div>

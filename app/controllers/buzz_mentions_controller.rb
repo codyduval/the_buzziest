@@ -1,7 +1,9 @@
 class BuzzMentionsController < ApplicationController
   
+  load_and_authorize_resource
+  
   def index
-    @buzz_mentions = BuzzMention.all
+    @buzz_mentions = BuzzMention.paginate(:page => params[:page], :per_page => params[:per_page]).order(sort_column + ' ' + sort_direction)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -42,13 +44,10 @@ class BuzzMentionsController < ApplicationController
 
   def update
     @buzz_mention = BuzzMention.find(params[:id])
-
+    @buzz_mention.update_attributes!(params[:buzz_mention])
     respond_to do |format|
-      if @buzz_mention.update_attributes(params[:buzz_mention])
-        format.html { redirect_to @buzz_mention, notice: 'Buzz mention was successfully updated.' }
-      else
-        format.html { render action: "edit" }
-      end
+      format.html { redirect_to @buzz_mention, notice: 'Buzz mention was successfully updated.' }
+      format.js
     end
   end
 
@@ -61,4 +60,27 @@ class BuzzMentionsController < ApplicationController
       format.html { redirect_to buzz_mentions_url }
     end
   end
+
+  def toggle_ignore  
+    @buzz_mention = BuzzMention.find(params[:id])  
+    @buzz_mention.toggle!(:ignore)  
+
+    respond_to do |format|
+      format.js
+    end 
+  end
+
+  def per_page
+   params[:per_page] ||= 50
+  end
+
+private
+  def sort_column
+    BuzzMention.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
+  end
+  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end
+
 end

@@ -12,12 +12,15 @@ gem 'pg'
 gem 'sanitize'
 gem 'will_paginate', '~> 3.0.0'
 gem 'sentry-raven', :git => "https://github.com/getsentry/raven-ruby.git"
+gem 'cancan'
+gem 'thin'
 
 group :development do
   gem 'meta_request', '0.2.1'
   gem "better_errors"
   gem "binding_of_caller"
   gem 'sunspot_solr'
+  gem 'therubyracer'
 end
 
 # Gems used only for assets and not required
@@ -25,17 +28,15 @@ end
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platform => :ruby
-
+  gem 'twitter-bootstrap-rails'
+  gem 'less-rails'
   gem 'uglifier', '>= 1.0.3'
 end
 
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'

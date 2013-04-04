@@ -1,16 +1,30 @@
 TheBuzziest::Application.routes.draw do
 
+  resources :buzz_mention_highlights
+
+
+  root :to => 'restaurants#index'
+
+  get 'signup', to: 'users#new', as: 'signup'
+  get 'login', to: 'sessions#new', as: 'login'
+  get 'logout', to: 'sessions#destroy', as: 'logout'
+
+  resources :users
+  resources :sessions
+
   resources :buzz_posts
 
   resources :buzz_sources
 
-  resources :buzz_mentions
+  resources :buzz_mentions do  
+    get 'toggle_ignore', :on => :member  
+  end
 
   resources :restaurants
  
   match '/inbound_email/:city' => 'inbound_email#create'
 
-  root :to => 'restaurants#index'
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

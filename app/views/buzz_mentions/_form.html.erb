@@ -1,10 +1,10 @@
-<%= form_for(@buzz_post) do |f| %>
-  <% if @buzz_post.errors.any? %>
+<%= form_for(@buzz_mention) do |f| %>
+  <% if @buzz_mention.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@buzz_post.errors.count, "error") %> prohibited this buzz_post from being saved:</h2>
+      <h2><%= pluralize(@buzz_mention.errors.count, "error") %> prohibited this buzz_post from being saved:</h2>
 
       <ul>
-      <% @buzz_post.errors.full_messages.each do |msg| %>
+      <% @buzz_mention.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
@@ -12,28 +12,24 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :buzz_source_name %><br />
-    <%= f.text_field :buzz_source_name %>
+    <%= f.label :buzz_post_id %><br />
+    <%= f.text_field :buzz_post_id %>
   </div>
   <div class="field">
-    <%= f.label :post_date_time %><br />
-    <%= f.datetime_select :post_date_time %>
+    <%= f.label :restaurant_id %><br />
+    <%= f.text_field  :restaurant_id %>
   </div>
   <div class="field">
-    <%= f.label :post_uri %><br />
-    <%= f.text_field :post_uri %>
+    <%= f.label :decayed_buzz_score %><br />
+    <%= f.text_field :decayed_buzz_score %>
   </div>
   <div class="field">
-    <%= f.label :post_content %><br />
-    <%= f.text_area :post_content %>
+    <%= f.label :buzz_score %><br />
+    <%= f.text_field  :buzz_score %>
   </div>
   <div class="field">
-    <%= f.label :scanned_flag %><br />
-    <%= f.check_box :scanned_flag %>
-  </div>
-  <div class="field">
-    <%= f.label :post_weight %><br />
-    <%= f.text_field :post_weight %>
+    <%= f.label :ignore %><br />
+    <%= f.check_box :ignore %>
   </div>
   <div class="actions">
     <%= f.submit %>

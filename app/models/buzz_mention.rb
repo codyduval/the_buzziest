@@ -1,9 +1,10 @@
 class BuzzMention < ActiveRecord::Base
-  attr_accessible :buzz_post, :buzz_score, :restaurant_name, :restaurant_id, :buzz_post_id, :decayed_buzz_score
+  attr_accessible :buzz_post, :buzz_score, :restaurant_name, :restaurant_id, :buzz_post_id, :decayed_buzz_score, :ignore
 
   belongs_to :buzz_post
   belongs_to :restaurant, :counter_cache => true
   has_many :buzz_sources, :through => :buzz_posts
+  has_many :buzz_mention_highlights, :dependent => :destroy
 
   def calculate_decayed_buzz_score(options = {})
       options = {:now=> Time.now, :buzz_points=>self.buzz_score, :date=>self.created_at, :decay_factor=>self.buzz_post.buzz_source.decay_factor }.merge(options)
