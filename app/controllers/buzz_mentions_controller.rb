@@ -1,7 +1,7 @@
 class BuzzMentionsController < ApplicationController
-  
+
   load_and_authorize_resource
-  
+
   def index
     @buzz_mentions = BuzzMention.paginate(:page => params[:page], :per_page => params[:per_page]).order(sort_column + ' ' + sort_direction)
 
@@ -61,13 +61,13 @@ class BuzzMentionsController < ApplicationController
     end
   end
 
-  def toggle_ignore  
-    @buzz_mention = BuzzMention.find(params[:id])  
-    @buzz_mention.toggle!(:ignore)  
+  def toggle_ignore
+    @buzz_mention = BuzzMention.find(params[:id])
+    @buzz_mention.toggle!(:ignore)
 
     respond_to do |format|
       format.js
-    end 
+    end
   end
 
   def per_page
@@ -78,7 +78,7 @@ private
   def sort_column
     BuzzMention.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
   end
-  
+
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end

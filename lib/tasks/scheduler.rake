@@ -1,7 +1,7 @@
 desc "This task is called by the Heroku scheduler add-on"
 
 task :update_buzz_scores => :environment do
-  
+
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
 
@@ -60,7 +60,7 @@ task :delete_old_posts => :environment do
   def self.mentioned_posts_ids
     mentioned_posts = BuzzMention.all
     mentioned_posts_ids = []
-    
+
     mentioned_posts.each do |post|
       mentioned_posts_ids << post.buzz_post_id
     end
@@ -79,14 +79,14 @@ task :delete_old_posts => :environment do
     BuzzPost.destroy(posts_to_destroy)
   end
 
-  
+
   posts_to_destroy = find_posts_to_destroy(old_posts_ids(5), mentioned_posts_ids)
   destroy_old_posts(posts_to_destroy)
   end
 end
 
 
-task :fetch_new_restaurants => :environment do 
+task :fetch_new_restaurants => :environment do
 
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
@@ -97,7 +97,7 @@ task :fetch_new_restaurants => :environment do
 
   def self.fuzzy_match(name)
     fuzzy_match = Restaurant.search do
-      fulltext %Q/"#{name}"/ 
+      fulltext %Q/"#{name}"/
     end
     fuzzy_match = fuzzy_match.results
 
@@ -110,10 +110,10 @@ task :fetch_new_restaurants => :environment do
   @skipped_count = 0
   @full_restaurant_name_list = Array.new
   number_of_pages_to_scrape = 2
-  city = MasterCities.get_city(:nyc)
-  restaurant_list_sources = BuzzSource.where("buzz_source_type = ? AND city = ?","restaurant_list", city)
-    
+  cities = MasterCities.get_all_city_names
+
   def self.fetch_restaurant_names(pages,restaurant_list_source)
+    single_source_restaurant_name_list = Array.new
     (1..pages).each do |page|
       url = restaurant_list_source.uri + "#{(page)}"
       node = restaurant_list_source.x_path_nodes
@@ -122,9 +122,10 @@ task :fetch_new_restaurants => :environment do
       restaurant_names = doc.xpath(node)
       restaurant_names.each do |restaurant_name|
         puts restaurant_name.text
-        @full_restaurant_name_list.push(restaurant_name.text)
+        single_source_restaurant_name_list.push(restaurant_name.text)
       end
     end
+    return single_source_restaurant_name_list
   end
 
   def self.add_restaurant_names_to_db(full_restaurant_name_list,city)
@@ -161,13 +162,15 @@ task :fetch_new_restaurants => :environment do
     end
   end
 
-  restaurant_list_sources.each do |restaurant_list_source|
-    fetch_restaurant_names(number_of_pages_to_scrape,restaurant_list_source)
+  cities.each do |city|
+    full_restaurant_name_list = Array.new
+    restaurant_list_sources = BuzzSource.where("buzz_source_type = ? AND city = ?","restaurant_list", city)
+    restaurant_list_sources.each do |restaurant_list_source|
+      full_restaurant_name_list.concat(fetch_restaurant_names(number_of_pages_to_scrape,restaurant_list_source))
+    end
+    add_restaurant_names_to_db(full_restaurant_name_list,city)
   end
 
-  add_restaurant_names_to_db(@full_restaurant_name_list,city)
-
-  
   total_count = @skipped_count + @added_count
   total_restaurants_in_db = Restaurant.count
   puts "\r \r"
@@ -252,12 +255,12 @@ task :scan_posts_for_buzz => :environment do
             puts "Found new buzz for #{restaurant.name} in post id #{hit.primary_key.to_i} posted on #{@buzz_mention.buzz_post.buzz_source.name}".light_green
             hit.highlights(:post_content).each do |highlight|
               @buzz_mention_highlight = BuzzMentionHighlight.create(
-              :buzz_mention_highlight_text => highlight.format, 
+              :buzz_mention_highlight_text => highlight.format,
               :buzz_mention_id => @buzz_mention.id
               )
               puts "Creating highlight for #{restaurant.name} in buzz mention id #{@buzz_mention.id} which says: #{highlight.format}".light_green
             end
-            
+
           end
         end
       else

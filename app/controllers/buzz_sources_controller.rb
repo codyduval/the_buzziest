@@ -1,6 +1,6 @@
 class BuzzSourcesController < ApplicationController
-  # GET /buzz_sources
-  # GET /buzz_sources.json
+  load_and_authorize_resource
+
   def index
     @buzz_sources = BuzzSource.all
 
