@@ -16,12 +16,12 @@ TheBuzziest::Application.routes.draw do
 
   resources :buzz_sources
 
-  resources :buzz_mentions do  
-    get 'toggle_ignore', :on => :member  
+  resources :buzz_mentions do
+    get 'toggle_ignore', :on => :member
   end
 
   resources :restaurants
- 
+
   match '/inbound_email/:city' => 'inbound_email#create'
 
 
