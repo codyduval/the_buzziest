@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
       if params[:remember_me]
         cookies.permanent[:auth_token] = user.auth_token
       else
-        cookies[:auth_token] = user.auth_token  
+        cookies[:auth_token] = user.auth_token
       end
       redirect_to root_url, :notice => "Logged in!"
     else

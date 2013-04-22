@@ -4,12 +4,11 @@ class RestaurantsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @restaurants = Restaurant.order(sort_column + ' ' + sort_direction).page(params[:page])
+    @restaurants = Restaurant.where("city" => request.subdomain).order(sort_column + ' ' + sort_direction).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @restaurants }
-      
     end
   end
 
@@ -77,7 +76,7 @@ private
   def sort_column
     Restaurant.column_names.include?(params[:sort]) ? params[:sort] : "total_current_buzz"
   end
-  
+
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end

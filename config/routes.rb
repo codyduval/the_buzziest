@@ -1,26 +1,24 @@
 TheBuzziest::Application.routes.draw do
 
-  resources :buzz_mention_highlights
-
-
-  root :to => 'restaurants#index'
-
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
 
+  resources :buzz_mention_highlights
   resources :users
   resources :sessions
-
   resources :buzz_posts
-
   resources :buzz_sources
-
   resources :buzz_mentions do
     get 'toggle_ignore', :on => :member
   end
-
   resources :restaurants
+
+
+  match '', to: 'restaurants#index', constraints: lambda { |r| r.subdomain.present? && ( r.subdomain == 'nyc' || r.subdomain == 'la' || r.subdomain == 'sf') }
+
+  # root :to => 'restaurants#index'
+  root :to => redirect(:subdomain => 'nyc')
 
   match '/inbound_email/:city' => 'inbound_email#create'
 
