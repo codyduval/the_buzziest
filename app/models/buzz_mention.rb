@@ -10,7 +10,7 @@ class BuzzMention < ActiveRecord::Base
       options = {:now=> Time.now, :buzz_points=>self.buzz_score, :date=>self.buzz_post.post_date_time, :decay_factor=>self.buzz_post.buzz_source.decay_factor }.merge(options)
       now = options[:now]
       buzz_points  = options[:buzz_points]
-      date = options[:date]
+      date = options[:date] ||= self.created_at
       decay_factor = options[:decay_factor].to_f
       age_in_seconds = now - date
       age_in_days = age_in_seconds/86400
