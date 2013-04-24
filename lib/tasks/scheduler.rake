@@ -5,14 +5,21 @@ task :update_buzz_scores => :environment do
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
 
+  def self.calculate_decayed_scores_old
+    buzz_mentions = BuzzMention.where(:ignore => false)
+    puts "Decaying scores for " + buzz_mentions.count + " buzz mentions."
+    buzz_mentions.each do |buzz_mention|
+      decayed_score = buzz_mention.calculate_decayed_buzz_score
+      buzz_mention.decayed_buzz_score = decayed_score
+      buzz_mention.save
+    end
+  end
+
   def self.calculate_decayed_scores
+    puts "Decaying scores..."
     buzz_mentions = BuzzMention.where(:ignore => false)
     buzz_mentions.each do |buzz_mention|
       decayed_score = buzz_mention.calculate_decayed_buzz_score
-      unless buzz_mention.decayed_buzz_score.nil?
-        change_in_score_percent = (((buzz_mention.decayed_buzz_score - decayed_score)/decayed_score)*100).round(4)
-      end
-      puts "Decaying score for BuzzMention with id of " + buzz_mention.id.to_s + ". Score went down by " + change_in_score_percent.to_s.light_red + " percent."
       buzz_mention.decayed_buzz_score = decayed_score
       buzz_mention.save
     end
@@ -21,15 +28,9 @@ task :update_buzz_scores => :environment do
   def self.update_restaurants_total_scores
     restaurants = Restaurant.where("buzz_mentions_count >= 1")
     restaurants.each do |restaurant|
-      restaurant_id = restaurant.id
-      buzz_mentions = BuzzMention.where(:restaurant_id => restaurant_id, :ignore => false)
-      decayed_buzz_scores = buzz_mentions.pluck(:decayed_buzz_score)
-      total_buzz_score = decayed_buzz_scores.inject(:+)
-      if total_buzz_score == nil
-        total_buzz_score = 0
-      end
-      restaurant.total_current_buzz = total_buzz_score
-      puts "Updating " + restaurant.name + "'s total score to " + total_buzz_score.to_s
+      total_score = BuzzMention.where(:restaurant_id => restaurant.id, :ignore => false).sum("decayed_buzz_score")
+      restaurant.total_current_buzz = total_score
+      puts "Updating " + restaurant.name + "'s total score to " + total_score.to_s
       restaurant.save
     end
   end
@@ -215,13 +216,25 @@ task :scan_posts_for_buzz => :environment do
     return buzz_post_search_hits
   end
 
+  def self.search_phrase_by_post_and_city(name,city)
+    buzz_post_search_results = BuzzPost.search do
+      with(:city, city)
+      fulltext %Q/"#{name}"/ do
+        highlight :post_content
+      end
+    end
+    buzz_post_search_hits = buzz_post_search_results.hits
+
+    return buzz_post_search_hits
+  end
+
   def self.scan_posts(restaurant)
     if restaurant.exact_match == true
       puts "Scanning all posts for an exact match of ".light_yellow + restaurant.name
-      search_phrase_by_post(restaurant.name)
+      search_phrase_by_post_and_city(restaurant.name, restaurant.city)
     else
       puts "Scanning all posts for a regular match on ".light_white+ restaurant.name
-      search_phrase_by_post(restaurant.name)
+      search_phrase_by_post_and_city(restaurant.name, restaurant.city)
     end
   end
 
@@ -252,7 +265,7 @@ task :scan_posts_for_buzz => :environment do
               :buzz_post_id => hit.primary_key.to_i,
               :buzz_score => BuzzPost.where(:id => hit.primary_key.to_i).first.post_weight
             )
-            puts "Found new buzz for #{restaurant.name} in post id #{hit.primary_key.to_i} posted on #{@buzz_mention.buzz_post.buzz_source.name}".light_green
+            puts "Found new buzz for #{restaurant.name} in #{restaurant.city} in post id #{hit.primary_key.to_i} posted on #{@buzz_mention.buzz_post.buzz_source.name}".light_green
             hit.highlights(:post_content).each do |highlight|
               @buzz_mention_highlight = BuzzMentionHighlight.create(
               :buzz_mention_highlight_text => highlight.format,
@@ -272,12 +285,11 @@ task :scan_posts_for_buzz => :environment do
   time_elapsed = Benchmark.realtime do
 
   all_restaurants = Restaurant.all
-  # all_restaurant_names = get_restaurant_names(all_restaurants)
   scan_restaurants(all_restaurants)
 
   end
 
-  puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+  puts "Done in #{time_elapsed} seconds."
   end
 end
 
@@ -328,10 +340,8 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
 
   def self.get_buzz_source_types(args)
     unless args.source_type == "all"
-      # buzz_source_types = BuzzSourceType.where(:source_type=> args.source_type)
       buzz_source_types = args.source_type
     else
-      # buzz_source_types = BuzzSourceType.where("source_type = 'feed' OR source_type = 'twitter'")
       buzz_source_types = ["feed","twitter"]
     end
   end
@@ -369,7 +379,8 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
           :post_uri => "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
           :post_date_time => tweet.created_at,
           :post_weight => buzz_source[:buzz_weight],
-          :scanned_flag => false
+          :scanned_flag => false,
+          :city => buzz_source[:city]
         )
         puts "Added ".light_green + tweet.text.light_green + " from " + tweet.user.screen_name
       end
@@ -398,7 +409,8 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
             :post_date_time => entry.published,
             :post_guid => entry.id,
             :post_weight => "1",
-            :scanned_flag => false
+            :scanned_flag => false,
+            :city => buzz_source[:city]
           )
           puts "added ".light_green + entry.title.light_green + " " + entry.url
         else

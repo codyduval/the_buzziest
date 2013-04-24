@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130328142855) do
+ActiveRecord::Schema.define(:version => 20130424135834) do
 
   create_table "buzz_mention_highlights", :force => true do |t|
     t.integer  "buzz_mention_id"
@@ -37,10 +37,11 @@ ActiveRecord::Schema.define(:version => 20130328142855) do
     t.boolean  "scanned_flag"
     t.decimal  "post_weight"
     t.integer  "buzz_source_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.string   "post_guid"
     t.string   "post_title"
+    t.string   "city",           :default => "nyc"
   end
 
   create_table "buzz_sources", :force => true do |t|

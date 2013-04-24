@@ -1,5 +1,5 @@
 class BuzzPost < ActiveRecord::Base
-  attr_accessible :post_title, :post_guid, :post_content, :post_date_time, :post_uri, :post_weight, :scanned_flag, :buzz_source_id
+  attr_accessible :post_title, :post_guid, :post_content, :post_date_time, :post_uri, :post_weight, :scanned_flag, :buzz_source_id, :city
 
   belongs_to :buzz_source
   has_many :buzz_mentions, :dependent => :destroy
@@ -13,6 +13,8 @@ class BuzzPost < ActiveRecord::Base
   searchable do
     text :post_title, :stored => true
     text :post_content, :stored => true
+
+    string :city
   end
 
   def self.create_from_postmark(mitt)

@@ -19,8 +19,6 @@ private
 @cities = {
     :nyc => "nyc",
     :la => "la",
-    :chicago => "chicago",
-    :seattle =>"seattle",
     :sf => "sf"
   }
 
