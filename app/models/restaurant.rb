@@ -3,6 +3,7 @@ class Restaurant < ActiveRecord::Base
 
   has_many :buzz_mentions, :dependent => :destroy
   has_many :buzz_posts, :through => :buzz_mentions
+  has_many :buzz_scores, :dependent => :destroy
 
   #include PgSearch
   #pg_search_scope :search_by_restaurant_name, :against => :name

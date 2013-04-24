@@ -5,38 +5,35 @@ task :update_buzz_scores => :environment do
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
 
-  def self.calculate_decayed_scores_old
-    buzz_mentions = BuzzMention.where(:ignore => false)
-    puts "Decaying scores for " + buzz_mentions.count + " buzz mentions."
-    buzz_mentions.each do |buzz_mention|
-      decayed_score = buzz_mention.calculate_decayed_buzz_score
-      buzz_mention.decayed_buzz_score = decayed_score
-      buzz_mention.save
-    end
-  end
-
   def self.calculate_decayed_scores
-    puts "Decaying scores..."
+    puts "Decaying scores"
     buzz_mentions = BuzzMention.where(:ignore => false)
+    counter = buzz_mentions.count
     buzz_mentions.each do |buzz_mention|
       decayed_score = buzz_mention.calculate_decayed_buzz_score
       buzz_mention.decayed_buzz_score = decayed_score
       buzz_mention.save
+      counter = counter -1
+      print "\r#{counter} to go..."
     end
+    puts "...and done!"
   end
 
-  def self.update_restaurants_total_scores
+  def self.update_total_scores
+    puts "Updating score table"
     restaurants = Restaurant.where("buzz_mentions_count >= 1")
+    counter = restaurants.count
     restaurants.each do |restaurant|
       total_score = BuzzMention.where(:restaurant_id => restaurant.id, :ignore => false).sum("decayed_buzz_score")
-      restaurant.total_current_buzz = total_score
-      puts "Updating " + restaurant.name + "'s total score to " + total_score.to_s
-      restaurant.save
+      BuzzScore.create({ :restaurant_id => restaurant.id, :buzz_score => total_score})
+      counter = counter -1
+      print "\r#{counter} to go..."
     end
+    puts "...and done!"
   end
 
   calculate_decayed_scores
-  update_restaurants_total_scores
+  update_total_scores
 
   end
 end
@@ -48,7 +45,7 @@ task :delete_old_posts => :environment do
   # captures any exceptions which happen in this block and notify via Sentry
 
   def self.old_posts_ids(age_in_days)
-    old_posts = BuzzPost.where("created_at < :days", {:days => age_in_days.day.ago})
+    old_posts = BuzzPost.where("post_date_time < :days", {:days => age_in_days.day.ago})
     old_posts_ids = []
 
     old_posts.each do |post|
@@ -80,9 +77,24 @@ task :delete_old_posts => :environment do
     BuzzPost.destroy(posts_to_destroy)
   end
 
+  def self.find_old_buzz_mentions
+    old_buzz_mentions_ids = []
+    old_buzz_mentions = BuzzMention.where("decayed_buzz_score < ?",0.05)
+    old_buzz_mentions.each do |mention|
+      old_buzz_mentions_ids << mention.id
+    end
+    BuzzMention.find_all_by_id(old_buzz_mentions_ids)
+  end
 
-  posts_to_destroy = find_posts_to_destroy(old_posts_ids(5), mentioned_posts_ids)
+  def self.destroy_old_buzz_mentions(mentions_to_destroy)
+    puts "Destroying ".light_red + mentions_to_destroy.count.to_s.light_red + " mentions".light_red
+    BuzzMention.destroy(mentions_to_destroy)
+  end
+
+  posts_to_destroy = find_posts_to_destroy(old_posts_ids(30), mentioned_posts_ids)
   destroy_old_posts(posts_to_destroy)
+  mentions_to_destroy = find_old_buzz_mentions
+  destroy_old_buzz_mentions(mentions_to_destroy)
   end
 end
 
@@ -260,11 +272,14 @@ task :scan_posts_for_buzz => :environment do
         scan_results_hits.each do |hit|
           restaurant = Restaurant.find_by_name(restaurant.name)
           unless BuzzMention.exists?(:buzz_post_id => hit.primary_key.to_i, :restaurant_id => restaurant[:id])
+            initial_buzz_score = BuzzPost.where(:id => hit.primary_key.to_i).first.post_weight
             @buzz_mention = BuzzMention.create(
               :restaurant_id => restaurant[:id],
               :buzz_post_id => hit.primary_key.to_i,
-              :buzz_score => BuzzPost.where(:id => hit.primary_key.to_i).first.post_weight
+              :buzz_score => initial_buzz_score,
+              :decayed_buzz_score => initial_buzz_score
             )
+            @buzz_mention.update_decayed_buzz_score!
             puts "Found new buzz for #{restaurant.name} in #{restaurant.city} in post id #{hit.primary_key.to_i} posted on #{@buzz_mention.buzz_post.buzz_source.name}".light_green
             hit.highlights(:post_content).each do |highlight|
               @buzz_mention_highlight = BuzzMentionHighlight.create(
@@ -395,7 +410,7 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
     feed = Feedzirra::Feed.fetch_and_parse(feed_url)
     unless feed.nil?
       feed.entries.each do |entry|
-        unless BuzzPost.exists?(:post_guid => entry.id)
+        unless (BuzzPost.exists?(:post_guid => entry.id) || (entry.published < 25.day.ago))
           if entry.content.nil?
             stripped_summary = strip_tags(entry.summary)
           else
