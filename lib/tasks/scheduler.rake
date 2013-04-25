@@ -1,6 +1,6 @@
 desc "This task is called by the Heroku scheduler add-on"
 
-task :update_buzz_scores => :environment do
+task :update_scores => :environment do
 
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
@@ -39,7 +39,7 @@ task :update_buzz_scores => :environment do
 end
 
 
-task :delete_old_posts => :environment do
+task :cleanup_posts => :environment do
 
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
@@ -99,7 +99,7 @@ task :delete_old_posts => :environment do
 end
 
 
-task :fetch_new_restaurants => :environment do
+task :fetch_restaurants => :environment do
 
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
@@ -199,7 +199,7 @@ end
 
 
 
-task :scan_posts_for_buzz => :environment do
+task :scan_posts => :environment do
 
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
@@ -344,7 +344,7 @@ task :fetch_all_twitter_handles => :environment do
 end
 
 
-task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
+task :fetch_posts, [:city, :source_type] => :environment do |t, args|
   args.with_defaults(:city => "nyc", :source_type => "all")
 
   Raven.capture do
