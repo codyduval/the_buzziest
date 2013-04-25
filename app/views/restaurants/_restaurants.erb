@@ -14,8 +14,8 @@
       <tr>
         <td><%= restaurant.name %></td>
         <td><a target="_blank" href=http://www.twitter.com/<%= restaurant.twitter_handle%>><%= restaurant.twitter_handle%></td>
-        <td class="buzz_mentions_score"><%= number_with_precision(latest_buzz(restaurant),:precision => 1) %></td>
-        <td class="buzz_mentions_count"><%= restaurant.buzz_mentions_count if restaurant.buzz_mentions.exists? %></td>
+        <td class="buzz_mentions_score"><%= number_with_precision(restaurant.total_current_buzz,:precision => 1) %></td>
+        <td class="buzz_mentions_count"><%= restaurant.buzz_mention_count_ignored %></td>
         <td><%= restaurant.created_at.strftime("%b %d %y")  %></td>
         <td>
           <% if can? :edit, @restaurant %>

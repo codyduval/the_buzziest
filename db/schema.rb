@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130424165749) do
+ActiveRecord::Schema.define(:version => 20130425185155) do
 
   create_table "buzz_mention_highlights", :force => true do |t|
     t.integer  "buzz_mention_id"
@@ -81,15 +81,16 @@ ActiveRecord::Schema.define(:version => 20130424165749) do
     t.string   "neighborhood"
     t.string   "reserve"
     t.text     "description"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
     t.string   "twitter_handle"
     t.boolean  "exact_match"
     t.boolean  "skip_scan"
     t.integer  "city_id"
-    t.integer  "buzz_mentions_count", :default => 0
-    t.string   "city",                :default => "nyc"
-    t.decimal  "total_current_buzz",  :default => 0.0
+    t.integer  "buzz_mentions_count",        :default => 0
+    t.string   "city",                       :default => "nyc"
+    t.decimal  "total_current_buzz",         :default => 0.0
+    t.integer  "buzz_mention_count_ignored", :default => 0,     :null => false
   end
 
   create_table "users", :force => true do |t|

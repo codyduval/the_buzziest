@@ -21,11 +21,13 @@ task :update_scores => :environment do
 
   def self.update_total_scores
     puts "Updating score table"
-    restaurants = Restaurant.where("buzz_mentions_count >= 1")
+    restaurants = Restaurant.where("total_current_buzz > 0")
     counter = restaurants.count
     restaurants.each do |restaurant|
       total_score = BuzzMention.where(:restaurant_id => restaurant.id, :ignore => false).sum("decayed_buzz_score")
+      restaurant.total_current_buzz = total_score
       BuzzScore.create({ :restaurant_id => restaurant.id, :buzz_score => total_score})
+      restaurant.save
       counter = counter -1
       print "\r#{counter} to go..."
     end
@@ -83,6 +85,10 @@ task :cleanup_posts => :environment do
     old_buzz_mentions.each do |mention|
       old_buzz_mentions_ids << mention.id
     end
+    ignored_buzz_mentions = BuzzMention.where("created_at < ? AND ignore = ?", 30.day.ago, true)
+    ignored_buzz_mentions.each do |mention|
+      old_buzz_mentions_ids << mention.id
+    end
     BuzzMention.find_all_by_id(old_buzz_mentions_ids)
   end
 
@@ -91,10 +97,19 @@ task :cleanup_posts => :environment do
     BuzzMention.destroy(mentions_to_destroy)
   end
 
+  def self.update_counter_caches
+    puts "Updating counter caches".light_red
+    BuzzMention.counter_culture_fix_counts
+  end
+
+  destroy_old_buzz_mentions(find_old_buzz_mentions)
+
   posts_to_destroy = find_posts_to_destroy(old_posts_ids(30), mentioned_posts_ids)
   destroy_old_posts(posts_to_destroy)
-  mentions_to_destroy = find_old_buzz_mentions
-  destroy_old_buzz_mentions(mentions_to_destroy)
+
+  update_counter_caches
+  puts "All done.".green
+
   end
 end
 

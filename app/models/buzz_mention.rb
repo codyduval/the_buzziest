@@ -2,7 +2,11 @@ class BuzzMention < ActiveRecord::Base
   attr_accessible :buzz_post, :buzz_score, :restaurant_name, :restaurant_id, :buzz_post_id, :decayed_buzz_score, :ignore
 
   belongs_to :buzz_post
-  belongs_to :restaurant, :counter_cache => true
+  belongs_to :restaurant
+  counter_culture :restaurant,
+      :column_name => Proc.new {|model| (model.ignore == false) ? 'buzz_mention_count_ignored' : nil },
+      :column_names => {
+          ["buzz_mentions.ignore = ?", false] => 'buzz_mention_count_ignored'}
   has_many :buzz_sources, :through => :buzz_posts
   has_many :buzz_mention_highlights, :dependent => :destroy
 
