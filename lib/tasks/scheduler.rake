@@ -397,7 +397,7 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
           :scanned_flag => false,
           :city => buzz_source[:city]
         )
-        puts "Added ".light_green + tweet.text.light_green + " from " + tweet.user.screen_name
+        puts "Added tweet".light_green + tweet.text + " from " + tweet.user.screen_name
       end
     end
   end
@@ -410,7 +410,8 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
     feed = Feedzirra::Feed.fetch_and_parse(feed_url)
     exist_count = 0
     too_old_count = 0
-    unless feed.nil?
+    new_entries = []
+    unless (feed.nil? || feed == 0)
       print "Found #{feed.entries.count} entries in #{buzz_source[:name]}".light_cyan
       feed.entries.each do |entry|
         print ".".light_cyan
@@ -435,13 +436,15 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
             :scanned_flag => false,
             :city => buzz_source[:city]
           )
-          puts "\nAdding... ".light_green + entry.title.light_green + " " + entry.url
+          new_entries << entry
         end
       end
     end
-    puts "\n#{exist_count} are older than 25 days, skipping.".light_yellow
-    puts "#{too_old_count} already exist, skipping.".light_yellow
-    puts "...and done with #{buzz_source[:name]}".light_cyan
+    new_entries.each do |entry|
+      print "\nAdding ".light_green + entry.title + " " + entry.url
+    end
+    puts "\n#{exist_count} are older than 25 days and won't be added.".light_yellow
+    puts "#{too_old_count} already exist and won't be added.".light_yellow
   end
 
   time_elapsed = Benchmark.realtime do
@@ -452,6 +455,6 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
 
   end
 
-  puts "Total time elapsed #{time_elapsed} seconds".dark_green
+  puts "Total time elapsed #{time_elapsed} seconds".green
   end
 end
