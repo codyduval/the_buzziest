@@ -408,9 +408,17 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
   def self.update_from_feed(buzz_source)
     feed_url = buzz_source[:uri]
     feed = Feedzirra::Feed.fetch_and_parse(feed_url)
+    exist_count = 0
+    too_old_count = 0
     unless feed.nil?
+      print "Found #{feed.entries.count} entries in #{buzz_source[:name]}".light_cyan
       feed.entries.each do |entry|
-        unless (BuzzPost.exists?(:post_guid => entry.id) || (entry.published < 25.day.ago))
+        print ".".light_cyan
+        if BuzzPost.exists?(:post_guid => entry.id)
+          exist_count += 1
+        elsif entry.published < 25.day.ago
+          too_old_count += 1
+        else
           if entry.content.nil?
             stripped_summary = strip_tags(entry.summary)
           else
@@ -427,12 +435,13 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
             :scanned_flag => false,
             :city => buzz_source[:city]
           )
-          puts "added ".light_green + entry.title.light_green + " " + entry.url
-        else
-          puts "skipped ".light_yellow + entry.title.light_yellow+ " " + entry.url
+          puts "\nAdding... ".light_green + entry.title.light_green + " " + entry.url
         end
       end
     end
+    puts "\n#{exist_count} are older than 25 days, skipping.".light_yellow
+    puts "#{too_old_count} already exist, skipping.".light_yellow
+    puts "...and done with #{buzz_source[:name]}".light_cyan
   end
 
   time_elapsed = Benchmark.realtime do
@@ -443,6 +452,6 @@ task :fetch_buzz_posts, [:city, :source_type] => :environment do |t, args|
 
   end
 
-  puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
+  puts "Total time elapsed #{time_elapsed} seconds".dark_green
   end
 end
