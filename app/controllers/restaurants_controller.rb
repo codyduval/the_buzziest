@@ -4,7 +4,7 @@ class RestaurantsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @restaurants = Restaurant.where("city" => request.subdomain).order(sort_column + ' ' + sort_direction).page(params[:page])
+    @restaurants = Restaurant.where("city = ? AND buzz_mentions_count > ?",request.subdomain, 0).order(sort_column + ' ' + sort_direction).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
