@@ -242,10 +242,10 @@ task :scan_posts_for_buzz => :environment do
 
   def self.scan_posts(restaurant)
     if restaurant.exact_match == true
-      puts "Scanning all posts for an exact match of ".light_yellow + restaurant.name
+      puts "Scanning posts for an exact match of ".light_yellow + restaurant.name
       search_phrase_by_post_and_city(restaurant.name, restaurant.city)
     else
-      puts "Scanning all posts for a regular match on ".light_white+ restaurant.name
+      puts "Scanning posts for a regular match on ".light_white + restaurant.name
       search_phrase_by_post_and_city(restaurant.name, restaurant.city)
     end
   end
@@ -280,13 +280,13 @@ task :scan_posts_for_buzz => :environment do
               :decayed_buzz_score => initial_buzz_score
             )
             @buzz_mention.update_decayed_buzz_score!
-            puts "Found new buzz for #{restaurant.name} in #{restaurant.city} in post id #{hit.primary_key.to_i} posted on #{@buzz_mention.buzz_post.buzz_source.name}".light_green
+            puts "Buzz found in post_id #{hit.primary_key.to_i} published in #{@buzz_mention.buzz_post.buzz_source.name} on #{@buzz_mention.buzz_post.post_date_time}".light_green
+            puts "Giving initial buzz score of #{@buzz_mention.decayed_buzz_score}".light_cyan
             hit.highlights(:post_content).each do |highlight|
               @buzz_mention_highlight = BuzzMentionHighlight.create(
               :buzz_mention_highlight_text => highlight.format,
               :buzz_mention_id => @buzz_mention.id
               )
-              puts "Creating highlight for #{restaurant.name} in buzz mention id #{@buzz_mention.id} which says: #{highlight.format}".light_green
             end
 
           end
