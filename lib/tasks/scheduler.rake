@@ -21,7 +21,7 @@ task :update_scores => :environment do
 
   def self.update_total_scores
     puts "Updating score table"
-    restaurants = Restaurant.where("total_current_buzz > 0")
+    restaurants = Restaurant.where("buzz_mention_count_ignored > 0")
     counter = restaurants.count
     restaurants.each do |restaurant|
       total_score = BuzzMention.where(:restaurant_id => restaurant.id, :ignore => false).sum("decayed_buzz_score")
