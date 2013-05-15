@@ -16,12 +16,16 @@ gem 'cancan'
 gem 'thin'
 gem 'counter_culture', '~> 0.1.7'
 
+group :test do
+  gem 'minitest-spec-rails'
+end
+
 group :development do
   gem 'meta_request', '0.2.1'
   gem "better_errors"
   gem "binding_of_caller"
   gem 'sunspot_solr'
-end
+End
 
 # Gems used only for assets and not required
 # in production environments by default.

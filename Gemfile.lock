@@ -100,6 +100,10 @@ GEM
       rack-contrib
       rails
     mime-types (1.23)
+    minitest (4.7.4)
+    minitest-spec-rails (4.7.2)
+      minitest (~> 4.7)
+      rails (>= 3.0)
     mono_logger (1.0.1)
     multi_json (1.7.2)
     multipart-post (1.2.0)
@@ -213,6 +217,7 @@ DEPENDENCIES
   feedzirra
   jquery-rails
   meta_request (= 0.2.1)
+  minitest-spec-rails
   nokogiri
   pg
   postmark-mitt
