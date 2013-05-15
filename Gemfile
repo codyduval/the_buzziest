@@ -17,7 +17,7 @@ gem 'thin'
 gem 'counter_culture', '~> 0.1.7'
 
 group :test do
-  gem 'minitest-spec-rails'
+  gem 'minitest'
 end
 
 group :development do

@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  restaurant_id: 1
-  buzz_score: 9.99
-
-two:
-  restaurant_id: 1
-  buzz_score: 9.99
