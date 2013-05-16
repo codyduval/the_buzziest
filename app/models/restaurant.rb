@@ -1,9 +1,11 @@
 class Restaurant < ActiveRecord::Base
-  attr_accessible :description, :name, :neighborhood, :twitter_handle, :reserve, :style, :skip_scan, :exact_match, :total_current_buzz
+  attr_accessible :description, :name, :neighborhood, :twitter_handle, :reserve, :style, :skip_scan, :exact_match, :total_current_buzz, :city
 
   has_many :buzz_mentions, :dependent => :destroy
   has_many :buzz_posts, :through => :buzz_mentions
   has_many :buzz_scores, :dependent => :destroy
+
+  validates :name, :uniqueness => true
 
   #include PgSearch
   #pg_search_scope :search_by_restaurant_name, :against => :name
