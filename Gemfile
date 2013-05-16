@@ -18,6 +18,9 @@ gem 'counter_culture', '~> 0.1.7'
 
 group :test do
   gem 'minitest'
+  gem 'turn'
+  gem 'factory_girl_rails', "~> 4.0"
+  gem 'ffaker'
 end
 
 group :development do
@@ -25,7 +28,7 @@ group :development do
   gem "better_errors"
   gem "binding_of_caller"
   gem 'sunspot_solr'
-End
+end
 
 # Gems used only for assets and not required
 # in production environments by default.

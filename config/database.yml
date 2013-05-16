@@ -13,3 +13,4 @@ test:
   pool: 5
   username: CodyD
   password:
+  min_messages: WARNING
