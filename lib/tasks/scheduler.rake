@@ -5,37 +5,40 @@ task :update_scores => :environment do
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry
 
-  def self.calculate_decayed_scores
-    puts "Decaying scores"
-    buzz_mentions = BuzzMention.where(:ignore => false)
-    counter = buzz_mentions.count
-    buzz_mentions.each do |buzz_mention|
-      decayed_score = buzz_mention.calculate_decayed_buzz_score
-      buzz_mention.decayed_buzz_score = decayed_score
-      buzz_mention.save
-      counter = counter -1
-      print "\r#{counter} to go..."
-    end
-    puts "...and done!"
-  end
+  # def self.calculate_decayed_scores
+  #   puts "Decaying scores"
+  #   buzz_mentions = BuzzMention.where(:ignore => false)
+  #   counter = buzz_mentions.count
+  #   buzz_mentions.each do |buzz_mention|
+  #     decayed_score = buzz_mention.calculate_decayed_buzz_score
+  #     buzz_mention.decayed_buzz_score = decayed_score
+  #     buzz_mention.save
+  #     counter = counter -1
+  #     print "\\r#{counter} to go..."
+  #   end
+  #   puts "...and done!"
+  # end
 
-  def self.update_total_scores
-    puts "Updating score table"
-    restaurants = Restaurant.where("buzz_mention_count_ignored > 0")
-    counter = restaurants.count
-    restaurants.each do |restaurant|
-      total_score = BuzzMention.where(:restaurant_id => restaurant.id, :ignore => false).sum("decayed_buzz_score")
-      restaurant.total_current_buzz = total_score
-      BuzzScore.create({ :restaurant_id => restaurant.id, :buzz_score => total_score})
-      restaurant.save
-      counter = counter -1
-      print "\r#{counter} to go..."
-    end
-    puts "...and done!"
-  end
+  # def self.update_total_scores
+  #   puts "Updating score table"
+  #   restaurants = Restaurant.where("buzz_mention_count_ignored > 0")
+  #   counter = restaurants.count
+  #   restaurants.each do |restaurant|
+  #     total_score = BuzzMention.where(:restaurant_id => restaurant.id, :ignore => false).sum("decayed_buzz_score")
+  #     restaurant.total_current_buzz = total_score
+  #     BuzzScore.create({ :restaurant_id => restaurant.id, :buzz_score => total_score})
+  #     restaurant.save
+  #     counter = counter -1
+  #     print "\\r#{counter} to go..."
+  #   end
+  #   puts "...and done!"
+  # end
 
-  calculate_decayed_scores
-  update_total_scores
+  require "#{Rails.root}/lib/rake_modules/score_updater.rb"
+  include RakeModules::ScoreUpdater
+
+  RakeModules::ScoreUpdater.calculate_decayed_scores
+  RakeModules::ScoreUpdater.update_total_scores
 
   end
 end

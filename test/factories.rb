@@ -6,6 +6,7 @@ FactoryGirl.define do
     uri Faker::Internet.http_url
     buzz_weight 1
     buzz_source_type "feed"
+    decay_factor 0.906
 
     factory :email_source do
       buzz_source_type "email"
