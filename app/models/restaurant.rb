@@ -7,6 +7,8 @@ class Restaurant < ActiveRecord::Base
 
   validates :name, :uniqueness => true
 
+  scope :with_buzz, where("buzz_mention_count_ignored > 0")
+
   #include PgSearch
   #pg_search_scope :search_by_restaurant_name, :against => :name
 

@@ -14,7 +14,7 @@ module RakeModules
 
   def self.update_total_scores
     puts "Updating score table"
-    restaurants = Restaurant.where("buzz_mention_count_ignored > 0")
+    restaurants = Restaurant.with_buzz
     counter = restaurants.count
     restaurants.each do |restaurant|
       total_score = BuzzMention.where(:restaurant_id => restaurant.id, :ignore => false).sum("decayed_buzz_score")
@@ -25,10 +25,6 @@ module RakeModules
       print "\r#{counter} to go..."
     end
     puts "...and done!"
-  end
-
-  def self.valid_buzz_mentions
-    buzz_mentions = BuzzMention.where(:ignore => false)
   end
 
   end

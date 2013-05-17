@@ -3,6 +3,9 @@ class BuzzMention < ActiveRecord::Base
 
   belongs_to :buzz_post
   belongs_to :restaurant
+
+  scope  :not_ignored, where(:ignore => false)
+  
   counter_culture :restaurant,
       :column_name => Proc.new {|model| (model.ignore == false) ? 'buzz_mention_count_ignored' : nil },
       :column_names => {
@@ -21,15 +24,12 @@ class BuzzMention < ActiveRecord::Base
       decayed_buzz_score = buzz_points*((decay_factor)**age_in_days)
   end
 
-  def update_decayed_buzz_score!(options = {})
-      options = {:now=> Time.now, :buzz_points=>self.buzz_score, :date=>self.buzz_post.post_date_time, :decay_factor=>self.buzz_post.buzz_source.decay_factor }.merge(options)
-      now = options[:now]
-      buzz_points  = options[:buzz_points]
-      date = options[:date] ||= self.created_at
-      decay_factor = options[:decay_factor].to_f
-      age_in_seconds = now - date
+  def update_decayed_buzz_score!
+      born_on_date = self.buzz_post.post_date_time ||= self.created_at
+      decay_factor = self.buzz_post.buzz_source.decay_factor.to_f ||= 0.906
+      age_in_seconds = Time.now - born_on_date
       age_in_days = age_in_seconds/86400
-      decayed_buzz_score = buzz_points*((decay_factor)**age_in_days)
+      decayed_buzz_score = self.buzz_score*((decay_factor)**age_in_days)
       self.decayed_buzz_score = decayed_buzz_score
       self.save
   end

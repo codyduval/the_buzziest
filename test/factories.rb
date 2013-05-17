@@ -40,6 +40,8 @@ FactoryGirl.define do
   factory :buzz_mention do
     restaurant
     buzz_post
+    buzz_score 2
+    decayed_buzz_score 2
   end
 
   factory :buzz_mention_highlight do
