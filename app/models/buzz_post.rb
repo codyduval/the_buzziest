@@ -5,10 +5,8 @@ class BuzzPost < ActiveRecord::Base
   has_many :buzz_mentions, :dependent => :destroy
   has_many :restaurants, :through => :buzz_mentions
 
-  # include PgSearch
-
-  # pg_search_scope :search_by_post, :against => [:post_title, :post_content],
-                  # :using => {:tsearch => {:normalization => 4}}
+  scope :with_buzz_mentions, where("id IN (SELECT DISTINCT(buzz_post_id) FROM buzz_mentions)")
+  scope :with_no_buzz_mentions, includes(:buzz_mentions).where( :buzz_mentions => { :buzz_post_id => nil} )
 
   searchable do
     text :post_title, :stored => true
@@ -26,6 +24,14 @@ class BuzzPost < ActiveRecord::Base
       :post_content => stripped_email_body_content,
       :post_guid => mitt.message_id
     )
+  end
+  
+  def self.old_posts(age_in_days)
+    where("post_date_time < :days", {:days => age_in_days.day.ago})
+  end
+
+  def self.old_posts_with_no_mentions(age_in_days) 
+    old_posts_with_no_mentions = self.old_posts(age_in_days).with_no_buzz_mentions
   end
 
   def self.assign_buzz_source_id(type,city)

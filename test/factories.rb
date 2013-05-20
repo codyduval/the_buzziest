@@ -44,6 +44,10 @@ FactoryGirl.define do
     decayed_buzz_score 2
   end
 
+  factory :buzz_score do
+    restaurant
+  end
+  
   factory :buzz_mention_highlight do
     buzz_mention
     buzz_mention_highlight_text Faker::Lorem.sentences

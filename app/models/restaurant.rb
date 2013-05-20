@@ -9,18 +9,12 @@ class Restaurant < ActiveRecord::Base
 
   scope :with_buzz, where("buzz_mention_count_ignored > 0")
 
-  #include PgSearch
-  #pg_search_scope :search_by_restaurant_name, :against => :name
-
   searchable do
     text :name
   end
-
-  def buzz_mentions_custom_path(restaurant)
-    if restaurant.buzz_mentions.exists?
-      restaurant.buzz_mentions
-    else
-      "doesnt"
-    end
+  
+  def total_score 
+    total_score = self.buzz_mentions.not_ignored.sum("decayed_buzz_score")    
   end
+
 end

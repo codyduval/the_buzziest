@@ -18,71 +18,20 @@ end
 task :cleanup_posts => :environment do
 
   Raven.capture do
-  # captures any exceptions which happen in this block and notify via Sentry
-
-  def self.old_posts_ids(age_in_days)
-    old_posts = BuzzPost.where("post_date_time < :days", {:days => age_in_days.day.ago})
-    old_posts_ids = []
-
-    old_posts.each do |post|
-      old_posts_ids << post.id
-    end
-
-    return old_posts_ids
-  end
-
-  def self.mentioned_posts_ids
-    mentioned_posts = BuzzMention.all
-    mentioned_posts_ids = []
-
-    mentioned_posts.each do |post|
-      mentioned_posts_ids << post.buzz_post_id
-    end
-
-    return mentioned_posts_ids
-  end
-
-  def self.find_posts_to_destroy(old_posts_ids, mentioned_posts_ids)
-    post_ids_to_destroy = []
-    post_ids_to_destroy = (old_posts_ids - mentioned_posts_ids)
-    BuzzPost.find_all_by_id(post_ids_to_destroy)
-  end
-
-  def self.destroy_old_posts(posts_to_destroy)
-    puts "Destroying ".light_red + posts_to_destroy.count.to_s.light_red + " posts".light_red
-    BuzzPost.destroy(posts_to_destroy)
-  end
-
-  def self.find_old_buzz_mentions
-    old_buzz_mentions_ids = []
-    old_buzz_mentions = BuzzMention.where("decayed_buzz_score < ?",0.05)
-    old_buzz_mentions.each do |mention|
-      old_buzz_mentions_ids << mention.id
-    end
-    ignored_buzz_mentions = BuzzMention.where("created_at < ? AND ignore = ?", 30.day.ago, true)
-    ignored_buzz_mentions.each do |mention|
-      old_buzz_mentions_ids << mention.id
-    end
-    BuzzMention.find_all_by_id(old_buzz_mentions_ids)
-  end
-
-  def self.destroy_old_buzz_mentions(mentions_to_destroy)
+    
+    tiny_score_mentions = BuzzMention.tiny_decayed_buzz_score
+    ignored_and_old_mentions = BuzzMention.ignored_and_older_than(30)
+    buzz_mentions = (tiny_score_mentions + ignored_and_old_mentions).uniq
     puts "Destroying ".light_red + mentions_to_destroy.count.to_s.light_red + " mentions".light_red
-    BuzzMention.destroy(mentions_to_destroy)
-  end
+    BuzzMention.destroy(buzz_mentions)
 
-  def self.update_counter_caches
+    buzz_posts = BuzzPost.old_posts_no_mentions(30)
+    puts "Destroying ".light_red + posts_to_destroy.count.to_s.light_red + " posts".light_red
+    BuzzPost.destroy(buzz_posts)
+
     puts "Updating counter caches".light_red
     BuzzMention.counter_culture_fix_counts
-  end
-
-  destroy_old_buzz_mentions(find_old_buzz_mentions)
-
-  posts_to_destroy = find_posts_to_destroy(old_posts_ids(30), mentioned_posts_ids)
-  destroy_old_posts(posts_to_destroy)
-
-  update_counter_caches
-  puts "All done.".green
+    puts "All done.".green
 
   end
 end

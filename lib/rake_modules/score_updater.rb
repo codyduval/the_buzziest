@@ -17,10 +17,7 @@ module RakeModules
     restaurants = Restaurant.with_buzz
     counter = restaurants.count
     restaurants.each do |restaurant|
-      total_score = BuzzMention.where(:restaurant_id => restaurant.id, :ignore => false).sum("decayed_buzz_score")
-      restaurant.total_current_buzz = total_score
-      BuzzScore.create({ :restaurant_id => restaurant.id, :buzz_score => total_score})
-      restaurant.save
+      BuzzScore.create_score_entry(restaurant, restaurant.total_score)
       counter = counter -1
       print "\r#{counter} to go..."
     end

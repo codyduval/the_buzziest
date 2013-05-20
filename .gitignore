@@ -14,3 +14,4 @@
 /log/*.log
 /tmp
 /solr/data/development/index
+/solr/data/test/index
