@@ -9,8 +9,8 @@ describe BuzzScore do
 
   it "creates a new entry in BuzzScore table" do
     restaurant = FactoryGirl.create(:restaurant, name: Faker::Company.name) 
-    score = 5
-    buzz_score = BuzzScore.create_score_entry(restaurant, score)
+    buzz_mention = FactoryGirl.create(:buzz_mention, :restaurant => restaurant, decayed_buzz_score: 5)
+    buzz_score = BuzzScore.create_score_entry(restaurant)
 
     buzz_score.buzz_score.must_equal(5)
   end

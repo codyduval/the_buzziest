@@ -17,7 +17,7 @@ module RakeModules
     restaurants = Restaurant.with_buzz
     counter = restaurants.count
     restaurants.each do |restaurant|
-      BuzzScore.create_score_entry(restaurant, restaurant.total_score)
+      BuzzScore.create_score_entry(restaurant)
       counter = counter -1
       print "\r#{counter} to go..."
     end

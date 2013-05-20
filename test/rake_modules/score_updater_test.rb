@@ -8,6 +8,7 @@ describe RakeModules::ScoreUpdater do
   end
 
   it "decreases score for each valid BuzzMention " do
+    buzz_mention_not_ignored = FactoryGirl.create(:buzz_mention, ignore: true)
     buzz_mentions = BuzzMention.not_ignored
 
     RakeModules::ScoreUpdater.decay_buzz_mention_scores(buzz_mentions)
@@ -28,4 +29,14 @@ describe RakeModules::ScoreUpdater do
     single_mention[:decayed_buzz_score].to_f.must_equal @buzz_mention_ignored[:buzz_score].to_f   
   end
 
+  it "#self.update_total_scores" do
+    restaurant = FactoryGirl.create(:restaurant)
+    restaurant_two = FactoryGirl.create(:restaurant)
+    buzz_mention = FactoryGirl.create(:buzz_mention, :restaurant => restaurant)
+    another_buzz_mention = FactoryGirl.create(:buzz_mention, :restaurant => restaurant_two)
+
+    RakeModules::ScoreUpdater.update_total_scores
+
+    buzz_score_entry = BuzzScore
+  end
 end

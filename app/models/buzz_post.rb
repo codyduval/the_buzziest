@@ -30,8 +30,8 @@ class BuzzPost < ActiveRecord::Base
     where("post_date_time < :days", {:days => age_in_days.day.ago})
   end
 
-  def self.old_posts_with_no_mentions(age_in_days) 
-    old_posts_with_no_mentions = self.old_posts(age_in_days).with_no_buzz_mentions
+  def self.old_posts_no_mentions(age_in_days) 
+    old_posts_no_mentions = self.old_posts(age_in_days).with_no_buzz_mentions
   end
 
   def self.assign_buzz_source_id(type,city)

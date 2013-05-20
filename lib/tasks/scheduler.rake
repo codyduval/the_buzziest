@@ -3,7 +3,6 @@ desc "This task is called by the Heroku scheduler add-on"
 task :update_scores => :environment do
 
   Raven.capture do
-
     require "#{Rails.root}/lib/rake_modules/score_updater.rb"
     include RakeModules::ScoreUpdater
 
@@ -18,19 +17,17 @@ end
 task :cleanup_posts => :environment do
 
   Raven.capture do
-    
-    tiny_score_mentions = BuzzMention.tiny_decayed_buzz_score
-    ignored_and_old_mentions = BuzzMention.ignored_and_older_than(30)
-    buzz_mentions = (tiny_score_mentions + ignored_and_old_mentions).uniq
-    puts "Destroying ".light_red + mentions_to_destroy.count.to_s.light_red + " mentions".light_red
-    BuzzMention.destroy(buzz_mentions)
+    require "#{Rails.root}/lib/rake_modules/post_cleaner.rb"
+    include RakeModules::PostCleaner
 
-    buzz_posts = BuzzPost.old_posts_no_mentions(30)
-    puts "Destroying ".light_red + posts_to_destroy.count.to_s.light_red + " posts".light_red
-    BuzzPost.destroy(buzz_posts)
+    old_buzz_mentions = RakeModules::PostCleaner.old_buzz_mentions    
+    RakeModules::PostCleaner.destroy_old_buzz_mentions(old_buzz_mentions)
 
-    puts "Updating counter caches".light_red
-    BuzzMention.counter_culture_fix_counts
+    old_buzz_posts = RakeModules::PostCleaner.old_buzz_posts
+    RakeModules::PostCleaner.destroy_old_buzz_posts(old_buzz_posts)
+
+    RakeModules::PostCleaner.update_counter_caches
+
     puts "All done.".green
 
   end

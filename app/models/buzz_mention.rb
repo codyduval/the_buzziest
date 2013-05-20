@@ -19,6 +19,7 @@ class BuzzMention < ActiveRecord::Base
       decay_factor = self.buzz_post.buzz_source.decay_factor.to_f ||= 0.906
       age_in_seconds = Time.now - born_on_date
       age_in_days = age_in_seconds/86400
+      puts self.buzz_score
       decayed_buzz_score = self.buzz_score*((decay_factor)**age_in_days)
       self.decayed_buzz_score = decayed_buzz_score
       self.save

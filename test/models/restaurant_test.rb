@@ -32,8 +32,8 @@ describe Restaurant do
   it "#total_score calculates score for all related buzz mentions" do
     restaurant = FactoryGirl.create(:restaurant, name: Faker::Company.name)
     a_buzz_mention = restaurant.buzz_mentions.create(:decayed_buzz_score => 2)
-    another_buzz_mention = restaurant.buzz_mentions.create(:decayed_buzz_score => 3)
-    ignored_buzz_mention = restaurant.buzz_mentions.create(:decayed_buzz_score => 5, :ignore => true)
+    another_buzz_mention = restaurant.buzz_mentions.create(:buzz_score => 3, :decayed_buzz_score => 3)
+    ignored_buzz_mention = restaurant.buzz_mentions.create(:buzz_score => 5, :decayed_buzz_score => 5, :ignore => true)
 
     restaurant.total_score.must_equal(5)
   end

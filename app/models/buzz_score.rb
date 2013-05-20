@@ -11,7 +11,7 @@ class BuzzScore < ActiveRecord::Base
     self.restaurant.save
   end
 
-  def self.create_score_entry(restaurant, score)
-      self.create(:restaurant_id => restaurant.id, :buzz_score => score)
+  def self.create_score_entry(restaurant)
+      self.create(:restaurant_id => restaurant.id, :buzz_score => restaurant.total_score)
   end 
 end
