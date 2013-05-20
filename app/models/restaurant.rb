@@ -17,4 +17,11 @@ class Restaurant < ActiveRecord::Base
     total_score = self.buzz_mentions.not_ignored.sum("decayed_buzz_score")    
   end
 
+  def self.fuzzy_match(name)
+    fuzzy_match = self.search do
+      fulltext %Q/"#{name}"/
+    end
+    fuzzy_match = fuzzy_match.results
+  end
+  
 end
