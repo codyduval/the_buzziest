@@ -2,30 +2,32 @@ require 'nokogiri'
 require 'open-uri'
 
 module Fetcher
-  module Restaurant
     class Client
-    attr_accessor :url  
+    attr_accessor :url, :name_list  
       
-      def initialize(url, node, page=1)
-        @url = url + "#{(page)}"
-        @page = page
+      def initialize(url, node, city)
+        @url = url
         @node = node
+        @city = city
+        @name_list = []
       end
 
-      def fetch
-        html = get(@url)
+      def fetch(page=1)
+        url_page = @url + "#{(page)}"
+        html = get(url_page)
         parse(html)
       end
 
       def parse(html)
-        restaurant_name_list = []
         doc = Nokogiri::HTML(html)
         restaurant_names = doc.xpath(@node)
         restaurant_names.each do |restaurant_name|
           puts restaurant_name.text
-          restaurant_name_list.push(restaurant_name.text)
-        end
-        restaurant_name_list
+          restaurant = {}
+          restaurant[:name] = restaurant_name.text
+          restaurant[:city] = @city
+          @name_list << restaurant 
+       end
       end
 
       private
@@ -35,6 +37,5 @@ module Fetcher
       end
 
     end
-  end
 end
 

@@ -36,100 +36,19 @@ end
 
 task :fetch_restaurants => :environment do
 
-  Raven.capture do
-  # captures any exceptions which happen in this block and notify via Sentry
+  #Raven.capture do
 
-  require 'nokogiri'
-  require 'open-uri'
-  require 'benchmark'
+    require 'benchmark'
+    time_elapsed = Benchmark.realtime do
 
-  def self.fuzzy_match(name)
-    fuzzy_match = Restaurant.search do
-      fulltext %Q/"#{name}"/
+      pages_to_scrape = 2
+    
+      RakeModules::RestaurantFetcher.get_new_restaurants(pages_to_scrape)
+      puts "Total restaurants in db: ".green + Restaurant.count.to_s.green 
     end
-    fuzzy_match = fuzzy_match.results
+     puts "Time elapsed: #{time_elapsed} seconds"
+  #end
 
-    return fuzzy_match
-  end
-
-  time_elapsed = Benchmark.realtime do
-
-  @added_count = 0
-  @skipped_count = 0
-  @full_restaurant_name_list = Array.new
-  number_of_pages_to_scrape = 2
-  cities = MasterCities.get_all_city_names
-
-  def self.fetch_restaurant_names(pages,restaurant_list_source)
-    single_source_restaurant_name_list = Array.new
-    (1..pages).each do |page|
-      url = restaurant_list_source.uri + "#{(page)}"
-      node = restaurant_list_source.x_path_nodes
-      puts "Visting #{url}".cyan
-      doc = Nokogiri::HTML(open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' ))
-      restaurant_names = doc.xpath(node)
-      restaurant_names.each do |restaurant_name|
-        puts restaurant_name.text
-        single_source_restaurant_name_list.push(restaurant_name.text)
-      end
-    end
-    return single_source_restaurant_name_list
-  end
-
-  def self.add_restaurant_names_to_db(full_restaurant_name_list,city)
-    puts "Attempting to add ".light_green + full_restaurant_name_list.count.to_s + " restaurants into to the database.".light_green
-    full_restaurant_name_list.each do |name|
-      puts name.light_white
-      searched_restaurant = fuzzy_match(name)
-      if searched_restaurant.empty?
-        @restaurant = Restaurant.find_or_initialize_by_name(name)
-        @restaurant.city = city
-        fetch_restaurant_twitter_handle(@restaurant)
-        @restaurant.save
-        puts '*added to db*'.light_green
-        @added_count = @added_count + 1
-      else
-        puts '**skipped - already in db**'.light_yellow
-        @skipped_count = @skipped_count + 1
-      end
-    end
-  end
-
-  def self.fetch_restaurant_twitter_handle(restaurant)
-    stripped_restaurant_name=restaurant.name.gsub(/[^0-9a-z ]/i, '')
-    stripped_restaurant_name_no_spaces=stripped_restaurant_name.gsub(/ /, '%20')
-    url = "https://twitter.com/search/users?q=#{(stripped_restaurant_name_no_spaces)}"
-    node = "//@data-screen-name"
-    puts "Visting #{url}".cyan
-    doc = Nokogiri::HTML(open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' ))
-    twitter_handle = doc.at_xpath(node)
-    unless twitter_handle.nil?
-      valid_twitter_handle = "@" + twitter_handle.value
-      restaurant.twitter_handle = valid_twitter_handle
-      restaurant.save
-    end
-  end
-
-  cities.each do |city|
-    full_restaurant_name_list = Array.new
-    restaurant_list_sources = BuzzSource.where("buzz_source_type = ? AND city = ?","restaurant_list", city)
-    restaurant_list_sources.each do |restaurant_list_source|
-      full_restaurant_name_list.concat(fetch_restaurant_names(number_of_pages_to_scrape,restaurant_list_source))
-    end
-    add_restaurant_names_to_db(full_restaurant_name_list,city)
-  end
-
-  total_count = @skipped_count + @added_count
-  total_restaurants_in_db = Restaurant.count
-  puts "\r \r"
-  puts "#{total_count}".light_cyan + " restaurants found"
-  puts "#{@added_count}".light_green + " successfully added"
-  puts "#{@skipped_count}".light_yellow + " skipped (duplicates)"
-  puts "#{total_restaurants_in_db}".green + " total restaurants in database"
-
-  end
-  puts "Time elapsed #{time_elapsed*1000} milliseconds or #{time_elapsed} seconds"
-  end
 end
 
 
