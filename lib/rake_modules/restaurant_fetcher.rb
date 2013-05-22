@@ -4,24 +4,20 @@ require 'open-uri'
 module RakeModules
   module RestaurantFetcher
 
-    @added_count = 0
-    @skipped_count = 0
-
-    def self.get_new_restaurants(pages)
+    def self.get_and_create_new_restaurants(pages)
       restaurant_list_sources.each do |source|
-        name_fetcher = Fetcher::NameFetcher.new(pages, client(source))
         puts "Visiting #{source.name}".cyan 
-        name_fetcher.fetch_restaurant_names
-        name_fetcher.add_restaurants
+        remote_source = client(source, pages)
+        remote_source.fetch
+        names = remote_source.name_list
+        Restaurant.batch_create_from_remote(names)
       end
-      puts "Added #{@added_count} new restaurants".cyan
-      puts "Skipped #{@skipped_count} restaurants".cyan
     end
 
    private 
 
-    def self.client(source)
-      @client = Fetcher::Client.new(source[:uri], source[:x_path_nodes], source[:city])
+    def self.client(source, pages)
+      @client = Fetch::RestaurantNames::Client.new(source[:uri], source[:x_path_nodes], source[:city], pages)
     end
 
     def self.restaurant_list_sources

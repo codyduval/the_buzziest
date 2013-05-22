@@ -12,7 +12,16 @@ class Restaurant < ActiveRecord::Base
   searchable do
     text :name
   end
-  
+ 
+  def fetch_and_update_twitter_handle!
+    twitter_client = Fetch::TwitterHandle::Client.new(self.name)
+    twitter_client.fetch
+    self.twitter_handle = twitter_client.valid_twitter_handle 
+    if self.save
+      puts twitter_client.valid_twitter_handle
+    end
+  end
+
   def total_score 
     total_score = self.buzz_mentions.not_ignored.sum("decayed_buzz_score")    
   end
@@ -24,4 +33,13 @@ class Restaurant < ActiveRecord::Base
     fuzzy_match = fuzzy_match.results
   end
   
+  def self.batch_create_from_remote(name_list)
+    name_list.each do |name|
+      restaurant = Restaurant.where(:name => name[:name]).first_or_create(:city => name[:city]) 
+      if restaurant.twitter_handle == nil
+        puts "Attempting to get Twitter handle for #{restaurant.name}...".cyan
+        restaurant.fetch_and_update_twitter_handle!
+      end
+    end
+  end
 end

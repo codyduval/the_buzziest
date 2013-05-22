@@ -36,18 +36,23 @@ end
 
 task :fetch_restaurants => :environment do
 
-  #Raven.capture do
+  Raven.capture do
 
     require 'benchmark'
     time_elapsed = Benchmark.realtime do
 
       pages_to_scrape = 2
-    
-      RakeModules::RestaurantFetcher.get_new_restaurants(pages_to_scrape)
-      puts "Total restaurants in db: ".green + Restaurant.count.to_s.green 
+      start_total = Restaurant.count
+
+      RakeModules::RestaurantFetcher.get_and_create_new_restaurants(pages_to_scrape)
+
+      end_total = Restaurant.count
+      total_added = end_total - start_total 
+      puts "Restaurants added to db: ".green + total_added.to_s.green 
+      puts "Total restaurants db: ".green + end_total.to_s.green 
     end
      puts "Time elapsed: #{time_elapsed} seconds"
-  #end
+  end
 
 end
 

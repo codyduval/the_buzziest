@@ -1,21 +1,26 @@
 require 'nokogiri'
 require 'open-uri'
 
-module Fetcher
+module Fetch
+  module RestaurantNames
     class Client
-    attr_accessor :url, :name_list  
+
+      attr_accessor :url, :name_list  
       
-      def initialize(url, node, city)
+      def initialize(url, node, city, pages=1)
         @url = url
         @node = node
         @city = city
+        @pages = pages
         @name_list = []
       end
 
-      def fetch(page=1)
-        url_page = @url + "#{(page)}"
-        html = get(url_page)
-        parse(html)
+      def fetch
+        (1..@pages).each do |page| 
+          url_page = @url + "#{(page)}"
+          html = get(url_page)
+          parse(html)
+        end
       end
 
       def parse(html)
@@ -27,7 +32,7 @@ module Fetcher
           restaurant[:name] = restaurant_name.text
           restaurant[:city] = @city
           @name_list << restaurant 
-       end
+        end
       end
 
       private
@@ -37,5 +42,6 @@ module Fetcher
       end
 
     end
+  end
 end
 
