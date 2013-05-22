@@ -1,5 +1,4 @@
 require "minitest_helper"
-require "#{Rails.root}/lib/rake_modules/post_cleaner.rb"
 
 describe RakeModules::PostCleaner do
   before do

@@ -3,8 +3,6 @@ desc "This task is called by the Heroku scheduler add-on"
 task :update_scores => :environment do
 
   Raven.capture do
-    require "#{Rails.root}/lib/rake_modules/score_updater.rb"
-    include RakeModules::ScoreUpdater
 
     buzz_mentions = BuzzMention.not_ignored 
     RakeModules::ScoreUpdater.decay_buzz_mention_scores(buzz_mentions)
@@ -17,8 +15,6 @@ end
 task :cleanup_posts => :environment do
 
   Raven.capture do
-    require "#{Rails.root}/lib/rake_modules/post_cleaner.rb"
-    include RakeModules::PostCleaner
 
     old_buzz_mentions = RakeModules::PostCleaner.old_buzz_mentions    
     RakeModules::PostCleaner.destroy_old_buzz_mentions(old_buzz_mentions)
@@ -164,41 +160,6 @@ task :scan_posts => :environment do
   end
 
   puts "Done in #{time_elapsed} seconds."
-  end
-end
-
-
-task :fetch_all_twitter_handles => :environment do
-  Raven.capture do
-  # captures any exceptions which happen in this block and notify via Sentry
-
-  require 'nokogiri'
-  require 'open-uri'
-
-
-  def self.fetch_restaurant_twitter_handle(restaurant)
-    stripped_restaurant_name=restaurant.name.gsub(/[^0-9a-z ]/i, '')
-    stripped_restaurant_name_no_spaces=stripped_restaurant_name.gsub(/ /, '%20')
-    puts "Getting " + stripped_restaurant_name
-    url = "https://twitter.com/search/users?q=#{(stripped_restaurant_name_no_spaces)}"
-    node = "//@data-screen-name"
-    puts "Visting #{url}".cyan
-    doc = Nokogiri::HTML(open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' ))
-    twitter_handle = doc.at_xpath(node)
-    unless twitter_handle.nil?
-      valid_twitter_handle = "@" + twitter_handle.value
-      restaurant.twitter_handle = valid_twitter_handle
-      restaurant.save
-    end
-  end
-
-  restaurants = Restaurant.all
-  restaurants.each do |restaurant|
-    if restaurant.twitter_handle.blank?
-      fetch_restaurant_twitter_handle(restaurant)
-    end
-  end
-
   end
 end
 

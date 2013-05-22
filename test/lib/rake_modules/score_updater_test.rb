@@ -1,5 +1,4 @@
 require "minitest_helper"
-require "#{Rails.root}/lib/rake_modules/score_updater.rb"
 
 describe RakeModules::ScoreUpdater do
   before do
