@@ -21,6 +21,8 @@ group :test do
   gem 'turn'
   gem 'factory_girl_rails', "~> 4.0"
   gem 'ffaker'
+  gem 'vcr'
+  gem 'webmock', "1.10"
 end
 
 group :development do

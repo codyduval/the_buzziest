@@ -5,7 +5,7 @@ module Fetch
   module RestaurantNames
     class Client
 
-      attr_accessor :url, :name_list  
+      attr_accessor :url, :name_list, :city  
       
       def initialize(url, node, city, pages=1)
         @url = url

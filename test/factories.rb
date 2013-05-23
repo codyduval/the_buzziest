@@ -14,6 +14,10 @@ FactoryGirl.define do
 
     factory :restaurant_list do
       buzz_source_type "restaurant_list"
+      name "Tasting Table NY"
+      uri "http://nymag.com/srch?t=restaurant&N=265+334&No=0&Ns=nyml_sort_name"
+      x_path_nodes "//dl[@class=\"result\"]/dt/a"
+      city "nyc"
     end
 
     factory :twitter_source do

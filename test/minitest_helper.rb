@@ -4,9 +4,10 @@ require "minitest/autorun"
 require "vcr"
 require "webmock/minitest"
 
-VCR.configure.do |c|
+VCR.configure do |c|
   c.cassette_library_dir = 'test/fixtures/the_buzziest_cassettes'
   c.hook_into :webmock
+  c.ignore_localhost = true
 end
 
 Turn.config.format = :outline

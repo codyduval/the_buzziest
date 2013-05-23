@@ -17,11 +17,13 @@ module RakeModules
    private 
 
     def self.client(source, pages)
-      @client = Fetch::RestaurantNames::Client.new(source[:uri], source[:x_path_nodes], source[:city], pages)
+      @client = Fetch::RestaurantNames::Client.new(source[:uri], 
+          source[:x_path_nodes], source[:city], pages)
     end
 
     def self.restaurant_list_sources
-      restaurant_list_sources = BuzzSource.where(:buzz_source_type => "restaurant_list")
+      restaurant_list_sources = BuzzSource.where(:buzz_source_type => 
+                                                 "restaurant_list")
     end
 
   end

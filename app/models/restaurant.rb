@@ -35,7 +35,8 @@ class Restaurant < ActiveRecord::Base
   
   def self.batch_create_from_remote(name_list)
     name_list.each do |name|
-      restaurant = Restaurant.where(:name => name[:name]).first_or_create(:city => name[:city]) 
+      restaurant = Restaurant.where(:name => 
+        name[:name]).first_or_create(:city => name[:city]) 
       if restaurant.twitter_handle == nil
         puts "Attempting to get Twitter handle for #{restaurant.name}...".cyan
         restaurant.fetch_and_update_twitter_handle!
