@@ -23,6 +23,8 @@ module Fetch
         end
       end
 
+      private
+
       def parse(html)
         doc = Nokogiri::HTML(html)
         restaurant_names = doc.xpath(@node)
@@ -35,10 +37,10 @@ module Fetch
         end
       end
 
-      private
-
       def get(url)
-        open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' )
+        open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; 
+             Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML,
+             like Gecko) Version/3.1 Safari/525.13')
       end
 
     end

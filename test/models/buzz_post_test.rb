@@ -56,4 +56,22 @@ describe BuzzPost do
   it "#create_from_postmark(mitt) a new entry" do
     skip("TO DO")
   end
+
+  describe "#self.create_from_feed" do
+    let(:source) {FactoryGirl.build(:feed_source)}
+    let(:feed_client) {Fetch::RemoteBuzzPosts::FeedClient.new(source[:uri])}
+
+    it "creates new BuzzPosts from feed" do
+      feed_client.fetch_and_parse
+      feed = feed_client.feed
+
+      BuzzPost.create_from_feed(feed, source)
+      
+      buzz_post = BuzzPost.where(:post_guid => "tag:ny.eater.com,2013://4.520164")
+      buzz_post.count.must_equal 1
+      buzz_post.first.post_uri.must_equal "http://ny.eater.com/archives/2013/05/cronut_wire.php"
+
+    end
+  end
+
 end
