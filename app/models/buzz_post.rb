@@ -9,7 +9,7 @@ class BuzzPost < ActiveRecord::Base
   scope :with_buzz_mentions, 
         where("id IN (SELECT DISTINCT(buzz_post_id) FROM buzz_mentions)")
   scope :with_no_buzz_mentions, 
-        includes(:buzz_mentions).where( :buzz_mentions => { :buzz_post_id => nil} )
+        includes(:buzz_mentions).where(:buzz_mentions => {:buzz_post_id => nil})
 
   searchable do
     text :post_title, :stored => true

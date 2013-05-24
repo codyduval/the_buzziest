@@ -8,10 +8,12 @@ describe BuzzPost do
     @buzz_post_32 = FactoryGirl.create(:buzz_post, post_date_time: 32.days.ago)
   end
   
-  it "should create a buzz_post factory" do
-    buzz_post = FactoryGirl.build(:buzz_post)
-    
-    buzz_post.wont_be_nil
+  describe "#new" do
+    it "should create a buzz_post factory" do
+      buzz_post = FactoryGirl.build(:buzz_post)
+      
+      buzz_post.wont_be_nil
+    end
   end
  
   describe "#with_buzz_mentions" do  
@@ -94,8 +96,12 @@ describe BuzzPost do
       feed = feed_client.feed
       post_url = "http://ny.eater.com/archives/2013/05/cronut_wire.php"
 
-      BuzzPost.create_from_feed(feed, source)
       
+      #Roll clock back so post fixture is accepted 
+      Timecop.travel(2013, 5, 23) do
+        BuzzPost.create_from_feed(feed, source)
+      end 
+
       buzz_post = BuzzPost.where(:post_guid => 
         "tag:ny.eater.com,2013://4.520164")
       buzz_post.count.must_equal 1
@@ -106,26 +112,43 @@ describe BuzzPost do
       feed_client.fetch_and_parse
       feed = feed_client.feed
       feed_dup = feed_client.feed
-
-      BuzzPost.create_from_feed(feed, source)
-      BuzzPost.create_from_feed(feed_dup, source)
+     
+     #Roll clock back so post fixture is accepted 
+      Timecop.travel(2013, 5, 23) do
+        BuzzPost.create_from_feed(feed, source)
+        BuzzPost.create_from_feed(feed_dup, source)
+      end
 
       buzz_posts = BuzzPost.where(:post_guid => feed.entries.first.id)
       buzz_posts.count.must_equal 1
     end
 
     it "does not create BuzzPosts older than 25 days" do
-      DatabaseCleaner.clean
+      BuzzPost.destroy_all
       feed_client.fetch_and_parse
       feed = feed_client.feed
 
-      Timecop.freeze(Date.today + 30) do
+      Timecop.freeze(2013, 6, 23) do
         puts Date.today
         BuzzPost.create_from_feed(feed, source)
       end
 
       posts = BuzzPost.all
       posts.must_be_empty
+    end
+
+    it "does create BuzzPosts younger than 25 days" do
+      BuzzPost.destroy_all
+      feed_client.fetch_and_parse
+      feed = feed_client.feed
+
+      Timecop.freeze(2013, 6, 04) do
+        puts Date.today
+        BuzzPost.create_from_feed(feed, source)
+      end
+
+      posts = BuzzPost.all
+      posts.wont_be_empty
     end
   end
 

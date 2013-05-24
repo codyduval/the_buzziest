@@ -18,13 +18,13 @@ end
 DatabaseCleaner.strategy = :truncation 
 
 class MiniTest::Spec
-  # before :each do
-  #   DatabaseCleaner.start
-  # end
+  before :each do
+    DatabaseCleaner.start
+  end
 
-  # before :each do
-  #   DatabaseCleaner.clean
-  # end
+  before :each do
+    DatabaseCleaner.clean
+  end
 end
 
-Turn.config.format = :outline
+Turn.config.format = :cue

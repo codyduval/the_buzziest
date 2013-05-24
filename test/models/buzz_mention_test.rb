@@ -2,47 +2,61 @@ require "minitest_helper"
 
 describe BuzzMention do
 
-  before do
-    @buzz_mention_ignored = FactoryGirl.create(:buzz_mention, ignore: true)    
-    @buzz_mention_not_ignored = FactoryGirl.create(:buzz_mention, ignore: false)
-    @buzz_mention_not_ignored_two = FactoryGirl.create(:buzz_mention, ignore: false)
-  end
- 
-  it "creates a BuzzMention factory" do
-    buzz_mention = FactoryGirl.build(:buzz_mention)
+  describe "#new" do
+    it "creates a BuzzMention factory" do
+      buzz_mention = FactoryGirl.build(:buzz_mention)
 
-    buzz_mention.wont_be_nil 
+      buzz_mention.wont_be_nil 
+    end
   end
 
-  it "#not_ignored scope gets not ignored BuzzMentions" do
-    buzz_mentions = BuzzMention.not_ignored
+  describe "#not_ignored" do
+    
+    it "scope gets not ignored BuzzMentions" do
+      mention_ignored = FactoryGirl.create(:buzz_mention, ignore: true)    
+      mention_not_ignored = FactoryGirl.create(:buzz_mention, ignore: false)
+      mention_not_ignored_two = FactoryGirl.create(:buzz_mention, ignore: false)
+      buzz_mentions = BuzzMention.not_ignored
 
-    buzz_mentions.wont_include(@buzz_mention_ignored)
-    buzz_mentions.must_include(@buzz_mention_not_ignored)
-    buzz_mentions.must_include(@buzz_mention_not_ignored_two)
+      buzz_mentions.wont_include(mention_ignored)
+      buzz_mentions.must_include(mention_not_ignored)
+      buzz_mentions.must_include(mention_not_ignored_two)
+    end
   end
 
-  it "#ignored scope gets ignored BuzzMentions" do
-    buzz_mentions = BuzzMention.ignored
+  describe "#ignored" do
+    it "scope gets ignored BuzzMentions" do
+      mention_ignored = FactoryGirl.create(:buzz_mention, ignore: true)    
+      mention_not_ignored = FactoryGirl.create(:buzz_mention, ignore: false)
+      mention_not_ignored_two = FactoryGirl.create(:buzz_mention, ignore: false)
+      buzz_mentions = BuzzMention.ignored
 
-    buzz_mentions.must_include(@buzz_mention_ignored)
-    buzz_mentions.wont_include(@buzz_mention_not_ignored)
-    buzz_mentions.wont_include(@buzz_mention_not_ignored_two)
+      buzz_mentions.must_include(mention_ignored)
+      buzz_mentions.wont_include(mention_not_ignored)
+      buzz_mentions.wont_include(mention_not_ignored_two)
+    end
   end
 
-  it "#tiny_decayed_buzz_score scope gets BuzzMentions with score less than 0.05" do
-    buzz_mention_tiny_score = FactoryGirl.create(:buzz_mention, decayed_buzz_score: 0.04)
-    buzz_mention_normal_score = FactoryGirl.create(:buzz_mention, decayed_buzz_score: 0.9)
+  describe "#tiny_decayed_buzz_score" do
+    it "scope gets mentions with score less than 0.05" do
+      mention_tiny_score = FactoryGirl.create(:buzz_mention,
+                                              decayed_buzz_score: 0.04)
+      mention_normal_score = FactoryGirl.create(:buzz_mention,
+                                                decayed_buzz_score: 0.9)
 
-    buzz_mentions = BuzzMention.tiny_decayed_buzz_score
+      mentions = BuzzMention.tiny_decayed_buzz_score
 
-    buzz_mentions.must_include(buzz_mention_tiny_score)
-    buzz_mentions.wont_include(buzz_mention_normal_score)
+      mentions.must_include(mention_tiny_score)
+      mentions.wont_include(mention_normal_score)
+    end
   end
 
-  it "#update_decay_buzz_score! correctly" do
-    @buzz_mention_not_ignored.update_decayed_buzz_score!
-    @buzz_mention_not_ignored[:decayed_buzz_score].to_f.must_be :<, 2
+  describe "#update_decay_buzz_score!" do
+    it "updates mention with decayed buzz score" do
+      mention = FactoryGirl.build(:buzz_mention, ignore: true)    
+      mention.update_decayed_buzz_score!
+      mention[:decayed_buzz_score].to_f.must_be :<, 2
+    end
   end
 
 end
