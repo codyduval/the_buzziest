@@ -13,48 +13,76 @@ describe BuzzPost do
     
     buzz_post.wont_be_nil
   end
-  
-  it "#with_buzz_mentions scope should get posts with buzz mentions" do
-    buzz_post_with_mention = FactoryGirl.create(:buzz_post)
-    buzz_mention = FactoryGirl.create(:buzz_mention, :buzz_post => buzz_post_with_mention) 
-    buzz_post_no_mentions = FactoryGirl.create(:buzz_post)
+ 
+  describe "#with_buzz_mentions" do  
+    it "scope should get posts with buzz mentions" do
+      buzz_post_with_mention = FactoryGirl.create(:buzz_post)
+      buzz_mention = FactoryGirl.create(:buzz_mention, 
+                                        :buzz_post => buzz_post_with_mention) 
+      buzz_post_no_mentions = FactoryGirl.create(:buzz_post)
 
-    with_buzz_mentions = BuzzPost.with_buzz_mentions
+      with_buzz_mentions = BuzzPost.with_buzz_mentions
 
-    with_buzz_mentions.must_include(buzz_post_with_mention)    
-    with_buzz_mentions.wont_include(buzz_post_no_mentions)
+      with_buzz_mentions.must_include(buzz_post_with_mention)    
+      with_buzz_mentions.wont_include(buzz_post_no_mentions)
+    end
   end
   
-  it "#with_no_buzz_mentions scope should get no posts with buzz mentions" do
-    buzz_post_with_mention = FactoryGirl.create(:buzz_post)
-    buzz_mention = FactoryGirl.create(:buzz_mention, :buzz_post => buzz_post_with_mention) 
-    buzz_post_no_mentions = FactoryGirl.create(:buzz_post)
+  describe "#with_no_buzz_mentions" do
+    it "gets all posts with no buzz mentions" do
+      buzz_post_with_mention = FactoryGirl.create(:buzz_post)
+      buzz_mention = FactoryGirl.create(:buzz_mention,
+                                        :buzz_post => buzz_post_with_mention) 
+      buzz_post_no_mentions = FactoryGirl.create(:buzz_post)
 
-    with_buzz_mentions = BuzzPost.with_no_buzz_mentions
+      with_no_buzz_mentions = BuzzPost.with_no_buzz_mentions
 
-    with_buzz_mentions.wont_include(buzz_post_with_mention)    
-    with_buzz_mentions.must_include(buzz_post_no_mentions)
+      with_no_buzz_mentions.wont_include(buzz_post_with_mention)    
+      with_no_buzz_mentions.must_include(buzz_post_no_mentions)
+    end
   end
 
-  it "#self.old_posts(age_in_days) should get posts older than age_in_days" do
-    old_posts = BuzzPost.old_posts(30)
+  describe "#self.old_posts(age_in_days)" do
+    it "gets posts older than age_in_days" do
+      old_posts = BuzzPost.old_posts(30)
 
-    old_posts.must_include(@buzz_post_31)
-  end 
+      old_posts.must_include(@buzz_post_31)
+    end 
+  end
 
-  it "#self.old_posts_no_mentions(age_in_days) should get appropraite posts" do
-    old_buzz_post_with_mention = FactoryGirl.create(:buzz_post, post_date_time: 32.days.ago)
-    buzz_mention = FactoryGirl.create(:buzz_mention, :buzz_post => old_buzz_post_with_mention) 
-    buzz_post_no_mentions = FactoryGirl.create(:buzz_post, post_date_time: 32.days.ago)
+  describe "#self.old_posts_no_mentions" do
+    it "gets old posts with no mentions" do
+      old_buzz_post_with_mention = FactoryGirl.create(:buzz_post,
+                                                      post_date_time: 32.days.ago)
+      buzz_mention = FactoryGirl.create(:buzz_mention,
+                                        :buzz_post => old_buzz_post_with_mention) 
+      buzz_post_no_mentions = FactoryGirl.create(:buzz_post, 
+                                                 post_date_time: 32.days.ago)
 
-    old_posts_no_mentions = BuzzPost.old_posts_no_mentions(30)
+      old_posts_no_mentions = BuzzPost.old_posts_no_mentions(30)
 
-    old_posts_no_mentions.must_include(buzz_post_no_mentions)
-    old_posts_no_mentions.wont_include(old_buzz_post_with_mention)
-  end 
+      old_posts_no_mentions.must_include(buzz_post_no_mentions)
+      old_posts_no_mentions.wont_include(old_buzz_post_with_mention)
+    end 
+  end
 
-  it "#create_from_postmark(mitt) a new entry" do
-    skip("TO DO")
+  describe "#create_from_postmark" do
+    let(:mitt) {Postmark::Mitt.new(read_fixture)}
+
+    it "creates a new entry from postmark" do
+      BuzzPost.create_from_postmark(mitt)
+      id = "dd10d709-ca9f-46bf-8376-8dc489807a66"
+
+      buzz_post = BuzzPost.where(:post_guid => id)
+      buzz_post.first.post_guid.must_equal mitt.message_id
+    end
+
+    it "strips HTML from message body" do
+      BuzzPost.create_from_postmark(mitt)
+
+      buzz_post = BuzzPost.where(:buzz_source_id => 9999)
+      buzz_post.first.post_content.wont_include "<html>"
+    end
   end
 
   describe "#self.create_from_feed" do
@@ -64,13 +92,40 @@ describe BuzzPost do
     it "creates new BuzzPosts from feed" do
       feed_client.fetch_and_parse
       feed = feed_client.feed
+      post_url = "http://ny.eater.com/archives/2013/05/cronut_wire.php"
 
       BuzzPost.create_from_feed(feed, source)
       
-      buzz_post = BuzzPost.where(:post_guid => "tag:ny.eater.com,2013://4.520164")
+      buzz_post = BuzzPost.where(:post_guid => 
+        "tag:ny.eater.com,2013://4.520164")
       buzz_post.count.must_equal 1
-      buzz_post.first.post_uri.must_equal "http://ny.eater.com/archives/2013/05/cronut_wire.php"
+      buzz_post.first.post_uri.must_equal post_url
+    end
 
+    it "does not create a duplicate BuzzPost" do
+      feed_client.fetch_and_parse
+      feed = feed_client.feed
+      feed_dup = feed_client.feed
+
+      BuzzPost.create_from_feed(feed, source)
+      BuzzPost.create_from_feed(feed_dup, source)
+
+      buzz_posts = BuzzPost.where(:post_guid => feed.entries.first.id)
+      buzz_posts.count.must_equal 1
+    end
+
+    it "does not create BuzzPosts older than 25 days" do
+      DatabaseCleaner.clean
+      feed_client.fetch_and_parse
+      feed = feed_client.feed
+
+      Timecop.freeze(Date.today + 30) do
+        puts Date.today
+        BuzzPost.create_from_feed(feed, source)
+      end
+
+      posts = BuzzPost.all
+      posts.must_be_empty
     end
   end
 

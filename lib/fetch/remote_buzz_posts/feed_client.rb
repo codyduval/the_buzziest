@@ -13,7 +13,6 @@ module Fetch
 
       def fetch_and_parse
         @feed = get(@url)
-        #@entries = feed.entries
       end
 
       private

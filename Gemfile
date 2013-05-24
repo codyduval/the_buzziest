@@ -23,6 +23,8 @@ group :test do
   gem 'ffaker'
   gem 'vcr'
   gem 'webmock', "1.10"
+  gem 'timecop'
+  gem 'database_cleaner'
 end
 
 group :development do

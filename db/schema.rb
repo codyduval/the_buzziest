@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130520172601) do
+ActiveRecord::Schema.define(:version => 20130523180333) do
 
   create_table "buzz_mention_highlights", :force => true do |t|
     t.integer  "buzz_mention_id"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(:version => 20130520172601) do
     t.text     "post_uri"
     t.text     "post_content"
     t.boolean  "scanned_flag"
-    t.decimal  "post_weight"
+    t.decimal  "post_weight",    :default => 1.0
     t.integer  "buzz_source_id"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
@@ -54,16 +54,13 @@ ActiveRecord::Schema.define(:version => 20130520172601) do
   create_table "buzz_sources", :force => true do |t|
     t.string   "name"
     t.string   "uri"
-    t.decimal  "buzz_weight"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
-    t.string   "source_id_tag"
-    t.integer  "city_id"
-    t.integer  "buzz_source_type_id"
+    t.decimal  "buzz_weight",      :default => 1.0
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.string   "x_path_nodes"
     t.string   "buzz_source_type"
-    t.string   "city",                :default => "nyc"
-    t.decimal  "decay_factor",        :default => 0.906
+    t.string   "city",             :default => "nyc"
+    t.decimal  "decay_factor",     :default => 0.906
   end
 
   create_table "pg_search_documents", :force => true do |t|
@@ -84,9 +81,8 @@ ActiveRecord::Schema.define(:version => 20130520172601) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.string   "twitter_handle"
-    t.boolean  "exact_match"
-    t.boolean  "skip_scan"
-    t.integer  "city_id"
+    t.boolean  "exact_match",                :default => false
+    t.boolean  "skip_scan",                  :default => false
     t.integer  "buzz_mentions_count",        :default => 0
     t.string   "city",                       :default => "nyc"
     t.decimal  "total_current_buzz",         :default => 0.0

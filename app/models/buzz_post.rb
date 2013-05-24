@@ -1,12 +1,15 @@
 class BuzzPost < ActiveRecord::Base
-  attr_accessible :post_title, :post_guid, :post_content, :post_date_time, :post_uri, :post_weight, :scanned_flag, :buzz_source_id, :city
+  attr_accessible :post_title, :post_guid, :post_content, :post_date_time, 
+                  :post_uri, :post_weight, :scanned_flag, :buzz_source_id, :city
 
   belongs_to :buzz_source
   has_many :buzz_mentions, :dependent => :destroy
   has_many :restaurants, :through => :buzz_mentions
 
-  scope :with_buzz_mentions, where("id IN (SELECT DISTINCT(buzz_post_id) FROM buzz_mentions)")
-  scope :with_no_buzz_mentions, includes(:buzz_mentions).where( :buzz_mentions => { :buzz_post_id => nil} )
+  scope :with_buzz_mentions, 
+        where("id IN (SELECT DISTINCT(buzz_post_id) FROM buzz_mentions)")
+  scope :with_no_buzz_mentions, 
+        includes(:buzz_mentions).where( :buzz_mentions => { :buzz_post_id => nil} )
 
   searchable do
     text :post_title, :stored => true
@@ -16,19 +19,20 @@ class BuzzPost < ActiveRecord::Base
   end
 
   def self.create_from_postmark(mitt)
-    stripped_tags_email_body_content = ActionController::Base.helpers.strip_tags(mitt.text_body)
-    stripped_email_body_content = ActionController::Base.helpers.strip_links(stripped_tags_email_body_content)
-    # stripped_email_body_content= Sanitize.clean(mitt.text_body, Sanitize::Config::RESTRICTED)
+    sanitized_content = Sanitize.clean(mitt.text_body,
+                                      Sanitize::Config::RESTRICTED)
+    content_no_newline = sanitized_content.gsub(/\n/," ")
     BuzzPost.create(
       :post_title => mitt.subject,
-      :post_content => stripped_email_body_content,
-      :post_guid => mitt.message_id
-    )
+      :post_content => content_no_newline,
+      :post_guid => mitt.message_id,
+      :buzz_source_id => 9999)
   end
 
   def self.create_from_feed(feed, source)
     feed.entries.each do |entry|
-      unless BuzzPost.exists?(:post_guid => entry.id || entry.published < 25.day.ago)
+      unless BuzzPost.exists?(:post_guid => entry.id) || 
+                             (entry.published < 25.day.ago)
         content = entry.content ||= entry.summary 
         sanitized_content = Sanitize.clean(content)
         BuzzPost.create(
