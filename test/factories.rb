@@ -22,6 +22,7 @@ FactoryGirl.define do
 
     factory :twitter_source do
       buzz_source_type "twitter"
+      uri "@codee"
     end
 
     factory :feed_source do

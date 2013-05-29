@@ -15,3 +15,6 @@
 /tmp
 /solr/data/development/index
 /solr/data/test/index
+
+# Ignore app keys and secrets
+/config/app_secrets.yml

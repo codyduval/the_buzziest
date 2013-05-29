@@ -16,7 +16,7 @@ development:
     open_timeout: 10
 
 test:
-solr:
+  solr:
     hostname: localhost
     port: 8981
     log_level: WARNING

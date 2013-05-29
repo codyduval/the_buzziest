@@ -48,7 +48,25 @@ class BuzzPost < ActiveRecord::Base
       end
     end
   end
-
+  
+  def self.create_from_twitter(timeline, source)
+    timeline.each do |tweet|
+      unless BuzzPost.exists?(:post_guid => tweet.id.to_s)
+        BuzzPost.create(
+          :post_guid => tweet.id.to_s,
+          :buzz_source_id => source[:id],
+          :post_content => tweet.text,
+          :post_title => tweet.text,
+          :post_uri => "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
+          :post_date_time => tweet.created_at,
+          :post_weight => source[:buzz_weight],
+          :scanned_flag => false,
+          :city => source[:city]
+        )
+      end
+    end
+  
+  end
   
   def self.old_posts(age_in_days)
     where("post_date_time < :days", {:days => age_in_days.day.ago})
