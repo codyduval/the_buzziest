@@ -28,4 +28,16 @@ describe BuzzSource do
       BuzzSource.all_feeds.wont_include twitter_source
     end
   end
+
+  describe "#buzz_source_id_email_from(city)" do
+    it "Finds correct BuzzSource id for an email from a city " do
+      not_the_source = FactoryGirl.create(:email_source, city: "sf")
+      email_source = FactoryGirl.create(:email_source, city: "nyc")
+      city = "nyc"
+
+      id = BuzzSource.buzz_source_id_email_from(city)
+      id.must_equal email_source.id
+    end
+  end
+
 end

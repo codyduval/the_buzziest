@@ -21,9 +21,8 @@ module ApplicationHelper
 
   end
 
-  # MasterCities module is located in initializers
   def city_names
-    MasterCities.get_all_city_names
+    City.all_names
   end
 
   def ignore_link_text(ignorable)  

@@ -5,22 +5,28 @@ module Fetch
   module TwitterHandle 
     class Client
 
-      attr_reader :url, :valid_twitter_handle, :restaurant_name 
+      attr_reader :url, :twitter_handle, :restaurant_name 
       
       def initialize(restaurant_name)
-        @url = "https://twitter.com/search/users?q=" 
-        @node = "//@data-screen-name"
         @restaurant_name = clean_name(restaurant_name)
+        @url = base_url + @restaurant_name 
       end
 
       def fetch_and_parse
-        url_page = @url + "#{(@restaurant_name)}"
-        html = get(url_page)
-        parse(html)
+        fetched_html = get(@url)
+        @twitter_handle = parse(fetched_html)
       end
 
 
       private
+
+      def base_url
+        base_url = "https://twitter.com/search/users?q=" 
+      end
+
+      def node
+        node = "//@data-screen-name"
+      end
 
       def get(url)
         open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; 
@@ -31,17 +37,15 @@ module Fetch
       def clean_name(restaurant_name)
          stripped_restaurant_name=restaurant_name.gsub(/[^0-9a-z ]/i, '')
          stripped_restaurant_name_no_spaces=stripped_restaurant_name.gsub(/ /, '%20')
-
-         return stripped_restaurant_name_no_spaces
       end
 
       def parse(html)
         doc = Nokogiri::HTML(html)
-        twitter_handle = doc.at_xpath(@node)
+        twitter_handle = doc.at_xpath(node)
         unless twitter_handle.nil?
-          @valid_twitter_handle = "@" + twitter_handle.value
+          twitter_handle = "@" + twitter_handle.value
         else
-          @valid_twitter_handle = "tbd"
+          twitter_handle = "tbd"
         end
       end
 

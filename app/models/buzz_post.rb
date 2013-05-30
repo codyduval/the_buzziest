@@ -76,11 +76,6 @@ class BuzzPost < ActiveRecord::Base
     old_posts_no_mentions = self.old_posts(age_in_days).with_no_buzz_mentions
   end
 
-  def self.assign_buzz_source_id(type,city)
-    buzz_source = BuzzSource.where("buzz_source_type = ? AND city = ?",type, city)
-    buzz_source_id = buzz_source.first.id
-  end
-
   def self.paginated_for_index(posts_per_page, current_page)
     paginate(:per_page => posts_per_page, :page => current_page, :order => 'title')
   end

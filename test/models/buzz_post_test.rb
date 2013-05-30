@@ -96,7 +96,6 @@ describe BuzzPost do
       feed = feed_client.feed
       post_url = "http://ny.eater.com/archives/2013/05/cronut_wire.php"
 
-      
       #Roll clock back so post fixture is accepted 
       Timecop.travel(2013, 5, 23) do
         BuzzPost.create_from_feed(feed, source)
@@ -151,5 +150,6 @@ describe BuzzPost do
       posts.wont_be_empty
     end
   end
+  
 
 end

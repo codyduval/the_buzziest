@@ -25,6 +25,7 @@ group :test do
   gem 'webmock', "1.10"
   gem 'timecop'
   gem 'database_cleaner'
+  gem 'simplecov'
 end
 
 group :development do

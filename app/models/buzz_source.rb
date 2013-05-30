@@ -7,4 +7,8 @@ class BuzzSource < ActiveRecord::Base
   scope :all_twitter, where(:buzz_source_type => 'twitter')
   scope :all_feeds, where(:buzz_source_type => 'feed')
   
+  def self.buzz_source_id_email_from(city)
+    buzz_source = self.where("buzz_source_type = ? AND city = ?","email", city)
+    buzz_source_id = buzz_source.first.id
+  end
 end

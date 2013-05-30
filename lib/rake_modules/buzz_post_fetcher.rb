@@ -30,14 +30,5 @@ module RakeModules
       @client = Fetch::RemoteBuzzPosts::TwitterClient.new(source[:uri])
     end
 
-    def self.get_feed_buzz_sources(buzz_source_types)
-      buzz_sources_array = Array.new
-      buzz_source_types.each do |buzz_source_type|
-        buzz_source = BuzzSource.where(:buzz_source_type  => buzz_source_type)
-        buzz_sources_array.push(buzz_source)
-      end
-      return buzz_sources_array
-    end
-
   end
 end
