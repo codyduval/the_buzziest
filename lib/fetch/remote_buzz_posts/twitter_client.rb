@@ -5,7 +5,7 @@ module Fetch
   module RemoteBuzzPosts 
     class TwitterClient
 
-      attr_accessor :twitter_handle, :timeline
+      attr_reader :twitter_handle, :timeline
       
       def initialize(twitter_handle)
         @twitter_handle = twitter_handle 

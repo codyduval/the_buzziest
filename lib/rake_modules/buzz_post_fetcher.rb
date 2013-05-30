@@ -16,8 +16,7 @@ module RakeModules
       twitter_sources.each do |twitter_source|
         client = twitter_client(twitter_source)
         client.fetch_and_parse
-        timeline = client.timeline
-        BuzzPost.create_from_twitter(timeline, twitter_source)
+        BuzzPost.create_from_twitter(client.timeline, twitter_source)
       end
     end
 

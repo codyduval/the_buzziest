@@ -15,7 +15,7 @@ class Restaurant < ActiveRecord::Base
  
   def fetch_and_update_twitter_handle!
     twitter_client = Fetch::TwitterHandle::Client.new(self.name)
-    twitter_client.fetch
+    twitter_client.fetch_and_parse
     self.twitter_handle = twitter_client.valid_twitter_handle 
     if self.save
       puts twitter_client.valid_twitter_handle
@@ -33,8 +33,9 @@ class Restaurant < ActiveRecord::Base
     fuzzy_match = fuzzy_match.results
   end
   
-  def self.batch_create_from_remote(name_list)
-    name_list.each do |name|
+  def self.batch_create_from_remote(remote_source_client)
+    names = remote_source_client.name_list
+    names.each do |name|
       restaurant = Restaurant.where(:name => 
         name[:name]).first_or_create(:city => name[:city]) 
       if restaurant.twitter_handle == nil

@@ -5,19 +5,34 @@ module Fetch
   module TwitterHandle 
     class Client
 
-      attr_accessor :url, :valid_twitter_handle 
+      attr_reader :url, :valid_twitter_handle, :restaurant_name 
       
       def initialize(restaurant_name)
         @url = "https://twitter.com/search/users?q=" 
         @node = "//@data-screen-name"
-        @restaurant_name = restaurant_name
+        @restaurant_name = clean_name(restaurant_name)
       end
 
-      def fetch
-        clean_name = clean_name(@restaurant_name)
-        url_page = @url + "#{(clean_name)}"
+      def fetch_and_parse
+        url_page = @url + "#{(@restaurant_name)}"
         html = get(url_page)
         parse(html)
+      end
+
+
+      private
+
+      def get(url)
+        open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; 
+            Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 
+            (KHTML, like Gecko) Version/3.1 Safari/525.13' )
+      end
+
+      def clean_name(restaurant_name)
+         stripped_restaurant_name=restaurant_name.gsub(/[^0-9a-z ]/i, '')
+         stripped_restaurant_name_no_spaces=stripped_restaurant_name.gsub(/ /, '%20')
+
+         return stripped_restaurant_name_no_spaces
       end
 
       def parse(html)
@@ -28,19 +43,6 @@ module Fetch
         else
           @valid_twitter_handle = "tbd"
         end
-      end
-
-      private
-
-      def get(url)
-        open(url, "User-Agent" => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; cs-cz) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13' )
-      end
-
-      def clean_name(restaurant_name)
-         stripped_restaurant_name=restaurant_name.gsub(/[^0-9a-z ]/i, '')
-         stripped_restaurant_name_no_spaces=stripped_restaurant_name.gsub(/ /, '%20')
-
-         return stripped_restaurant_name_no_spaces
       end
 
     end

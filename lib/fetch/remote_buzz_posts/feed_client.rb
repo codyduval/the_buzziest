@@ -5,7 +5,7 @@ module Fetch
   module RemoteBuzzPosts 
     class FeedClient
 
-      attr_accessor :url, :feed
+      attr_reader :url, :feed
       
       def initialize(uri)
         @url = uri 

@@ -34,6 +34,17 @@ describe Restaurant do
     end
   end
 
+  describe "#fetch_and_update_twitter_handle!" do
+    it "updates restaurant with best guess for twitter handle" do
+      restaurant = FactoryGirl.create(:restaurant, name: "Happy Fun Time!!!")
+      VCR.use_cassette('twitter_name_fetch') do
+        restaurant.fetch_and_update_twitter_handle!
+      end
+
+      restaurant.twitter_handle.must_equal "@HappyFunTime"
+    end
+  end
+
   describe "#total_score" do
     it "calculates score for all related buzz mentions" do
       restaurant = FactoryGirl.create(:restaurant)
@@ -45,6 +56,22 @@ describe Restaurant do
                                            decayed_buzz_score: 4, :ignore => true)
 
       restaurant.total_score.must_equal(5)
+    end
+  end
+
+  describe "#batch_create_from_remote" do
+    let(:source) { FactoryGirl.create(:restaurant_list) } 
+
+    it "adds new restaurant names and twitter handles to db" do
+      remote_source_client = Fetch::RestaurantNames::Client.new(source) 
+      VCR.use_cassette('tt_restaurant_source') do
+        remote_source_client.fetch_and_parse
+      end
+      VCR.use_cassette('batch_twitter_handle_fetch') do
+        Restaurant.batch_create_from_remote(remote_source_client)      
+      end
+
+      Restaurant.all.first.name.must_equal "ABC Cocina"
     end
   end
   

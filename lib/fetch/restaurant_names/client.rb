@@ -5,17 +5,17 @@ module Fetch
   module RestaurantNames
     class Client
 
-      attr_accessor :url, :name_list, :city  
+      attr_reader :url, :name_list, :city  
       
-      def initialize(url, node, city, pages=1)
-        @url = url
-        @node = node
-        @city = city
+      def initialize(source, pages=1)
+        @url = source[:uri]
+        @node = source[:x_path_nodes]
+        @city = source[:city]
         @pages = pages
         @name_list = []
       end
 
-      def fetch
+      def fetch_and_parse
         (1..@pages).each do |page| 
           url_page = @url + "#{(page)}"
           html = get(url_page)

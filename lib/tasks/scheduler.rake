@@ -164,117 +164,26 @@ task :scan_posts => :environment do
 end
 
 
-task :fetch_posts, [:city, :source_type] => :environment do |t, args|
-  args.with_defaults(:city => "nyc", :source_type => "all")
+task :fetch_posts => :environment do 
 
   Raven.capture do
-  # captures any exceptions which happen in this block and notify via Sentry
+    require 'benchmark'
+    time_elapsed = Benchmark.realtime do
+      start_total = BuzzPost.count
 
-  include ActionView::Helpers::SanitizeHelper
-  require 'benchmark'
+      rss_feeds = BuzzSource.all_feeds
+      twitter_sources = BuzzSource.all_twitter
+      
+      puts "Fetching content from twitter...."
+      RakeModules::BuzzPostFetcher.get_and_create_buzz_posts_twitter(twitter_sources)
+      puts "Fetching content from rss feeds..."
+      RakeModules::BuzzPostFetcher.get_and_create_buzz_posts_feed(rss_feeds)
 
-  def self.get_buzz_source_types(args)
-    unless args.source_type == "all"
-      buzz_source_types = args.source_type
-    else
-      buzz_source_types = ["feed","twitter"]
+      end_total = BuzzPost.count
+      total_added = end_total - start_total 
+      puts "Posts added to db: ".green + total_added.to_s.green 
+      puts "Total posts in db: ".green + end_total.to_s.green 
     end
-  end
-
-  def self.get_buzz_sources(buzz_source_types)
-    buzz_sources_array = Array.new
-    buzz_source_types.each do |buzz_source_type|
-      buzz_source = BuzzSource.where(:buzz_source_type  => buzz_source_type)
-      buzz_sources_array.push(buzz_source)
-    end
-    return buzz_sources_array
-  end
-
-  def get_posts_from_source(buzz_sources_array)
-    buzz_sources_array.each do |buzz_sources|
-      buzz_sources.each do |buzz_source|
-        if buzz_source.buzz_source_type == "feed"
-            update_from_feed(buzz_source)
-        elsif buzz_source.buzz_source_type == "twitter"
-            update_from_twitter(buzz_source)
-        end
-      end
-    end
-  end
-
-  def self.update_from_twitter(buzz_source)
-    twitter_screen_name = buzz_source[:uri]
-    Twitter.user_timeline(twitter_screen_name).each do |tweet|
-      unless BuzzPost.exists?(:post_guid => tweet.id.to_s)
-        BuzzPost.create(
-          :post_guid => tweet.id.to_s,
-          :buzz_source_id => buzz_source[:id],
-          :post_content => tweet.text,
-          :post_title => tweet.text,
-          :post_uri => "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
-          :post_date_time => tweet.created_at,
-          :post_weight => buzz_source[:buzz_weight],
-          :scanned_flag => false,
-          :city => buzz_source[:city]
-        )
-        puts "Added tweet".light_green + tweet.text + " from " + tweet.user.screen_name
-      end
-    end
-  end
-
-  def self.update_from_html
-  end
-
-  def self.update_from_feed(buzz_source)
-    feed_url = buzz_source[:uri]
-    feed = Feedzirra::Feed.fetch_and_parse(feed_url)
-    exist_count = 0
-    too_old_count = 0
-    new_entries = []
-    unless (feed.nil? || feed == 0)
-      print "Found #{feed.entries.count} entries in #{buzz_source[:name]}".light_cyan
-      feed.entries.each do |entry|
-        print ".".light_cyan
-        if BuzzPost.exists?(:post_guid => entry.id)
-          exist_count += 1
-        elsif entry.published < 25.day.ago
-          too_old_count += 1
-        else
-          if entry.content.nil?
-            stripped_summary = strip_tags(entry.summary)
-          else
-            stripped_summary = strip_tags(entry.content)
-          end
-          BuzzPost.create(
-            :buzz_source_id => buzz_source[:id],
-            :post_title => entry.title,
-            :post_content => stripped_summary,
-            :post_uri => entry.url,
-            :post_date_time => entry.published,
-            :post_guid => entry.id,
-            :post_weight => "1",
-            :scanned_flag => false,
-            :city => buzz_source[:city]
-          )
-          new_entries << entry
-        end
-      end
-    end
-    new_entries.each do |entry|
-      print "\nAdding ".light_green + entry.title + " " + entry.url
-    end
-    puts "\n#{exist_count} are older than 25 days and won't be added.".light_yellow
-    puts "#{too_old_count} already exist and won't be added.".light_yellow
-  end
-
-  time_elapsed = Benchmark.realtime do
-
-  buzz_source_types = get_buzz_source_types(args)
-  buzz_sources_array = get_buzz_sources(buzz_source_types)
-  buzz_posts = get_posts_from_source(buzz_sources_array)
-
-  end
-
-  puts "Total time elapsed #{time_elapsed} seconds".green
+    puts "Total time elapsed #{time_elapsed} seconds".green
   end
 end

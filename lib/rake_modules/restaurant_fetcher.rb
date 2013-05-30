@@ -7,18 +7,16 @@ module RakeModules
     def self.get_and_create_new_restaurants(pages)
       restaurant_list_sources.each do |source|
         puts "Visiting #{source.name}".cyan 
-        remote_source = client(source, pages)
-        remote_source.fetch
-        names = remote_source.name_list
-        Restaurant.batch_create_from_remote(names)
+        remote_source_client = client(source, pages)
+        remote_source_client.fetch_and_parse
+        Restaurant.batch_create_from_remote(remote_source_client)
       end
     end
 
    private 
 
     def self.client(source, pages)
-      @client = Fetch::RestaurantNames::Client.new(source[:uri], 
-          source[:x_path_nodes], source[:city], pages)
+      @client = Fetch::RestaurantNames::Client.new(source, pages) 
     end
 
     def self.restaurant_list_sources
