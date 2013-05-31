@@ -15,6 +15,7 @@ gem 'sentry-raven', :git => "https://github.com/getsentry/raven-ruby.git"
 gem 'cancan'
 gem 'thin'
 gem 'counter_culture', '~> 0.1.7'
+gem 'ruby-progressbar'
 
 group :test do
   gem 'minitest'

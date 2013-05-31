@@ -5,11 +5,14 @@ module RakeModules
   module RestaurantFetcher
 
     def self.get_and_create_new_restaurants(pages)
+      progress_bar = ProgressBar.create(:format =>"%C %t %e %b", 
+                                        :title => "restaurant sources to check...", 
+                                        :total => restaurant_list_sources.count)
       restaurant_list_sources.each do |source|
-        puts "Visiting #{source.name}".cyan 
         remote_source_client = client(source, pages)
         remote_source_client.fetch_and_parse
         Restaurant.batch_create_from_remote(remote_source_client)
+        progress_bar.increment
       end
     end
 

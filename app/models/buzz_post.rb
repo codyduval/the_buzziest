@@ -57,7 +57,8 @@ class BuzzPost < ActiveRecord::Base
           :buzz_source_id => source[:id],
           :post_content => tweet.text,
           :post_title => tweet.text,
-          :post_uri => "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
+          :post_uri => 
+              "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id}",
           :post_date_time => tweet.created_at,
           :post_weight => source[:buzz_weight],
           :scanned_flag => false,
@@ -65,9 +66,17 @@ class BuzzPost < ActiveRecord::Base
         )
       end
     end
-  
   end
   
+  def self.destroy_old(buzz_posts)
+    progress_bar = ProgressBar.create(:format =>"%e %b", 
+                                      :total => buzz_posts.count)
+    buzz_posts.each do |buzz_post|
+      buzz_post.destroy
+      progress_bar.update
+    end
+  end
+
   def self.old_posts(age_in_days)
     where("post_date_time < :days", {:days => age_in_days.day.ago})
   end
@@ -80,5 +89,43 @@ class BuzzPost < ActiveRecord::Base
     paginate(:per_page => posts_per_page, :page => current_page, :order => 'title')
   end
 
+  def self.search_for_mentions(restaurants)
+    all_hits = []
+    progress_bar = ProgressBar.create(:format =>"%C %t %e %b", 
+                                      :title => "restaurants to scan...", 
+                                      :total => restaurants.count)
+    restaurants.each do |restaurant|
+      hits = self.search_for_mention_of(restaurant)
+      all_hits << hits unless hits.empty?
+      progress_bar.increment 
+    end
+    all_hits.flatten!
+  end  
+
+  private
+
+  def self.search_for_mention_of(restaurant)
+    hits = []
+    buzz_post_search_results = self.search do
+      with(:city, restaurant.city)
+      fulltext %Q/"#{restaurant.name}"/ do
+        highlight :post_content
+      end
+    end
+    buzz_post_search_results.hits.each do |hit|
+      search_hit = {}
+      highlight = hit.highlights(:post_content).first
+      if highlight.nil?
+        highlight_text = "n/a"
+      else
+        highlight_text = highlight.format
+      end
+      search_hit[:buzz_post_id] = hit.primary_key.to_i
+      search_hit[:highlight] =  highlight_text
+      search_hit[:restaurant_id] = restaurant.id 
+      hits << search_hit 
+    end
+    hits
+  end
 end
 

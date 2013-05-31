@@ -29,7 +29,6 @@ module Fetch
         doc = Nokogiri::HTML(html)
         restaurant_names = doc.xpath(@node)
         restaurant_names.each do |restaurant_name|
-          puts restaurant_name.text
           restaurant = {}
           restaurant[:name] = restaurant_name.text
           restaurant[:city] = @city

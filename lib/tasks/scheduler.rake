@@ -16,11 +16,11 @@ task :cleanup_posts => :environment do
 
   Raven.capture do
 
-    old_buzz_mentions = RakeModules::PostCleaner.old_buzz_mentions    
-    RakeModules::PostCleaner.destroy_old_buzz_mentions(old_buzz_mentions)
+    old_buzz_mention_ids = RakeModules::PostCleaner.old_buzz_mention_ids    
+    RakeModules::PostCleaner.destroy_old_buzz_mentions(old_buzz_mention_ids)
 
-    old_buzz_posts = RakeModules::PostCleaner.old_buzz_posts
-    RakeModules::PostCleaner.destroy_old_buzz_posts(old_buzz_posts)
+    old_buzz_post_ids = RakeModules::PostCleaner.old_buzz_post_ids
+    RakeModules::PostCleaner.destroy_old_buzz_posts(old_buzz_post_ids)
 
     RakeModules::PostCleaner.update_counter_caches
 
@@ -52,9 +52,19 @@ task :fetch_restaurants => :environment do
 
 end
 
-
-
 task :scan_posts => :environment do
+
+  require 'benchmark'
+
+  time_elapsed = Benchmark.realtime do
+    restaurants = Restaurant.all
+    RakeModules::PostScanner.search_for_and_create_buzz_mentions(restaurants)
+  end
+
+  puts "Done in #{time_elapsed} seconds."
+end
+
+task :old_scan_posts => :environment do
 
   Raven.capture do
   # captures any exceptions which happen in this block and notify via Sentry

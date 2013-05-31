@@ -161,6 +161,7 @@ GEM
       vegas (~> 0.1.2)
     rsolr (1.0.9)
       builder (>= 2.1.2)
+    ruby-progressbar (1.1.0)
     sanitize (2.0.3)
       nokogiri (>= 1.4.4, < 1.6)
     sass (3.2.8)
@@ -244,6 +245,7 @@ DEPENDENCIES
   postmark-mitt
   rails (= 3.2.13)
   resque
+  ruby-progressbar
   sanitize
   sass-rails (~> 3.2.3)
   sentry-raven!

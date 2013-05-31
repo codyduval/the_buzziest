@@ -8,7 +8,8 @@ class Restaurant < ActiveRecord::Base
   validates :name, :uniqueness => true
 
   scope :with_buzz, where("buzz_mention_count_ignored > 0")
-
+  scope :not_skipped, where(:skip_scan => false)
+  
   searchable do
     text :name
   end
@@ -33,8 +34,6 @@ class Restaurant < ActiveRecord::Base
       restaurant = Restaurant.where(:name => 
         name[:name]).first_or_create(:city => name[:city]) 
       if restaurant.twitter_handle == nil
-        puts "Attempting to get Twitter handle\
-              for #{restaurant.name}...".cyan
         restaurant.fetch_and_update_twitter_handle!
       end
     end
