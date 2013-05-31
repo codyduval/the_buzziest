@@ -11,7 +11,11 @@ module RakeModules
       feed_sources.each do |feed_source|
         client = feed_client(feed_source)
         client.fetch_and_parse
-        BuzzPost.create_from_feed(client.feed, feed_source) 
+        if client.feed.class == Fixnum
+          puts "No data for " + client.url
+        else
+          BuzzPost.create_from_feed(client.feed, feed_source) 
+        end
         progress_bar.increment
       end
     end
