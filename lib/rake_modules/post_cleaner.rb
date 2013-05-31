@@ -19,15 +19,14 @@ module RakeModules
     BuzzMention.counter_culture_fix_counts
   end
 
-  def self.old_buzz_mention_ids
+  def self.old_buzz_mentions_to_destroy
     tiny_score_mentions = BuzzMention.tiny_decayed_buzz_score
     ignored_and_old_mentions = BuzzMention.ignored_and_older_than(30)
     buzz_mentions = (tiny_score_mentions + ignored_and_old_mentions).uniq
-    buzz_mention_ids = buzz_mentions.map {|x| x.id}
   end
 
-  def self.old_buzz_post_ids
-    buzz_posts_ids = (BuzzPost.old_posts_no_mentions(30)).map {|x| x.id}
+  def self.old_buzz_posts_to_destroy
+    buzz_posts = BuzzPost.old_posts_no_mentions(30)
   end
 
   end
