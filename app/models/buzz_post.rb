@@ -73,7 +73,7 @@ class BuzzPost < ActiveRecord::Base
                                       :total => buzz_posts.count)
     buzz_posts.each do |buzz_post|
       buzz_post.destroy
-      progress_bar.update
+      progress_bar.increment
     end
   end
 
