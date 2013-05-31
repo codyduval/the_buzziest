@@ -54,14 +54,16 @@ end
 
 task :scan_posts => :environment do
 
-  require 'benchmark'
+  Raven.capture do
+    require 'benchmark'
 
-  time_elapsed = Benchmark.realtime do
-    restaurants = Restaurant.all
-    RakeModules::PostScanner.search_for_and_create_buzz_mentions(restaurants)
+    time_elapsed = Benchmark.realtime do
+      restaurants = Restaurant.all
+      RakeModules::PostScanner.search_for_and_create_buzz_mentions(restaurants)
+    end
+
+    puts "Done in #{time_elapsed} seconds."
   end
-
-  puts "Done in #{time_elapsed} seconds."
 end
 
 task :old_scan_posts => :environment do
