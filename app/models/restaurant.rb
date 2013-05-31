@@ -18,9 +18,7 @@ class Restaurant < ActiveRecord::Base
     twitter_client = Fetch::TwitterHandle::Client.new(self.name)
     twitter_client.fetch_and_parse
     self.twitter_handle = twitter_client.twitter_handle 
-    if self.save
-      puts twitter_client.twitter_handle
-    end
+    self.save
   end
 
   def total_score 

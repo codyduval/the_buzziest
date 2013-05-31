@@ -16,11 +16,11 @@ task :cleanup_posts => :environment do
 
   Raven.capture do
 
-    old_buzz_mention_ids = RakeModules::PostCleaner.old_buzz_mention_ids    
-    RakeModules::PostCleaner.destroy_old_buzz_mentions(old_buzz_mention_ids)
+    old_buzz_mentions = RakeModules::PostCleaner.old_buzz_mentions    
+    RakeModules::PostCleaner.destroy_old_buzz_mentions(old_buzz_mentions)
 
-    old_buzz_post_ids = RakeModules::PostCleaner.old_buzz_post_ids
-    RakeModules::PostCleaner.destroy_old_buzz_posts(old_buzz_post_ids)
+    old_buzz_posts = RakeModules::PostCleaner.old_buzz_posts
+    RakeModules::PostCleaner.destroy_old_buzz_posts(old_buzz_posts)
 
     RakeModules::PostCleaner.update_counter_caches
 
