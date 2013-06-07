@@ -14,16 +14,17 @@ TheBuzziest::Application.routes.draw do
   end
   resources :restaurants
 
+  constraints :subdomain => "admin" do
+    scope :module => "admin", :as => "admin" do
+    end
+  end
 
   match '', to: 'restaurants#index', constraints: lambda { |r| r.subdomain.present? && ( r.subdomain == 'nyc' || r.subdomain == 'la' || r.subdomain == 'sf') }
 
-  # root :to => 'restaurants#index'
-  root :to => redirect(:subdomain => 'nyc')
-
   match '/inbound_email/:city' => 'inbound_email#create'
 
-
-
+  root :to => redirect(:subdomain => 'nyc')
+    
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
