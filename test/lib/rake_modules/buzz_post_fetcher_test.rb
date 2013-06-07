@@ -15,6 +15,19 @@ describe RakeModules::BuzzPostFetcher do
       BuzzPost.all.count.must_equal 50
       BuzzPost.first.post_guid.must_equal "tag:ny.eater.com,2013://4.520164"
     end
+
+    it "outputs an error message if attempt to parse url returns 404" do
+      bad_source = FactoryGirl.create(:feed_source,
+                                      uri: "http://www.dkfjdkfjlsfjk.com")
+      feed_sources = [bad_source] 
+
+      get_and_create = Proc.new do
+        RakeModules::BuzzPostFetcher.get_and_create_buzz_posts_feed(feed_sources)
+      end
+
+      get_and_create.must_output "No data for #{bad_source.uri}\n"
+      
+    end
   end
 
   describe "#get_and_create_buzz_posts_twitter" do
