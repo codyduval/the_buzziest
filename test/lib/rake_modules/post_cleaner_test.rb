@@ -14,28 +14,24 @@ describe RakeModules::PostCleaner do
     @buzz_mention_tiny = FactoryGirl.create(:buzz_mention, decayed_buzz_score: 0.049)
   end
 
-  describe "#self.old_buzz_post_ids" do
-    it "gathers ids of posts older than 30 days with no mentions" do
-      old_posts = RakeModules::PostCleaner.old_buzz_post_ids
+  describe "#self.old_buzz_posts" do
+    it "gathers posts older than 30 days with no mentions" do
+      old_posts = RakeModules::PostCleaner.old_buzz_posts_to_destroy
       
-      old_posts.must_include(@buzz_post_30.id)
-      old_posts.wont_include(@buzz_post_32.id)
-      old_posts.wont_include(@buzz_post_29.id)
-    end
-
-    it "returns ids of old posts" do
-      old_posts = RakeModules::PostCleaner.old_buzz_post_ids  
-      old_posts.first.must_be_instance_of Fixnum
+      old_posts.must_include(@buzz_post_30)
+      old_posts.wont_include(@buzz_post_32)
+      old_posts.wont_include(@buzz_post_29)
     end
   end
   
-  describe "#self.old_buzz_mention_ids" do
+  describe "#self.old_buzz_mentions" do
     it "gathers mentions that are ignored and 30 days old OR small score" do
-      old_buzz_mentions = RakeModules::PostCleaner.old_buzz_mention_ids
+      old_buzz_mentions = 
+        RakeModules::PostCleaner.old_buzz_mentions_to_destroy
 
-      old_buzz_mentions.must_include(@buzz_mention_32_ignored.id)
-      old_buzz_mentions.must_include(@buzz_mention_tiny.id)
-      old_buzz_mentions.wont_include(@buzz_mention_32.id)
+      old_buzz_mentions.must_include(@buzz_mention_32_ignored)
+      old_buzz_mentions.must_include(@buzz_mention_tiny)
+      old_buzz_mentions.wont_include(@buzz_mention_32)
     end
   end
 
@@ -53,9 +49,9 @@ describe RakeModules::PostCleaner do
 
   describe "#self.destroy_old_buzz_mentions" do
     it "destroys one BuzzMention" do
-      buzz_mention_ids = []
-      buzz_mention_ids.push(@buzz_mention_32.id)
-      RakeModules::PostCleaner.destroy_old_buzz_mentions(buzz_mention_ids)
+      buzz_mentions = []
+      buzz_mentions.push(@buzz_mention_32)
+      RakeModules::PostCleaner.destroy_old_buzz_mentions(buzz_mentions)
 
       BuzzMention.all.must_include @buzz_mention_32_ignored 
       BuzzMention.all.must_include @buzz_mention_tiny 
@@ -63,9 +59,9 @@ describe RakeModules::PostCleaner do
     end
 
     it "destroys multiple BuzzMentions" do
-      buzz_mention_ids = []
-      buzz_mention_ids.push(@buzz_mention_tiny.id, @buzz_mention_32.id)  
-      RakeModules::PostCleaner.destroy_old_buzz_mentions(buzz_mention_ids)
+      buzz_mentions = []
+      buzz_mentions.push(@buzz_mention_tiny, @buzz_mention_32)  
+      RakeModules::PostCleaner.destroy_old_buzz_mentions(buzz_mentions)
 
       BuzzMention.all.wont_include @buzz_mention_32 
       BuzzMention.all.wont_include @buzz_mention_tiny
@@ -74,9 +70,9 @@ describe RakeModules::PostCleaner do
 
   describe "#self.destroy_old_buzz_posts" do
     it "destroys one BuzzPost" do
-      buzz_post_ids= []
-      buzz_post_ids.push(@buzz_post_29.id)
-      RakeModules::PostCleaner.destroy_old_buzz_posts(buzz_post_ids)
+      buzz_posts = []
+      buzz_posts.push(@buzz_post_29)
+      RakeModules::PostCleaner.destroy_old_buzz_posts(buzz_posts)
 
       BuzzPost.all.must_include @buzz_post_32
       BuzzPost.all.must_include @buzz_post_30
@@ -84,9 +80,9 @@ describe RakeModules::PostCleaner do
     end
 
     it "destroys multiple BuzzPosts" do
-      buzz_post_ids = []
-      buzz_post_ids.push(@buzz_post_32.id, @buzz_post_30.id)  
-      RakeModules::PostCleaner.destroy_old_buzz_posts(buzz_post_ids)
+      buzz_posts = []
+      buzz_posts.push(@buzz_post_32, @buzz_post_30)  
+      RakeModules::PostCleaner.destroy_old_buzz_posts(buzz_posts)
 
       BuzzPost.all.wont_include @buzz_post_32
       BuzzPost.all.wont_include @buzz_post_30

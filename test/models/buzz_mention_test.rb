@@ -59,4 +59,21 @@ describe BuzzMention do
     end
   end
 
+  describe "#self.batch_create_from_search!(search_hits)" do
+    it "creates entries from search results" do
+      rest = FactoryGirl.create(:restaurant, name: "Buzzies")
+      rest_two = FactoryGirl.create(:restaurant, name: "Dingos")
+      restaurants = [rest, rest_two]
+      buzz_post = FactoryGirl.create(:buzz_post, post_title: "I love Buzzies")
+      Sunspot.commit
+
+      search_hits = BuzzPost.search_for_mentions(restaurants)
+
+      BuzzMention.batch_create_from_search!(search_hits)
+
+      mention = BuzzMention.where(:restaurant_id => rest.id).first
+      mention.buzz_post_id.must_equal buzz_post.id
+    end    
+  end
+
 end

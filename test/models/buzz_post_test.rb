@@ -150,6 +150,46 @@ describe BuzzPost do
       posts.wont_be_empty
     end
   end
+
+  describe "#self.search_for_mentions(restaurants)" do
+    it "should find all posts for multiple restaurants" do
+      restaurant_one = FactoryGirl.create(:restaurant, name: "Gummo")
+      restaurant_two = FactoryGirl.create(:restaurant, name: "Blammo")
+      buzz_post = FactoryGirl.create(:buzz_post, post_title: "Gummo is a good place")
+      buzz_post_two = FactoryGirl.create(:buzz_post,
+                                         post_title: "I like Blammo")
+      Sunspot.commit
+      restaurants = [restaurant_one, restaurant_two]
+
+      all_hits = BuzzPost.search_for_mentions(restaurants)
+      restaurant_one_hits = all_hits.select do |hit|
+        hit[:restaurant_id] == restaurant_one.id
+      end
+
+      restaurant_two_hits = all_hits.select do |hit|
+        hit[:restaurant_id] == restaurant_two.id
+      end
+
+      restaurant_one_hits.first[:buzz_post_id].must_equal buzz_post.id
+      restaurant_two_hits.first[:buzz_post_id].must_equal buzz_post_two.id
+      all_hits.count.must_equal 2
+
+    end
+
+  end
+
+  describe "#self.search_for_mention_of(restaurant)" do
+    it "should find all posts that mention a restaurant" do
+      restaurant = FactoryGirl.create(:restaurant, name: "Yummo")
+      buzz_post = FactoryGirl.create(:buzz_post, post_title: "Yummo is a good place")
+      Sunspot.commit
+
+      hits = BuzzPost.search_for_mention_of(restaurant)
+
+      hits.last[:buzz_post_id].must_equal buzz_post.id
+      hits.count.must_equal 1
+    end
+  end
   
 
 end

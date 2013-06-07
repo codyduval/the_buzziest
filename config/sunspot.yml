@@ -2,7 +2,7 @@ production:
   solr:
     hostname: ec2-54-242-28-35.compute-1.amazonaws.com
     port: 8983
-    log_level: INFO
+    log_level: SEVERE
     path: /solr/the_buzziest_staging
     read_timeout: 10
     open_timeout: 20
@@ -10,7 +10,7 @@ development:
   solr:
     hostname: ec2-54-242-28-35.compute-1.amazonaws.com
     port: 8983
-    log_level: INFO
+    log_level: SEVERE
     path: /solr/the_buzziest_local
     read_timeout: 10
     open_timeout: 10
@@ -19,4 +19,4 @@ test:
   solr:
     hostname: localhost
     port: 8981
-    log_level: WARNING
+    log_level: FINEST

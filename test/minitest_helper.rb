@@ -30,4 +30,7 @@ class MiniTest::Spec
   end
 end
 
+Sunspot.remove_all!
+Sunspot.commit
+
 Turn.config.format = :cue
