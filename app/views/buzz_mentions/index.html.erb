@@ -1,40 +1,52 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Buzz Mention ID</th>
+      <th>Restaurant Name</th>
+      <th>Buzz Post Title</th>
+      <th>Ignore?</th>
+      <th>Buzz Post Source</th>
+      <th>Created At</th>
+      <th></th>
+    </tr>
+  </thead>
 
-<table>
-  <tr>
-    <th>Buzz Mention ID</th>
-    <th>Restaurant Name</th>
-    <th>Buzz Post Title</th>
-    <th>Ignore?</th>
-    <th>Buzz Post Source</th>
-    <th>Created At</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+  <tbody>
+    <% @buzz_mentions.each do |buzz_mention| %>
+      <tr>
+        <td><%= buzz_mention.id%></td>
+        <td><%= buzz_mention.restaurant.name %></td>
 
-<% @buzz_mentions.each do |buzz_mention| %>
-  <tr>
-    <td><%= buzz_mention.id%></td>
-    <td><%= buzz_mention.restaurant.name %></td>
-
-    <% if buzz_mention.buzz_mention_highlights.exists? %>
-      <td><%= render :partial => 'buzz_mentions/buzz_mentions_with_highlights', :locals => {:buzz_mention => buzz_mention} %>
-      </td>
-    <% else %>
-      <td> <%= render :partial => 'buzz_mentions/buzz_mentions', :locals => {:buzz_mention => buzz_mention} %></td>
+        <% if buzz_mention.buzz_mention_highlights.exists? %>
+          <td><%= render :partial => 'buzz_mentions/buzz_mentions_with_highlights',
+            :locals => {:buzz_mention => buzz_mention} %>
+          </td>
+        <% else %>
+          <td> <%= render :partial => 'buzz_mentions/buzz_mentions', 
+            :locals => {:buzz_mention => buzz_mention} %>
+          </td>
+        <% end %>
+        <td><% if can? :edit, @buzz_mention %>
+          <%= link_to ignore_link_text(buzz_mention),
+            toggle_ignore_buzz_mention_path(buzz_mention),
+            :remote => true, :id => "ignore_link_#{buzz_mention.id}" %>
+          <% end %>
+        </td>
+        <td><%= buzz_mention.buzz_post.buzz_source.name %></td>
+        <td><%= buzz_mention.created_at %></td>
+        <td>
+          <%= link_to 'Show', buzz_mention, :class => 'btn btn-mini' %>
+          <% if can? :edit, buzz_mention %>
+            <%= link_to 'Edit', edit_buzz_mention_path(buzz_mention),
+              :class => 'btn btn-mini' %>
+          <% end %>
+          <%= link_to 'Destroy', buzz_mention,
+            confirm: 'Are you sure?', method: :delete,
+            :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
     <% end %>
-    <td><% if can? :edit, @buzz_mention %>
-      <%= link_to ignore_link_text(buzz_mention),toggle_ignore_buzz_mention_path(buzz_mention),:remote => true, :id => "ignore_link_#{buzz_mention.id}" %>
-    <% end %></td>
-    <td><%= buzz_mention.buzz_post.buzz_source.name %></td>
-    <td><%= buzz_mention.created_at %></td>
-    <td><%= link_to 'Show', buzz_mention %></td>
-    <% if can? :edit, buzz_mention %>
-      <td><%= link_to 'Edit', edit_buzz_mention_path(buzz_mention) %></td>
-    <% end %>
-    <td><%= link_to 'Destroy', buzz_mention, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+  </tbody>
 </table>
 
 <%= will_paginate @buzz_mentions, :page_links => false %>

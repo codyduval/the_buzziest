@@ -22,7 +22,7 @@ group :test, :development do
   gem "better_errors"
   gem "binding_of_caller"
   gem 'sunspot_solr'
-  gem 'minitest', "~> 4.0"
+  gem 'minitest-rails'
   gem 'turn'
   gem 'factory_girl_rails', "~> 4.0"
   gem 'ffaker'
