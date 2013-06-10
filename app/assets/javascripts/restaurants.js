@@ -1,7 +1,7 @@
 $(function () {
 	$(document).on('click', '#restaurants th a', function () {
     $.getScript(this.href);
-    return false;
+    event.preventDefault();
   });
 
   $('.mention_highlight').popover({ html: true});

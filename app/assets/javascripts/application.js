@@ -12,5 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap
-//= require_tree .
+//= require flat_ui_js
+//= require bootstrap-tooltip
+//= require bootstrap-popover
+//= require bootstrap_popover_custom
+//= require restaurants
+//
