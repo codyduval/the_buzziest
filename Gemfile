@@ -17,8 +17,12 @@ gem 'thin'
 gem 'counter_culture', '~> 0.1.7'
 gem 'ruby-progressbar'
 
-group :test do
-  gem 'minitest'
+group :test, :development do
+  gem 'meta_request', '0.2.1'
+  gem "better_errors"
+  gem "binding_of_caller"
+  gem 'sunspot_solr'
+  gem 'minitest', "~> 4.0"
   gem 'turn'
   gem 'factory_girl_rails', "~> 4.0"
   gem 'ffaker'
@@ -27,13 +31,6 @@ group :test do
   gem 'timecop'
   gem 'database_cleaner'
   gem 'simplecov'
-end
-
-group :development do
-  gem 'meta_request', '0.2.1'
-  gem "better_errors"
-  gem "binding_of_caller"
-  gem 'sunspot_solr'
 end
 
 # Gems used only for assets and not required
