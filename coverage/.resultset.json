@@ -1,6 +1,18 @@
 {
   "Unit Tests": {
     "coverage": {
+      "/Users/CodyD/Dropbox/Rails_projects/the_buzziest/app/controllers/admin/dashboard_controller.rb": [
+        1,
+        1,
+        0,
+        null,
+        0,
+        0,
+        0,
+        null,
+        null,
+        null
+      ],
       "/Users/CodyD/Dropbox/Rails_projects/the_buzziest/app/controllers/application_controller.rb": [
         1,
         1,
@@ -49,6 +61,10 @@
         0,
         null,
         null,
+        null
+      ],
+      "/Users/CodyD/Dropbox/Rails_projects/the_buzziest/app/helpers/admin/dashboard_helper.rb": [
+        1,
         null
       ],
       "/Users/CodyD/Dropbox/Rails_projects/the_buzziest/app/helpers/bootstrap_flash_helper.rb": [
@@ -1260,6 +1276,6 @@
         null
       ]
     },
-    "timestamp": 1370628493
+    "timestamp": 1370642554
   }
 }

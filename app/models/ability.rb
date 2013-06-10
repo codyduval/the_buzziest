@@ -7,7 +7,6 @@ class Ability
       can :manage, :all
     else
       can :read, Restaurant
-      can :read, BuzzMention
     end
   end
 

@@ -1,5 +1,7 @@
 TheBuzziest::Application.routes.draw do
 
+  get "dashboard/index"
+
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
@@ -16,6 +18,7 @@ TheBuzziest::Application.routes.draw do
 
   constraints :subdomain => "admin" do
     scope :module => "admin", :as => "admin" do
+      get '', to: 'dashboard#index', as: '/'
     end
   end
 

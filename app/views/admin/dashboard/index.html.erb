@@ -1,0 +1,11 @@
+<% title "Restaurants" %>
+
+<div id="restaurants"><%= render 'restaurants' %></div>
+
+<br />
+
+<%= will_paginate @restaurants, :page_links => false %>
+
+<% if can? :create, @restaurant %>
+  <%= link_to 'New Restaurant', new_restaurant_path %>
+<% end %>
