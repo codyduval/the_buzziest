@@ -17,12 +17,15 @@ gem 'thin'
 gem 'counter_culture', '~> 0.1.7'
 gem 'ruby-progressbar'
 
-group :test, :development do
+group :development do
   gem 'meta_request', '0.2.1'
   gem "better_errors"
   gem "binding_of_caller"
   gem 'sunspot_solr'
-  gem 'minitest-rails'
+end
+
+group :test do
+  gem 'minitest', "~> 4.0"
   gem 'turn'
   gem 'factory_girl_rails', "~> 4.0"
   gem 'ffaker'
