@@ -17,4 +17,7 @@
 //= require bootstrap-popover
 //= require bootstrap_popover_custom
 //= require restaurants
-//
+//= require lib/underscore
+//= require lib/backbone
+//= require lib/marionette
+//= require admin/app
