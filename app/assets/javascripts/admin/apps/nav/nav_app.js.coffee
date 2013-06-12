@@ -2,8 +2,8 @@
   @startWithParent = false
 
   API =
-    showNav: ->
-      NavApp.Show.Controller.showNav()
+    listNav: ->
+      NavApp.List.Controller.listNav()
 
   NavApp.on "start", ->
-    API.showNav()
+    API.listNav()

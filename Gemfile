@@ -17,6 +17,8 @@ gem 'thin'
 gem 'counter_culture', '~> 0.1.7'
 gem 'ruby-progressbar'
 gem 'eco'
+gem 'rabl'
+gem 'oj'
 
 group :development do
   gem 'meta_request', '0.2.1'
