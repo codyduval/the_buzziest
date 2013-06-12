@@ -21,3 +21,4 @@
 //= require lib/backbone
 //= require lib/marionette
 //= require admin/app
+//= require_tree ./admin/apps 

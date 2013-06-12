@@ -1,13 +1,16 @@
-@Demo = do (Backbone, Marionette) ->
+@Admin = do (Backbone, Marionette) ->
 
   App = new Marionette.Application
 
   App.addRegions
-    mainRegion "#main-region"
-    navRegion "#nav-region"
+    mainRegion: "#main-region"
+    navRegion: "#nav-region"
+
+  App.addInitializer ->
+    App.module("NavApp").start()
 
   App.on "initialize:after", ->
     if Backbone.history
-      Backgone.history.start()
+      Backbone.history.start()
 
   App

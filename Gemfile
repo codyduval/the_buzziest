@@ -16,6 +16,7 @@ gem 'cancan'
 gem 'thin'
 gem 'counter_culture', '~> 0.1.7'
 gem 'ruby-progressbar'
+gem 'eco'
 
 group :development do
   gem 'meta_request', '0.2.1'
