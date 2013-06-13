@@ -7,7 +7,7 @@ class Ability
       can :manage, :all
     else
       #can :read, Restaurant
-      can :manage, :all
+      can :read, :all
     end
   end
 

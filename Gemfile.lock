@@ -97,6 +97,9 @@ GEM
       rdoc (~> 3.8)
       sax-machine (~> 0.0.20)
     ffaker (1.16.1)
+    gon (4.1.1)
+      actionpack (>= 2.3.0)
+      json
     hashie (2.0.5)
     hike (1.2.3)
     i18n (0.6.1)
@@ -247,6 +250,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.0)
   feedzirra
   ffaker
+  gon
   jquery-rails
   meta_request (= 0.2.1)
   minitest (~> 4.0)

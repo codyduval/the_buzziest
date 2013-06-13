@@ -19,6 +19,7 @@ gem 'ruby-progressbar'
 gem 'eco'
 gem 'rabl'
 gem 'oj'
+gem 'gon'
 
 group :development do
   gem 'meta_request', '0.2.1'

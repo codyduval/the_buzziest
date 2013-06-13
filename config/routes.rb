@@ -8,7 +8,7 @@ TheBuzziest::Application.routes.draw do
 
   constraints :subdomain => "admin" do
     scope :module => "admin", :as => "admin" do
-      get '', to: 'dashboard#index', as: '/'
+      get '', to: 'home#index', as: '/'
       resources :buzz_mentions
     end
   end

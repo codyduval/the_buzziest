@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+      <div id="nav-region"></div>
+    </div>
+    <div class="span10">
+      <div id="main-region"></div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  $(function() {
+    Admin.start();
+    });
+<% end %>
