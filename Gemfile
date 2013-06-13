@@ -20,6 +20,7 @@ gem 'eco'
 gem 'rabl'
 gem 'oj'
 gem 'gon'
+gem 'js-routes'
 
 group :development do
   gem 'meta_request', '0.2.1'

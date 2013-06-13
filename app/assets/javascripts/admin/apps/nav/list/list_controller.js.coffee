@@ -4,7 +4,6 @@
 
     listNav: ->
       links = App.request "nav:entities"
-      window.links = links
 
       navView = @getNavView links
       App.navRegion.show navView

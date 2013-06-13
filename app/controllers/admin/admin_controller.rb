@@ -3,6 +3,6 @@ class Admin::AdminController < ApplicationController
 
   private
   def verify_admin
-      redirect_to login_url unless current_user.try(:admin?)
+      redirect_to login_url unless current_user.role == "admin"
   end
 end

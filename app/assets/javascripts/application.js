@@ -20,7 +20,9 @@
 //= require lib/underscore
 //= require lib/backbone
 //= require lib/marionette
+//= require js-routes
 //= require_tree ./admin/config
 //= require admin/app
 //= require_tree ./admin/entities
+//= require_tree ./admin/views
 //= require_tree ./admin/apps 
