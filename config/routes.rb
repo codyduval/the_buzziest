@@ -1,10 +1,17 @@
 TheBuzziest::Application.routes.draw do
 
-  get "dashboard/index"
+  match '/inbound_email/:city' => 'inbound_email#create'
 
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
+
+  constraints :subdomain => "admin" do
+    scope :module => "admin", :as => "admin" do
+      get '', to: 'dashboard#index', as: '/'
+      resources :buzz_mentions
+    end
+  end
 
   resources :buzz_mention_highlights
   resources :users
@@ -16,15 +23,8 @@ TheBuzziest::Application.routes.draw do
   end
   resources :restaurants
 
-  constraints :subdomain => "admin" do
-    scope :module => "admin", :as => "admin" do
-      get '', to: 'dashboard#index', as: '/'
-    end
-  end
 
   match '', to: 'restaurants#index', constraints: lambda { |r| r.subdomain.present? && ( r.subdomain == 'nyc' || r.subdomain == 'la' || r.subdomain == 'sf') }
-
-  match '/inbound_email/:city' => 'inbound_email#create'
 
   root :to => redirect(:subdomain => 'nyc')
     

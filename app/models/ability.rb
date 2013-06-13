@@ -6,7 +6,8 @@ class Ability
     if user.role == "admin"
       can :manage, :all
     else
-      can :read, Restaurant
+      #can :read, Restaurant
+      can :manage, :all
     end
   end
 
