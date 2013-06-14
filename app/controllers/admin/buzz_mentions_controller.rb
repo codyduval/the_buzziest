@@ -2,7 +2,7 @@ module Admin
   class BuzzMentionsController < AdminController
     
     def index
-      @buzz_mentions = BuzzMention.all
+      @buzz_mentions = nil 
     end
 
   end
