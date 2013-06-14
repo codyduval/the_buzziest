@@ -8,10 +8,10 @@
   API =
     getNavs: ->
       new Entities.NavCollection [
-        { name: "Dashboard" }
-        { name: "Buzz Mentions" }
-        { name: "Buzz Posts" }
-        { name: "Restaurants" }
+        { name: "Dashboard", url: "dashboard" }
+        { name: "Buzz Mentions", url:Routes.buzz_mentions_path() }
+        { name: "Buzz Posts", url: "buzz_posts"}
+        { name: "Restaurants", url:Routes.restaurants_path()}
       ]
 
   App.reqres.setHandler "nav:entities", ->

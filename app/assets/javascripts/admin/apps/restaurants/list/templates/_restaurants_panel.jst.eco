@@ -1,0 +1,1 @@
+Total Restaurants: <%= @items.length %>

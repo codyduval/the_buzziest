@@ -9,7 +9,8 @@ TheBuzziest::Application.routes.draw do
   constraints :subdomain => "admin" do
     scope :module => "admin", :as => "admin" do
       get '', to: 'home#index', as: '/'
-      resources :buzz_mentions
+      resources :buzz_mentions, :only => [:index]
+      resources :restaurants, :only => [:index]
     end
   end
 

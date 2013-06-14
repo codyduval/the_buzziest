@@ -2,7 +2,12 @@
   table-condensed">
   <thead>
     <tr>
-      <th>restaurant</th>
+      <th>Name</th>
+      <th>Twitter</th>
+      <th>Buzz Score</th>
+      <th>Buzz Mentions</th>
+      <th>Opened On</th>
+      <th></th>
     </tr>
   </thead>
   <tbody></tbody>

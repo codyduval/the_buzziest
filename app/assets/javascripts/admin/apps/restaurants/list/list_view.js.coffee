@@ -1,28 +1,28 @@
-@Admin.module "BuzzMentionsApp.List", (List, App, Backbone, Marionette, $, _) ->
+@Admin.module "RestaurantsApp.List", (List, App, Backbone, Marionette, $, _) ->
 
   class List.Layout extends App.Views.Layout
-    template: "buzz_mentions/list/templates/list_layout"
+    template: "restaurants/list/templates/list_layout"
 
     regions:
-      panelRegion: "#panel-region"
-      buzz_mentionsRegion: "#buzz-mentions-region"
+      restaurantsPanelRegion: "#restaurants-panel-region"
+      restaurantsListRegion: "#restaurants-list-region"
 
   class List.Panel extends App.Views.ItemView
-    template: "buzz_mentions/list/templates/_panel"
+    template: "restaurants/list/templates/_restaurants_panel"
 
     collectionEvents:
       "reset" : "render"
 
-  class List.BuzzMention extends App.Views.ItemView
-    template: "buzz_mentions/list/templates/_buzz_mention"
+  class List.Restaurant extends App.Views.ItemView
+    template: "restaurants/list/templates/_restaurant"
     tagName: "tr"
 
   class List.Empty extends App.Views.ItemView
-    template: "buzz_mentions/list/templates/_empty"
+    template: "restaurants/list/templates/_empty"
     tagName: "tr"
     
-  class List.BuzzMentions extends App.Views.CompositeView
-    template: "buzz_mentions/list/templates/_buzz_mentions"
-    itemView: List.BuzzMention
+  class List.Restaurants extends App.Views.CompositeView
+    template: "restaurants/list/templates/_restaurants"
+    itemView: List.Restaurant
     emptyView: List.Empty
     itemViewContainer: "tbody"

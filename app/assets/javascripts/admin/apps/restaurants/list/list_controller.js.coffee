@@ -1,33 +1,33 @@
-@Admin.module "BuzzMentionsApp.List", (List, App, Backbone, Marionette, $, _) ->
+@Admin.module "RestaurantsApp.List", (List, App, Backbone, Marionette, $, _) ->
 
   List.Controller =
 
-    listBuzzMentions: ->
-      App.request "buzz_mention:entities", (buzz_mentions) =>
+    listRestaurants: ->
+      App.request "restaurant:entities", (restaurants) =>
 
         @layout = @getLayoutView()
 
         @layout.on "show", =>
-          @showPanel buzz_mentions
-          @showBuzzMentions buzz_mentions
+          @showPanel restaurants
+          @showRestaurants restaurants
 
         App.mainRegion.show @layout
    
-    showPanel: (buzz_mentions) ->
-      panelView = @getPanelView buzz_mentions
-      @layout.panelRegion.show panelView
+    showPanel: (restaurants) ->
+      restaurantsPanelView = @getPanelView restaurants
+      @layout.restaurantsPanelRegion.show restaurantsPanelView
 
-    showBuzzMentions: (buzz_mentions) ->
-      buzz_mentionsView = @getBuzzMentionsView buzz_mentions
-      @layout.buzz_mentionsRegion.show buzz_mentionsView
+    showRestaurants: (restaurants) ->
+      restaurantsListView = @getRestaurantsView restaurants
+      @layout.restaurantsListRegion.show restaurantsListView
 
-    getPanelView: (buzz_mentions) ->
+    getPanelView: (restaurants) ->
       new List.Panel
-        collection: buzz_mentions
+        collection: restaurants
 
-    getBuzzMentionsView: (buzz_mentions) ->
-      new List.BuzzMentions
-        collection: buzz_mentions
+    getRestaurantsView: (restaurants) ->
+      new List.Restaurants
+        collection: restaurants
 
     getLayoutView: ->
       new List.Layout

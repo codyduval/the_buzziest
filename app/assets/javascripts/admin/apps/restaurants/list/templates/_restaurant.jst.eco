@@ -1,0 +1,6 @@
+<td><%= @name %></td>
+<td><%= @twitter_handle %></td>
+<td><%= @total_current_buzz_rounded %></td>
+<td><%= @buzz_mention_count_ignored %></td>
+<td><%= @created_at_formatted %></td>
+<td></td>
