@@ -1,7 +1,7 @@
 <td><%= @id %></td>
 <td><%= @restaurant.name %></td>
-<td><%= @blurb_text %></td>
+<td><%- @blurb_text %></td>
 <td><%= @ignored? %></td>
 <td><%= @buzz_post.buzz_source.name %></td>
-<td><%= @created_at %></td>
+<td><%= @created_at_formatted %></td>
 <td></td>

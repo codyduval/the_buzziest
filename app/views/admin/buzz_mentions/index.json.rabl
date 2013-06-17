@@ -17,6 +17,6 @@ end
 node do |buzz_mention|
   {
   :blurb_text => buzz_mention.highlight_text ||= buzz_mention.buzz_post.post_title,
-  :created_at_formatted => buzz_mention.created_at.strftime("%b %d %y")
+  :created_at_formatted => buzz_mention.created_at.strftime("%A, %b %d %Y at %I:%M%P(%Z)")
   }
 end
