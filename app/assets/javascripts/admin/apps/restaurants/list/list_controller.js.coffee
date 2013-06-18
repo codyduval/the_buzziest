@@ -5,25 +5,48 @@
     listRestaurants: ->
       App.request "restaurant:entities", (restaurants) =>
 
+        subnavs = App.request "restaurant:subnavs"
         @layout = @getLayoutView()
 
         @layout.on "show", =>
-          @showPanel restaurants
+          @showSubNavView subnavs
+          @showPanel()
           @showRestaurants restaurants
 
         App.mainRegion.show @layout
-   
-    showPanel: (restaurants) ->
-      restaurantsPanelView = @getPanelView restaurants
+
+    showPanel: ->
+      restaurantsPanelView = @getPanelView()
+
+      restaurantsPanelView.on "new:restaurants:button:clicked", =>
+        @layout.restaurantsPanelRegion.close()
+        @showNewRegion()
+
       @layout.restaurantsPanelRegion.show restaurantsPanelView
+
+    showSubNavView: (subnavs) ->
+      subNavView = @getSubNavView subnavs
+      @layout.restaurants_subnavRegion.show subNavView
 
     showRestaurants: (restaurants) ->
       restaurantsListView = @getRestaurantsView restaurants
       @layout.restaurantsListRegion.show restaurantsListView
 
-    getPanelView: (restaurants) ->
+    showNewRegion: ->
+      newRegion = App.request "new:restaurants:restaurant:view"
+
+      newRegion.on "form:cancel:button:clicked", =>
+        @layout.restaurants_newRegion.close()
+        @showPanel()
+
+      @layout.restaurants_newRegion.show newRegion
+
+    getPanelView: ->
       new List.Panel
-        collection: restaurants
+
+    getSubNavView: (subnavs) ->
+      new List.RestaurantsSubNavs
+        collection: subnavs
 
     getRestaurantsView: (restaurants) ->
       new List.Restaurants

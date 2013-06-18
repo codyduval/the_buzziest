@@ -1,1 +1,1 @@
-Total Restaurants: <%= @items.length %>
+<button id="new-restaurant" class="span2 btn btn-mini btn-inverse">New</button>

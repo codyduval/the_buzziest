@@ -1,0 +1,7 @@
+<div class="alert alert-info">
+  <button type="button" class="close fui-cross" data-dismiss="alert"></button>
+  <h3>New Restaurant</h3>
+  <p>An error message is information displayed when an <a href="#fakelink">unexpected condition occurs</a>, usually on a computer or other device. On modern operating systems with graphical user interfaces, error messages are often displayed using dialog boxes.</p>
+  <a href="#fakelink" id="new-save" class="btn btn-info btn-wide">Create</a>
+  <a href="#fakelink" id="new-cancel" class="btn btn-wide">Cancel</a>
+</div>

@@ -6,6 +6,9 @@
     model: Entities.BuzzMention
     url: -> Routes.buzz_mentions_path()
 
+  class Entities.BuzzMentionsSubNav extends Entities.Collection
+    model: Entities.BuzzMention
+    
   API =
     getBuzzMentionEntities: (cb) ->
       buzz_mentions = new Entities.BuzzMentionsCollection
@@ -15,5 +18,16 @@
         success: ->
           cb buzz_mentions
 
+    getSubNavs: ->
+      new Entities.BuzzMentionsSubNav [
+        { name: "New York" }
+        { name: "San Francisco" }
+        { name: "Los Angeles" }
+        { name: "All" }
+      ]
+
   App.reqres.setHandler "buzz_mention:entities", (cb) ->
     API.getBuzzMentionEntities cb
+    
+  App.reqres.setHandler "buzz_mention:subnavs", ->
+    API.getSubNavs()

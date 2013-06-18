@@ -7,4 +7,10 @@ td.buzz_mentions_score, td.buzz_mentions_count, th.buzz_mentions_score, th.buzz_
   text-align: center;
 }
 
-body { padding-top: 100px; }
+.main-body {
+  margin-top: 35px;
+}
+
+#new-restaurant {
+  margin-bottom: 20px;
+}

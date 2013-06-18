@@ -8,6 +8,12 @@
     listRestaurants: ->
       RestaurantsApp.List.Controller.listRestaurants()
 
+    newRestaurant: ->
+      RestaurantsApp.New.Controller.newRestaurant()
+
+  App.reqres.setHandler "new:restaurants:restaurant:view", ->
+    API.newRestaurant()
+
   App.addInitializer ->
     new RestaurantsApp.Router
       controller: API
