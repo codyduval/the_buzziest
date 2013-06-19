@@ -19,6 +19,9 @@
     template: "restaurants/list/templates/_restaurant"
     tagName: "tr"
 
+    events:
+      "click button.edit-restaurant" : -> @trigger "restaurants:restaurant:clicked", @model
+
   class List.Empty extends App.Views.ItemView
     template: "restaurants/list/templates/_empty"
     tagName: "tr"

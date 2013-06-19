@@ -2,6 +2,7 @@
 
   class RestaurantsApp.Router extends Marionette.AppRouter
     appRoutes:
+      "restaurants/:id/edit" : "editRestaurant"
       "restaurants" : "listRestaurants"
   
   API =
@@ -11,8 +12,15 @@
     newRestaurant: ->
       RestaurantsApp.New.Controller.newRestaurant()
 
+    editRestaurant: (id, restaurant) ->
+      RestaurantsApp.Edit.Controller.editRestaurant id, restaurant
+
   App.reqres.setHandler "new:restaurants:restaurant:view", ->
     API.newRestaurant()
+
+  App.vent.on "restaurants:restaurant:clicked", (restaurant) ->
+    App.navigate Routes.edit_restaurant_path(restaurant.id)
+    API.editRestaurant restaurant.id, restaurant
 
   App.addInitializer ->
     new RestaurantsApp.Router

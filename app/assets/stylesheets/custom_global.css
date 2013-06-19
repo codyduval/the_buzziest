@@ -5,12 +5,14 @@
 
 td.buzz_mentions_score, td.buzz_mentions_count, th.buzz_mentions_score, th.buzz_mentions_count{
   text-align: center;
+  vertical-align: center;
+}
+
+.table td {
+  vertical-align: middle;
 }
 
 .main-body {
   margin-top: 35px;
 }
 
-#new-restaurant {
-  margin-bottom: 20px;
-}

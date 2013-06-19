@@ -1,13 +1,14 @@
 @Admin.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
   
-  class Entities.Restaurant extends Entities.Model
+  class Entities.Restaurants extends App.Entities.Model
+    urlRoot: -> Routes.restaurants_path()
 
-  class Entities.RestaurantsCollection extends Entities.Collection
-    model: Entities.Restaurant
+  class Entities.RestaurantsCollection extends App.Entities.Collection
+    model: Entities.Restaurants
     url: -> Routes.restaurants_path()
 
-  class Entities.RestaurantsSubNav extends Entities.Collection
-    model: Entities.Restaurant
+  class Entities.RestaurantsSubNav extends App.Entities.Collection
+    model: Entities.Restaurants
 
   API =
     getRestaurantEntities: (cb) ->
@@ -29,8 +30,17 @@
     newRestaurant: ->
       RestaurantsApp.New.Controller.newRestaurant()
 
+    getRestaurant: (id) ->
+      restaurant = new Entities.Restaurants
+        id: id
+      restaurant.fetch()
+      restaurant
+
   App.reqres.setHandler "restaurant:entities", (cb) ->
     API.getRestaurantEntities cb
+
+  App.reqres.setHandler "restaurants:entity", (id) ->
+    API.getRestaurant id
 
   App.reqres.setHandler "restaurant:subnavs", ->
     API.getSubNavs()

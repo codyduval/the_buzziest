@@ -3,4 +3,6 @@
 <td><%= @total_current_buzz_rounded %></td>
 <td><%= @buzz_mention_count_ignored %></td>
 <td><%= @created_at_formatted %></td>
-<td></td>
+<td>
+  <button class="edit-restaurant btn btn-mini btn-info">Edit</button>
+</td>

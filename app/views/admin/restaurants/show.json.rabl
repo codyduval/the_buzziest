@@ -1,4 +1,4 @@
-collection @restaurants
+object @restaurant
 
 attributes :id, :name, :twitter_handle, :total_current_buzz, 
            :buzz_mention_count_ignored, :created_at, :updated_at, :city

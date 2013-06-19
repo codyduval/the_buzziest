@@ -1,22 +1,23 @@
 <div class="alert alert-info">
   <form class="form-horizontal">
     <fieldset>
-      <legend><h3>New Restaurant</h3></legend>
+      <legend><h3>Edit Restaurant</h3></legend>
 
       <div class="span4">
         <div class="control-group small">
-            <input id="restaurant-name" name="restaurant-name" 
-                   type="text" placeholder="Restaurant Name" class="span2 input">
+            <input id="restaurant-name" name="restaurant-name" value="<%= @name %>"
+                   type="text" placeholder="Restaurant Name" class="span2 input"/>
         </div>
 
         <div class="control-group small">
             <input id="restaurant-twitter" name="restaurant-twitter"
-                   type="text" placeholder="Twitter Handle" class="span2 input">
+            value="<%= @twitter_handle %>" type="text" placeholder="Twitter Handle"
+            class="span2 input"/>
         </div>
 
         <div class="control-group small">
           <select id="restaurant-city-select" name="restaurant-city-select"
-                  class="input">
+                  value="<%= @city %>" class="input">
             <option>nyc</option>
             <option>sf</option>
             <option>la</option>
