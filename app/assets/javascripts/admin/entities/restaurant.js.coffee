@@ -11,13 +11,10 @@
     model: Entities.Restaurants
 
   API =
-    getRestaurantEntities: (cb) ->
+    getRestaurantEntities: ->
       restaurants = new Entities.RestaurantsCollection
-      restaurants.fetch
-        #don't need reset: true now b/c using call back to wait to render
-        reset: true
-        success: ->
-          cb restaurants
+      restaurants.fetch()
+      restaurants
 
     getSubNavs: ->
       new Entities.RestaurantsSubNav [
@@ -36,8 +33,8 @@
       restaurant.fetch()
       restaurant
 
-  App.reqres.setHandler "restaurant:entities", (cb) ->
-    API.getRestaurantEntities cb
+  App.reqres.setHandler "restaurant:entities", ->
+    API.getRestaurantEntities()
 
   App.reqres.setHandler "restaurants:entity", (id) ->
     API.getRestaurant id

@@ -4,5 +4,5 @@
 <td><%= @buzz_mention_count_ignored %></td>
 <td><%= @created_at_formatted %></td>
 <td>
-  <button class="edit-restaurant btn btn-mini btn-info">Edit</button>
+  <button class="edit-restaurant btn btn-mini btn-warning">Edit</button>
 </td>

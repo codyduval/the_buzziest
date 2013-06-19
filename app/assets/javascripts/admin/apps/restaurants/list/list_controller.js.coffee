@@ -3,9 +3,10 @@
   List.Controller =
 
     listRestaurants: ->
-      App.request "restaurant:entities", (restaurants) =>
+      restaurants = App.request "restaurant:entities"
+      subnavs = App.request "restaurant:subnavs"
 
-        subnavs = App.request "restaurant:subnavs"
+      App.execute "when:fetched", restaurants, =>
         @layout = @getLayoutView()
 
         @layout.on "show", =>

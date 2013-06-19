@@ -1,2 +1,2 @@
 <button id="new-restaurant" 
-        class="pull-right span2 btn btn-mini btn-warning">New Restaurant</button>
+        class="pull-right span2 btn btn-mini btn-success">New Restaurant</button>

@@ -23,6 +23,7 @@
 //= require js-routes
 //= require_tree ./admin/config
 //= require admin/app
-//= require_tree ./admin/entities
 //= require_tree ./admin/views
+//= require_tree ./admin/entities
+//= require_tree ./admin/components
 //= require_tree ./admin/apps 
