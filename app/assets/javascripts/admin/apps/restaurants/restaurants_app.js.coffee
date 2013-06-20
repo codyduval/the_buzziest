@@ -15,12 +15,16 @@
     editRestaurant: (id, restaurant) ->
       RestaurantsApp.Edit.Controller.editRestaurant id, restaurant
 
+    editModalRestaurant: (restaurant) ->
+      RestaurantsApp.Edit.Controller.editModalRestaurant restaurant
+
   App.reqres.setHandler "new:restaurants:restaurant:view", ->
     API.newRestaurant()
 
   App.vent.on "restaurants:restaurant:clicked", (restaurant) ->
-    App.navigate Routes.edit_restaurant_path(restaurant.id)
-    API.editRestaurant restaurant.id, restaurant
+    #App.navigate Routes.edit_restaurant_path(restaurant.id)
+    #API.editRestaurant restaurant.id, restaurant
+    API.editModalRestaurant restaurant
 
   App.addInitializer ->
     new RestaurantsApp.Router

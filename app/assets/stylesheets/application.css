@@ -10,6 +10,7 @@
  *
  *= require_self
  *= require scaffolds
+ *= require jquery-ui
  *= require bootstrap-sass
  *= require flat-ui 
  *= require custom_global 

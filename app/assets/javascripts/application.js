@@ -11,10 +11,12 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery.ui.dialog
 //= require jquery_ujs
 //= require flat_ui_js
 //= require bootstrap-tooltip
 //= require bootstrap-popover
+//= require bootstrap-modal
 //= require bootstrap_popover_custom
 //= require restaurants
 //= require lib/underscore

@@ -13,6 +13,16 @@
 
         App.mainRegion.show @layout
 
+    editModalRestaurant: (restaurant) ->
+      @layout = @getModalLayoutView restaurant
+
+      @layout.on "show", =>
+        @showFormRegion restaurant
+        #editView = @getEditView restaurant
+        #@layout.formRegion.show editView
+
+      App.dialogRegion.show @layout
+
     showFormRegion: (restaurant) ->
       editView = @getEditView restaurant
 
@@ -27,4 +37,7 @@
     getEditView: (restaurant) ->
       new Edit.Restaurant
         model: restaurant
-
+    
+    getModalLayoutView: (restaurant) ->
+      new Edit.ModalLayout
+        model: restaurant

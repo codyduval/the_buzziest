@@ -33,7 +33,6 @@
       restaurantsListView = @getRestaurantsView restaurants
 
       restaurantsListView.on "itemview:restaurants:restaurant:clicked", (child, restaurant) ->
-        console.log "showRestaurants"
         App.vent.trigger "restaurants:restaurant:clicked", restaurant
 
       @layout.restaurantsListRegion.show restaurantsListView
