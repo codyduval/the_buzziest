@@ -7,7 +7,6 @@
   App.addRegions
     mainRegion: "#main-region"
     navRegion: "#nav-region"
-    dialogRegion: Marionette.Region.Dialog.extend el: "#dialog-region"
 
   App.addInitializer ->
     App.module("NavApp").start()

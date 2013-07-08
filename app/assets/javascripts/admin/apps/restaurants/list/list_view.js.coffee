@@ -4,10 +4,10 @@
     template: "restaurants/list/templates/list_layout"
 
     regions:
-      restaurants_newRegion: "#restaurants-new-region"
       restaurantsPanelRegion: "#restaurants-panel-region"
       restaurantsListRegion: "#restaurants-list-region"
       restaurants_subnavRegion: "#restaurants-subnav-region"
+      restaurants_newRegion: "#restaurants-new-region"
 
   class List.Panel extends App.Views.ItemView
     template: "restaurants/list/templates/_restaurants_panel"

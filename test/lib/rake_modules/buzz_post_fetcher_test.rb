@@ -10,7 +10,9 @@ describe RakeModules::BuzzPostFetcher do
       FactoryGirl.create(:feed_source)
       feed_sources = BuzzSource.all_feeds
 
-      RakeModules::BuzzPostFetcher.get_and_create_buzz_posts_feed(feed_sources)
+      Timecop.travel(2013, 5, 23) do
+        RakeModules::BuzzPostFetcher.get_and_create_buzz_posts_feed(feed_sources)
+      end 
 
       BuzzPost.all.count.must_equal 50
       BuzzPost.first.post_guid.must_equal "tag:ny.eater.com,2013://4.520164"

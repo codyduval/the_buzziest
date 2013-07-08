@@ -22,9 +22,8 @@
     API.newRestaurant()
 
   App.vent.on "restaurants:restaurant:clicked", (restaurant) ->
-    #App.navigate Routes.edit_restaurant_path(restaurant.id)
-    #API.editRestaurant restaurant.id, restaurant
-    API.editModalRestaurant restaurant
+    App.navigate Routes.edit_restaurant_path(restaurant.id)
+    API.editRestaurant restaurant.id, restaurant
 
   App.addInitializer ->
     new RestaurantsApp.Router
