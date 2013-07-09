@@ -18,7 +18,7 @@
     editModalRestaurant: (restaurant) ->
       RestaurantsApp.Edit.Controller.editModalRestaurant restaurant
 
-  App.reqres.setHandler "new:restaurants:restaurant:view", ->
+  App.reqres.setHandler "new:restaurant:restaurant:view", ->
     API.newRestaurant()
 
   App.vent.on "restaurants:restaurant:clicked", (restaurant) ->

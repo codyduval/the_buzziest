@@ -10,6 +10,6 @@
       <th></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="restaurants-new-region" >
   </tbody>
 </table>

@@ -38,7 +38,7 @@
       @layout.restaurantsListRegion.show restaurantsListView
 
     showNewRegion: ->
-      newRegion = App.request "new:restaurants:restaurant:view"
+      newRegion = App.request "new:restaurant:restaurant:view"
 
       newRegion.on "form:cancel:button:clicked", =>
         @layout.restaurants_newRegion.close()

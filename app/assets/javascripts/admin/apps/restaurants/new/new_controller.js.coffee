@@ -8,4 +8,4 @@
       newView
 
     getNewView: ->
-      new New.Restaurants
+      new New.Restaurant
