@@ -2,14 +2,15 @@
   table-condensed">
   <thead>
     <tr>
+      <th>ID</th>
       <th>Name</th>
       <th>Twitter</th>
       <th>Buzz Score</th>
       <th>Buzz Mentions</th>
-      <th>Opened On</th>
+      <th>Created At</th>
       <th></th>
     </tr>
   </thead>
-  <tbody id="restaurants-new-region" >
+  <tbody>
   </tbody>
 </table>

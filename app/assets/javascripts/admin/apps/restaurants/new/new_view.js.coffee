@@ -2,7 +2,7 @@
 
   class New.Restaurant extends App.Views.ItemView
     template: "restaurants/new/templates/new_restaurant"
-    tagName: "tr"
+    tagName: "div"
 
     triggers:
       "click #new-cancel" : "form:cancel:button:clicked"

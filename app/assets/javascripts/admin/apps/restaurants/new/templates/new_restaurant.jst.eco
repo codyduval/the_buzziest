@@ -1,9 +1,32 @@
-<td>New Name Here</td>
-<td>New Twitter Here</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>
-  <button class="btn btn-mini btn-success">Create</button>
-  <button class="btn btn-mini btn-warning">Cancel</button>
-</td>
+<div class="alert alert-success">
+  <form class="form-horizontal">
+    <fieldset>
+      <legend><h3>New Restaurant</h3></legend>
+
+      <div class="span4">
+        <div class="control-group small">
+            <input id="restaurant-name" name="restaurant-name" 
+                   type="text" placeholder="Restaurant Name" class="span2 input">
+        </div>
+
+        <div class="control-group small">
+            <input id="restaurant-twitter" name="restaurant-twitter"
+                   type="text" placeholder="Twitter Handle" class="span2 input">
+        </div>
+
+        <div class="control-group small">
+          <select id="restaurant-city-select" name="restaurant-city-select"
+                  class="input">
+            <option>nyc</option>
+            <option>sf</option>
+            <option>la</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+      <div class="control-group small">
+        <button id="new-save" class="btn btn-success btn-small">Create</button>
+        <button id="new-cancel" class="btn btn-small">Cancel</button>
+      </div>
+  </form>
+</div>

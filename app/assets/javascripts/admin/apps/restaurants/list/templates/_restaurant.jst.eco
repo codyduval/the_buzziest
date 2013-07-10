@@ -1,3 +1,4 @@
+<td><%= @id %></td>
 <td><%= @name %></td>
 <td><%= @twitter_handle %></td>
 <td><%= @total_current_buzz_rounded %></td>

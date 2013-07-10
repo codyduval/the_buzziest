@@ -23,6 +23,8 @@ gem 'oj'
 gem 'gon'
 gem 'js-routes'
 gem 'jquery-ui-rails'
+gem 'bootstrap-slider-rails', 
+  :git =>"https://github.com/utahstreetlabs/bootstrap-slider-rails.git"
 
 group :development do
   gem 'meta_request', '0.2.1'
