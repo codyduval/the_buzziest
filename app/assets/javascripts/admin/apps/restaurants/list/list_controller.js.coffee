@@ -18,31 +18,30 @@
 
     showPanel: ->
       restaurantsPanelView = @getPanelView()
-
-      restaurantsPanelView.on "new:restaurants:button:clicked", =>
-        @layout.restaurantsPanelRegion.close()
-        @showNewRegion()
-
       @layout.restaurantsPanelRegion.show restaurantsPanelView
 
     showSubNavView: (subnavs) ->
       subNavView = @getSubNavView subnavs
+      subNavView.on "new:restaurants:button:clicked", =>
+        @showNewRegion()
+
       @layout.restaurants_subnavRegion.show subNavView
 
     showRestaurants: (restaurants) ->
       restaurantsListView = @getRestaurantsView restaurants
-
-      restaurantsListView.on "itemview:restaurants:restaurant:clicked", (child, restaurant) ->
+      restaurantsListView.on "itemview:restaurants:restaurant:clicked",
+      (child, restaurant) ->
         App.vent.trigger "restaurants:restaurant:clicked", restaurant
 
       @layout.restaurantsListRegion.show restaurantsListView
 
     showNewRegion: ->
+      $("#new-restaurant").addClass("disabled").removeClass("btn-success")
       newRegion = App.request "new:restaurant:restaurant:view"
 
       newRegion.on "form:cancel:button:clicked", =>
         @layout.restaurants_newRegion.close()
-        @showPanel()
+        $("#new-restaurant").removeClass("disabled").addClass("btn-success")
 
       @layout.restaurants_newRegion.show newRegion
 

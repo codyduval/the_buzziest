@@ -40,3 +40,13 @@
     template: "restaurants/list/templates/subnavs"
     itemView: List.RestaurantsSubNav
     itemViewContainer: "ul.nav-tabs"
+    triggers:
+      "click #new-restaurant" : "new:restaurants:button:clicked"
+    onShow: ->
+      $('#test-slider').slider()
+      $('#test-slider2').slider()
+      $('#test-slider3').slider()
+      $('#test-slider3').slider().on('slideStop', ->
+        slidervalue = $('#test-slider3').slider('getValue')
+        console.log(slidervalue.val()))
+

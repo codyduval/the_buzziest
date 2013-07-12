@@ -1,2 +1,11 @@
-<button id="new-restaurant" 
-        class="pull-right span2 btn btn-mini btn-success">New Restaurant</button>
+  <ul class="nav nav-list nav-list-vivid">
+    <li>
+      <a href="#">Total <span class="nav-counter">234</span></a>
+    </li>
+    <li>
+      <a href="#">New <span class="nav-counter">9</span></a>
+    </li>
+    <li>
+      <a href="#">Expiring <span class="nav-counter">39</span></a>
+    </li>
+  </ul>

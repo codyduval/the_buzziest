@@ -12,6 +12,7 @@
  *= require scaffolds
  *= require jquery-ui
  *= require bootstrap-sass
+ *= require bootstrap-slider-override
  *= require flat-ui 
  *= require custom_global 
  *= require users 

@@ -19,6 +19,7 @@
       RestaurantsApp.Edit.Controller.editModalRestaurant restaurant
 
   App.reqres.setHandler "new:restaurant:restaurant:view", ->
+    console.log("new clicked")
     API.newRestaurant()
 
   App.vent.on "restaurants:restaurant:clicked", (restaurant) ->

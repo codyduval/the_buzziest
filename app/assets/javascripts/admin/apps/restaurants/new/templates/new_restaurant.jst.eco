@@ -1,4 +1,4 @@
-<div class="alert alert-success">
+<div class="alert alert-success span12">
   <form class="form-horizontal">
     <fieldset>
       <legend><h3>New Restaurant</h3></legend>

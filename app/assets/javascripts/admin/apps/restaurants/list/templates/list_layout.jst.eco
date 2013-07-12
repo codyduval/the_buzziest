@@ -1,4 +1,8 @@
-<div id="restaurants-panel-region"></div>
-<div id="restaurants-subnav-region"></div>
-<div id="restaurants-new-region"></div>
-<div id="restaurants-list-region"></div>
+<div class="row-fluid">
+  <div id="restaurants-subnav-region" class="span12"></div>
+  <div id="restaurants-new-region"></div>
+
+  <div class="row-fluid">
+    <div id="restaurants-list-region" class="span12"></div>
+  </div>
+</div>
