@@ -15,7 +15,7 @@
 //= require jquery_ujs
 //= require_tree ./flat_ui_js
 //= require bootstrap_popover_custom
-//= require bootstrap-slider
+//= require bootstrap-slider-seiyria
 //= require restaurants
 //= require lib/underscore
 //= require lib/backbone

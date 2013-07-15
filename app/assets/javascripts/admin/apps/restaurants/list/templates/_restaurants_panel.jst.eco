@@ -3,7 +3,7 @@
       <a href="#">Total <span class="nav-counter">234</span></a>
     </li>
     <li>
-      <a href="#">New <span class="nav-counter">9</span></a>
+      <a  href="#">New <span id="new-restaurants-counter" class="nav-counter">9</span></a>
     </li>
     <li>
       <a href="#">Expiring <span class="nav-counter">39</span></a>

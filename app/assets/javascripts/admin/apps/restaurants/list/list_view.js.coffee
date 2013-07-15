@@ -13,7 +13,7 @@
     template: "restaurants/list/templates/_restaurants_panel"
     
     triggers:
-      "click #new-restaurant" : "new:restaurants:button:clicked"
+      "click #new-restaurants-counter" : "panel:new:restaurants:link:clicked"
 
   class List.Restaurant extends App.Views.ItemView
     template: "restaurants/list/templates/_restaurant"
@@ -40,13 +40,15 @@
     template: "restaurants/list/templates/subnavs"
     itemView: List.RestaurantsSubNav
     itemViewContainer: "ul.nav-tabs"
+
     triggers:
       "click #new-restaurant" : "new:restaurants:button:clicked"
+      "click #age-filter-slider" : "filter:age:slider:clicked"
+          
     onShow: ->
       $('#test-slider').slider()
       $('#test-slider2').slider()
       $('#test-slider3').slider()
-      $('#test-slider3').slider().on('slideStop', ->
-        slidervalue = $('#test-slider3').slider('getValue')
-        console.log(slidervalue.val()))
+        
+
 

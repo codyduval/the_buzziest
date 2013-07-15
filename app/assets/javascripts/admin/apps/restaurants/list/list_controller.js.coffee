@@ -10,7 +10,7 @@
         @layout = @getLayoutView()
 
         @layout.on "show", =>
-          @showSubNavView subnavs
+          @showSubNavView subnavs, restaurants
           @showPanel()
           @showRestaurants restaurants
 
@@ -20,12 +20,31 @@
       restaurantsPanelView = @getPanelView()
       @layout.restaurantsPanelRegion.show restaurantsPanelView
 
-    showSubNavView: (subnavs) ->
+      restaurantsPanelView.on "panel:new:restaurants:link:clicked", =>
+        console.log("new link clicked")
+
+    showSubNavView: (subnavs, restaurants) ->
       subNavView = @getSubNavView subnavs
       subNavView.on "new:restaurants:button:clicked", =>
         @showNewRegion()
 
+      subNavView.on "filter:age:slider:clicked", =>
+        @showAgeSliderValue(restaurants)
+
       @layout.restaurants_subnavRegion.show subNavView
+
+    showAgeSliderValue: (restaurants) ->
+      agevalue = $('#test-slider3').slider('getValue')
+      ageValueArray = agevalue.val()
+      ageValueLow = ageValueArray[0]
+      ageValueHigh = ageValueArray[1]
+      console.log(agevalue.val())
+      console.log(restaurants)
+      filtered_restaurants = restaurants.filter((restaurant) ->
+        age = restaurant.get("age_in_days")
+        if ((age > ageValueLow) && (age < ageValueHigh)) then true
+      )
+      console.log(filtered_restaurants)
 
     showRestaurants: (restaurants) ->
       restaurantsListView = @getRestaurantsView restaurants

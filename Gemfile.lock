@@ -8,13 +8,6 @@ GIT
       multi_json (~> 1.0)
       uuidtools
 
-GIT
-  remote: https://github.com/utahstreetlabs/bootstrap-slider-rails.git
-  revision: 9a70d58df4b959273d5d0a4a874fa206206b176d
-  specs:
-    bootstrap-slider-rails (2.0.0.2)
-      railties (>= 3.1.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -252,7 +245,6 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass (~> 2.3.1.0)
-  bootstrap-slider-rails!
   cancan
   coffee-rails (~> 3.2.1)
   colorize

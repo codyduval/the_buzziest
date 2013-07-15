@@ -18,13 +18,18 @@
     editModalRestaurant: (restaurant) ->
       RestaurantsApp.Edit.Controller.editModalRestaurant restaurant
 
+    filterRestaurants: (original) ->
+      RestaurantsApp.List.Controller.filterRestaurants(orginal)
+
   App.reqres.setHandler "new:restaurant:restaurant:view", ->
-    console.log("new clicked")
     API.newRestaurant()
 
   App.vent.on "restaurants:restaurant:clicked", (restaurant) ->
     App.navigate Routes.edit_restaurant_path(restaurant.id)
     API.editRestaurant restaurant.id, restaurant
+
+  App.vent.on "restaurants:buzzScore:filtered", (restaurants) ->
+    API.filterRestaurants restaurants
 
   App.addInitializer ->
     new RestaurantsApp.Router
