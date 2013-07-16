@@ -8,6 +8,7 @@
       restaurantsListRegion: "#restaurants-list-region"
       restaurants_subnavRegion: "#restaurants-subnav-region"
       restaurants_newRegion: "#restaurants-new-region"
+      restaurantsSlidersRegion: "#restaurants-sliders-region"
 
   class List.Panel extends App.Views.ItemView
     template: "restaurants/list/templates/_restaurants_panel"
@@ -41,31 +42,22 @@
     itemView: List.RestaurantsSubNav
     itemViewContainer: "ul.nav-tabs"
 
-    triggers:
-      "click #new-restaurant" : "new:restaurants:button:clicked"
-      "click #score-filter-slider" : "filter:score:slider:clicked"
-      "click #mentions-filter-slider" : "filter:mentions:slider:clicked"
-      "click #age-filter-slider" : "filter:age:slider:clicked"
-          
-    onShow: ->
-      $('#score-slider').slider()
-      $('#mentions-slider').slider()
-      $('#age-slider').slider()
-        
   class List.Slider extends App.Views.ItemView
-    template: "restaurants/list/templates/_sub_nav"
-    tagName: "li"
+    template: "restaurants/list/templates/_slider"
+    tagName: "span"
+    initialize: ->
+      @$el.prop("id", "slider-" + this.model.get("cssID"))
 
   class List.Sliders extends App.Views.CompositeView
-    template: "restaurants/list/templates/subnavs"
-    itemView: List.RestaurantsSubNav
-    itemViewContainer: "ul.nav-tabs"
+    template: "restaurants/list/templates/_sliders"
+    itemView: List.Slider
+    itemViewContainer: "#sliders-go-here"
 
     triggers:
       "click #new-restaurant" : "new:restaurants:button:clicked"
-      "click #score-filter-slider" : "filter:score:slider:clicked"
-      "click #mentions-filter-slider" : "filter:mentions:slider:clicked"
-      "click #age-filter-slider" : "filter:age:slider:clicked"
+      "click #slider-score-slider" : "filter:score:slider:clicked"
+      "click #slider-mentions-slider" : "filter:mentions:slider:clicked"
+      "click #slider-age-slider" : "filter:age:slider:clicked"
           
     onShow: ->
       $('#score-slider').slider()

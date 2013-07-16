@@ -5,13 +5,15 @@
     listRestaurants: ->
       restaurants = App.request "restaurant:entities"
       subnavs = App.request "restaurant:subnavs"
+      sliders = App.request "restaurant:sliders"
 
       App.execute "when:fetched", restaurants, =>
         filterParams = App.request "restaurant:filterValues", restaurants
         @layout = @getLayoutView()
 
         @layout.on "show", =>
-          @showSubNavView(subnavs, restaurants, filterParams)
+          @showSubNavView(subnavs)
+          @showFilterSliders(sliders, filterParams)
           @showPanel()
           #@showRestaurants restaurants
           @showFilteredListView(restaurants, filterParams)
@@ -25,42 +27,16 @@
       restaurantsPanelView.on "panel:new:restaurants:link:clicked", =>
         console.log("new link clicked")
 
-    showSubNavView: (subnavs, restaurants, filterParams) ->
+    showSubNavView: (subnavs) ->
       subNavView = @getSubNavView subnavs
       subNavView.on "new:restaurants:button:clicked", =>
         @showNewRegion()
 
-      subNavView.on "filter:mentions:slider:clicked", =>
-        sliderValue = $('#mentions-slider').slider('getValue')
-        sliderValueText = sliderValue.val()
-        sliderValueArray = sliderValueText.split(',')
-        filterParams.mentionLow = sliderValueArray[0]
-        filterParams.mentionHigh = sliderValueArray[1]
-        console.log(filterParams)
-        @showFilteredView(restaurants, filterParams)
-
-      subNavView.on "filter:age:slider:clicked", =>
-        sliderValue = $('#age-slider').slider('getValue')
-        sliderValueText = sliderValue.val()
-        sliderValueArray = sliderValueText.split(',')
-        filterParams.ageLow = sliderValueArray[0]
-        filterParams.ageHigh = sliderValueArray[1]
-        console.log(filterParams)
-        @showFilteredView(restaurants, filterParams)
-        
-      subNavView.on "filter:score:slider:clicked", =>
-        sliderValue = $('#score-slider').slider('getValue')
-        sliderValueText = sliderValue.val()
-        sliderValueArray = sliderValueText.split(',')
-        filterParams.scoreLow = sliderValueArray[0]
-        filterParams.scoreHigh = sliderValueArray[1]
-        console.log(filterParams)
-        @showFilteredView(restaurants, filterParams)
-
       @layout.restaurants_subnavRegion.show subNavView
 
-    showFilterSliders: (restaurants, filterParams) ->
-      filterSlidersView = @getFilterSlidersView(restaurants, filterParams)
+    showFilterSliders: (sliders, filterParams) ->
+      console.log(sliders)
+      filterSlidersView = @getFilterSlidersView(sliders)
      
       filterSlidersView.on "filter:mentions:slider:clicked", =>
         sliderValue = $('#mentions-slider').slider('getValue')
@@ -89,7 +65,7 @@
         console.log(filterParams)
         @showFilteredListView(restaurants, filterParams)
 
-      @layout.restaurants_subnavRegion.show subNavView
+      @layout.restaurantsSlidersRegion.show filterSlidersView
 
     showFilteredListView: (restaurants, filterParams) ->
       filteredListView = @getFilteredListView(restaurants, filterParams)
@@ -125,8 +101,9 @@
       new List.Restaurants
         collection: restaurants
 
-    getFilterSlidersView: (restaurants, filterParams) ->
+    getFilterSlidersView: (sliders) ->
       new List.Sliders
+        collection: sliders
 
     getFilteredListView: (restaurants, filterParams) ->
       filtered_restaurants = App.request "restaurants:filtered:entities", restaurants, filterParams

@@ -13,39 +13,8 @@
       </div>
     </div>
   </div> 
-</div>
-<div class="row-fluid">
-  <div class="span10">
-    <div class="navbar">
-      <div class="navbar-inner">
-        <div class="nav-collapse collapse navbar-responsive-collapse">
-          <div class="slider-group" >
-            <span id="score-filter-slider">
-              <small>Buzz Score</small>
-              <br/>
-              <small class="slider-value-left">0.0</small>
-              <input type="text" id="score-slider" style="display: none" class="" value="" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="[25,75]" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
-              <small class="slider-value-right">10.2</small>
-            </span>
-            <span id="mentions-filter-slider">
-              <small>Buzz Mentions</small>
-              <br/>
-              <small class="slider-value-left">0.0</small>
-              <input type="text" id="mentions-slider" style="display: none" class="" value="" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="[25,75]" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
-              <small class="slider-value-right">10.2</small>
-            </span>
-            <span id="age-filter-slider">
-              <small>Age (Days)</small>
-              <br/>
-              <small class="slider-value-left">0</small>
-              <input type="text" id="age-slider" style="display: none" class="" value="" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="[25,75]" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
-              <small class="slider-value-right">64</small>
-            </span>
-          </div><!-- /.well -->
-        </div><!-- /.nav-collapse -->
-      </div><!-- /navbar-inner -->
-    </div><!-- /navbar -->
-</div>
-<div id="restaurants-panel-region" class="stats-column span2"></div>
-</div> <!-- /row -->
 
+<div class="row-fluid">
+  <div id="restaurants-sliders-region" class="span10"></div>
+  <div id="restaurants-panel-region" class="stats-column span2"></div>
+</div>

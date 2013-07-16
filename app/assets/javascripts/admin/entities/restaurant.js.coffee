@@ -10,6 +10,11 @@
   class Entities.RestaurantsSubNav extends App.Entities.Collection
     model: Entities.Restaurants
 
+  class Entities.RestaurantsSlider extends App.Entities.Model
+
+  class Entities.RestaurantsSliders extends App.Entities.Collection
+    model: Entities.RestaurantsSlider
+
   API =
     getRestaurantEntities: ->
       restaurants = new Entities.RestaurantsCollection
@@ -29,13 +34,19 @@
 
       filtered_restaurants
 
-
     getSubNavs: ->
       new Entities.RestaurantsSubNav [
         { name: "New York" }
         { name: "San Francisco" }
         { name: "Los Angeles" }
         { name: "All" }
+      ]
+
+    getRestaurantSliders: ->
+      new Entities.RestaurantsSliders [
+        { name: "Buzz Score", minValue: "0", maxValue: "100", cssID: "score-slider", initialValue: "[0,100]" }
+        { name: "Buzz Mentions", minValue: "0", maxValue: "100", cssID: "mentions-slider", initialValue: "[0,100]" }
+        { name: "Age(Days)", minValue: "0", maxValue: "100", cssID: "age-slider", initialValue: "[0,100]" }
       ]
 
     newRestaurant: ->
@@ -82,6 +93,9 @@
 
   App.reqres.setHandler "restaurant:entities", ->
     API.getRestaurantEntities()
+
+  App.reqres.setHandler "restaurant:sliders", ->
+    API.getRestaurantSliders()
 
   App.reqres.setHandler "restaurant:filterValues", (restaurants) ->
     API.getRestaurantFilterValues(restaurants)
