@@ -16,6 +16,20 @@
       restaurants.fetch()
       restaurants
 
+    getFilteredRestaurants: (restaurants, filterParams) ->
+      filtered_restaurants_list = restaurants.filter((restaurant) ->
+        restaurant.get('buzz_mention_count_ignored') > filterParams.mentionLow and
+        restaurant.get('buzz_mention_count_ignored') < filterParams.mentionHigh and
+        restaurant.get('total_current_buzz_rounded') > filterParams.scoreLow and
+        restaurant.get('total_current_buzz_rounded') < filterParams.scoreHigh and
+        restaurant.get('age_in_days') > filterParams.ageLow and
+        restaurant.get('age_in_days') < filterParams.ageHigh
+      )
+      filtered_restaurants = new Entities.RestaurantsCollection(filtered_restaurants_list)
+
+      filtered_restaurants
+
+
     getSubNavs: ->
       new Entities.RestaurantsSubNav [
         { name: "New York" }
@@ -33,11 +47,50 @@
       restaurant.fetch()
       restaurant
 
+    getRestaurantFilterValues: (restaurants) ->
+      filterParams = {}
+      console.log(restaurants)
+      lowestMention = restaurants.min((restaurant) ->
+        restaurant.get('buzz_mention_count_ignored')
+      )
+      highestMention = restaurants.max((restaurant) ->
+        restaurant.get('buzz_mention_count_ignored')
+      )
+      filterParams.mentionHigh = highestMention.get('buzz_mention_count_ignored')
+      filterParams.mentionLow = lowestMention.get('buzz_mention_count_ignored')
+
+      lowestScore = restaurants.min((restaurant) ->
+        restaurant.get('total_current_buzz_rounded')
+      )
+      highestScore = restaurants.max((restaurant) ->
+        restaurant.get('total_current_buzz_rounded')
+      )
+      filterParams.scoreHigh = highestScore.get('total_current_buzz_rounded')
+      filterParams.scoreLow = lowestScore.get('total_current_buzz_rounded')
+
+      lowestAge = restaurants.min((restaurant) ->
+        restaurant.get('age_in_days')
+      )
+      highestAge = restaurants.max((restaurant) ->
+        restaurant.get('age_in_days')
+      )
+      filterParams.ageHigh = highestAge.get('age_in_days')
+      filterParams.ageLow = lowestAge.get('age_in_days')
+      console.log(filterParams)
+
+      filterParams
+
   App.reqres.setHandler "restaurant:entities", ->
     API.getRestaurantEntities()
 
+  App.reqres.setHandler "restaurant:filterValues", (restaurants) ->
+    API.getRestaurantFilterValues(restaurants)
+
   App.reqres.setHandler "restaurants:entity", (id) ->
     API.getRestaurant id
+
+  App.reqres.setHandler "restaurants:filtered:entities", (restaurants, filterParams) ->
+    API.getFilteredRestaurants(restaurants, filterParams)
 
   App.reqres.setHandler "restaurant:subnavs", ->
     API.getSubNavs()

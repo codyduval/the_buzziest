@@ -1,0 +1,7 @@
+            <span id="score-filter-slider">
+              <small>Buzz Score</small>
+              <br/>
+              <small class="slider-value-left">0.0</small>
+              <input type="text" id="score-slider" style="display: none" class="" value="" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="[25,75]" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
+              <small class="slider-value-right">10.2</small>
+            </span>

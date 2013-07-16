@@ -43,12 +43,33 @@
 
     triggers:
       "click #new-restaurant" : "new:restaurants:button:clicked"
+      "click #score-filter-slider" : "filter:score:slider:clicked"
+      "click #mentions-filter-slider" : "filter:mentions:slider:clicked"
       "click #age-filter-slider" : "filter:age:slider:clicked"
           
     onShow: ->
-      $('#test-slider').slider()
-      $('#test-slider2').slider()
-      $('#test-slider3').slider()
+      $('#score-slider').slider()
+      $('#mentions-slider').slider()
+      $('#age-slider').slider()
         
+  class List.Slider extends App.Views.ItemView
+    template: "restaurants/list/templates/_sub_nav"
+    tagName: "li"
+
+  class List.Sliders extends App.Views.CompositeView
+    template: "restaurants/list/templates/subnavs"
+    itemView: List.RestaurantsSubNav
+    itemViewContainer: "ul.nav-tabs"
+
+    triggers:
+      "click #new-restaurant" : "new:restaurants:button:clicked"
+      "click #score-filter-slider" : "filter:score:slider:clicked"
+      "click #mentions-filter-slider" : "filter:mentions:slider:clicked"
+      "click #age-filter-slider" : "filter:age:slider:clicked"
+          
+    onShow: ->
+      $('#score-slider').slider()
+      $('#mentions-slider').slider()
+      $('#age-slider').slider()
 
 
