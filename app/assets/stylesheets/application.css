@@ -10,7 +10,6 @@
  *
  *= require_self
  *= require scaffolds
- *= require jquery-ui
  *= require bootstrap-sass
  *= require bootstrap-slider-override
  *= require flat-ui 
