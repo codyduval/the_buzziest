@@ -48,6 +48,10 @@
     template: "restaurants/list/templates/_sub_nav"
     tagName: "li"
 
+    events:
+      "click a" : ->
+        @trigger "subnavs:subnav:clicked", @model
+
   class List.RestaurantsSubNavs extends App.Views.CompositeView
     template: "restaurants/list/templates/subnavs"
     itemView: List.RestaurantsSubNav

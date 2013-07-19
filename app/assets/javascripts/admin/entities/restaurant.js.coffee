@@ -8,7 +8,6 @@
     url: -> Routes.restaurants_path()
 
   class Entities.RestaurantsSubNav extends App.Entities.Collection
-    model: Entities.Restaurants
 
   class Entities.RestaurantsSlider extends App.Entities.Model
 
@@ -28,10 +27,23 @@
       filtered = new allRestaurants.constructor()
 
       filtered._callbacks = {}
-      
+      filtered.subNavSortBy = (subnav) ->
+        if subnav
+          city = subnav.get('name')
+          console.log("city in subnav", city)
+          console.log("nyc", allRestaurants.where({city: "nyc"}))
+          
+          city = switch
+            when city is 'All' then restaurants = allRestaurants.models
+            when city is 'New York' then restaurants = allRestaurants.where({city: "nyc"})
+            when city is 'Los Angeles' then restaurants = allRestaurants.where({city: "la"})
+            when city is 'San Francisco' then restaurants = allRestaurants.where({city: "sf"})
+
+        filtered.reset restaurants
+        console.log("filtered via subnav", filtered)
+
       filtered.panelSortBy = (panelnav) ->
         restaurants = undefined
-
         if panelnav
           name = panelnav.get('name')
 

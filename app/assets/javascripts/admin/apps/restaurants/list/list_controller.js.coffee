@@ -21,14 +21,24 @@
 
         App.mainRegion.show @layout
     
+    listCityRestaurants: (restaurants) ->
+
+      sliders = App.request "restaurant:sliders", restaurants
+      panelnavs = App.request "restaurant:panelnavs", restaurants
+
+      @showFilterSliders(restaurants, sliders)
+      @showPanel(restaurants, panelnavs)
+
+
     showPanel: (restaurants, panelnavs) ->
       restaurantsPanelView = @getPanelView(panelnavs)
-      @layout.restaurantsPanelRegion.show restaurantsPanelView
 
       restaurantsPanelView.on "itemview:panel:panelnavs:clicked",
       (child, panelnav) ->
         restaurants.panelSortBy(panelnav)
         console.log("panelnav clicked",panelnav)
+
+      @layout.restaurantsPanelRegion.show restaurantsPanelView
 
     showSubNavView: (restaurants, subnavs) ->
       subNavView = @getSubNavView subnavs
@@ -39,6 +49,7 @@
       (child, subnav) ->
         restaurants.subNavSortBy(subnav)
         console.log("subnav clicked", subnav)
+        App.vent.trigger "subnavs:subnav:clicked", restaurants
 
       @layout.restaurants_subnavRegion.show subNavView
 
