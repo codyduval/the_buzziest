@@ -28,6 +28,9 @@
   App.vent.on "subnavs:subnav:clicked", (restaurants) ->
     API.listCityRestaurants(restaurants) 
 
+  App.vent.on "panel:panelnavs:clicked", (restaurants) ->
+    API.listCityRestaurants(restaurants) 
+
   App.addInitializer ->
     new RestaurantsApp.Router
       controller: API

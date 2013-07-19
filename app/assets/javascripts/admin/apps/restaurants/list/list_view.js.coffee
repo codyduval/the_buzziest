@@ -13,13 +13,9 @@
   class List.Panel extends App.Views.ItemView
     template: "restaurants/list/templates/_restaurants_panel"
     tagName: "li"
-    
-    # triggers:
-    #   "click a" : "panel:panelnav:clicked"
 
     events:
       "click a" : ->
-        console.log("panel nav event", @model)
         @trigger "panel:panelnavs:clicked", @model
 
   class List.Panels extends App.Views.CompositeView

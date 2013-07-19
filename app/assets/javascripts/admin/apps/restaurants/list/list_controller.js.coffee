@@ -10,7 +10,6 @@
         restaurants = App.request "restaurant:filter:entities", allRestaurants
         sliders = App.request "restaurant:sliders", allRestaurants
         panelnavs = App.request "restaurant:panelnavs", allRestaurants
-        console.log("panelnavs", panelnavs)
         @layout = @getLayoutView()
 
         @layout.on "show", =>
@@ -35,8 +34,11 @@
 
       restaurantsPanelView.on "itemview:panel:panelnavs:clicked",
       (child, panelnav) ->
+        console.log("single panelnav", panelnav)
         restaurants.panelSortBy(panelnav)
-        console.log("panelnav clicked",panelnav)
+        console.log("panel nav panels", panelnavs)
+        console.log("panel nav restaurants", restaurants)
+        App.vent.trigger "panel:panelnavs:clicked", restaurants
 
       @layout.restaurantsPanelRegion.show restaurantsPanelView
 
@@ -48,7 +50,6 @@
       subNavView.on "itemview:subnavs:subnav:clicked",
       (child, subnav) ->
         restaurants.subNavSortBy(subnav)
-        console.log("subnav clicked", subnav)
         App.vent.trigger "subnavs:subnav:clicked", restaurants
 
       @layout.restaurants_subnavRegion.show subNavView

@@ -30,8 +30,6 @@
       filtered.subNavSortBy = (subnav) ->
         if subnav
           city = subnav.get('name')
-          console.log("city in subnav", city)
-          console.log("nyc", allRestaurants.where({city: "nyc"}))
           
           city = switch
             when city is 'All' then restaurants = allRestaurants.models
@@ -40,7 +38,6 @@
             when city is 'San Francisco' then restaurants = allRestaurants.where({city: "sf"})
 
         filtered.reset restaurants
-        console.log("filtered via subnav", filtered)
 
       filtered.panelSortBy = (panelnav) ->
         restaurants = undefined
@@ -48,17 +45,16 @@
           name = panelnav.get('name')
 
           name = switch
-            when name is 'All' then restaurants = allRestaurants.models
-            when name is 'New' then restaurants = allRestaurants.filter((restaurant) ->
+            when name is 'All' then restaurants = @models
+            when name is 'New' then restaurants = @filter((restaurant) ->
               restaurant.get('age_in_days') <= 1.9
             )
-            when name is 'Expiring' then restaurants = allRestaurants.filter((restaurant) ->
+            when name is 'Expiring' then restaurants = @filter((restaurant) ->
               restaurant.get('age_in_days') >= 90 and
               restaurant.get('total_current_buzz_rounded') <= 0.5
             )
 
         filtered.reset restaurants
-        console.log("filtered via panel", filtered)
 
       filtered.filterBy = (sliders) ->
         restaurants = undefined
@@ -82,23 +78,18 @@
             restaurant.get('age_in_days') >= ageSlider.get('minValue') and
             restaurant.get('age_in_days') <= ageSlider.get('maxValue')
           )
-          console.log("sliders present so",restaurants)
           restaurants
 
         else
-          console.log("allrest.models", allRestaurants.models)
           restaurants = allRestaurants.models
 
         filtered._currentCriteria = sliders
 
-        console.log("filtered before reset are", filtered)
         filtered.reset restaurants
-        console.log("filtered after reset are", filtered)
 
       allRestaurants.on "reset", ->
         filtered.where filtered._currentCriteria
 
-      console.log("filtered are", filtered)
       filtered
       
     getSubNavs: ->
@@ -179,7 +170,6 @@
       filterParams.ageHigh = highestAge.get('age_in_days')
       filterParams.ageLow = lowestAge.get('age_in_days')
       filterParams.ageStartRange = ("[" + filterParams.ageLow + "," + filterParams.ageHigh + "]")
-      console.log(filterParams)
 
       filterParams
 
