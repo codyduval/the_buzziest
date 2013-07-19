@@ -14,7 +14,7 @@
         @layout = @getLayoutView()
 
         @layout.on "show", =>
-          @showSubNavView(subnavs)
+          @showSubNavView(restaurants, subnavs)
           @showFilterSliders(restaurants, sliders)
           @showPanel(restaurants, panelnavs)
           @showRestaurants(restaurants, sliders)
@@ -30,10 +30,15 @@
         restaurants.panelSortBy(panelnav)
         console.log("panelnav clicked",panelnav)
 
-    showSubNavView: (subnavs) ->
+    showSubNavView: (restaurants, subnavs) ->
       subNavView = @getSubNavView subnavs
       subNavView.on "new:restaurants:button:clicked", =>
         @showNewRegion()
+
+      subNavView.on "itemview:subnavs:subnav:clicked",
+      (child, subnav) ->
+        restaurants.subNavSortBy(subnav)
+        console.log("subnav clicked", subnav)
 
       @layout.restaurants_subnavRegion.show subNavView
 
