@@ -5,35 +5,30 @@
     listRestaurants: ->
       allRestaurants = App.request "restaurant:entities"
       subnavs = App.request "restaurant:subnavs"
-      sliders = App.request "restaurant:sliders"
 
       App.execute "when:fetched", allRestaurants, =>
         restaurants = App.request "restaurant:filter:entities", allRestaurants
+        sliders = App.request "restaurant:sliders", allRestaurants
+        panelnavs = App.request "restaurant:panelnavs", allRestaurants
+        console.log("panelnavs", panelnavs)
         @layout = @getLayoutView()
 
         @layout.on "show", =>
           @showSubNavView(subnavs)
-          @showFilterSliders(sliders)
-          @showPanel()
+          @showFilterSliders(restaurants, sliders)
+          @showPanel(restaurants, panelnavs)
           @showRestaurants(restaurants, sliders)
 
         App.mainRegion.show @layout
     
-    updateFilterValue: (slider) ->
-      sliderSelector = slider.get('cssID')
-      sliderValue = $("#"+ sliderSelector).slider('getValue')
-      sliderValueText = sliderValue.val()
-      sliderValueArray = sliderValueText.split(',')
-      slider.set({minValue: sliderValueArray[0], maxValue: sliderValueArray[1]})
-      console.log('updateFilterValue is', slider)
-      @showRestaurants()
-
-    showPanel: ->
-      restaurantsPanelView = @getPanelView()
+    showPanel: (restaurants, panelnavs) ->
+      restaurantsPanelView = @getPanelView(panelnavs)
       @layout.restaurantsPanelRegion.show restaurantsPanelView
 
-      restaurantsPanelView.on "panel:new:restaurants:link:clicked", =>
-        console.log("new link clicked")
+      restaurantsPanelView.on "itemview:panel:panelnavs:clicked",
+      (child, panelnav) ->
+        restaurants.panelSortBy(panelnav)
+        console.log("panelnav clicked",panelnav)
 
     showSubNavView: (subnavs) ->
       subNavView = @getSubNavView subnavs
@@ -42,7 +37,7 @@
 
       @layout.restaurants_subnavRegion.show subNavView
 
-    showFilterSliders: (sliders) ->
+    showFilterSliders: (restaurants, sliders) ->
       filterSlidersView = @getFilterSlidersView(sliders)
      
       filterSlidersView.on "itemview:sliders:slider:clicked",
@@ -52,14 +47,9 @@
         sliderValueText = sliderValue.val()
         sliderValueArray = sliderValueText.split(',')
         slider.set({minValue: sliderValueArray[0], maxValue: sliderValueArray[1]})
-        console.log('updateFilterValue is', slider)
-        console.log('all sliders', sliders)
-        App.vent.trigger "sliders:slider:clicked", sliders
+        restaurants.filterBy(sliders)
 
       @layout.restaurantsSlidersRegion.show filterSlidersView
-
-    filterRestaurants: (sliders) ->
-      @showRestaurants(restaurants, sliders)
 
     showRestaurants: (restaurants, sliders) ->
       restaurants.filterBy(sliders)
@@ -80,8 +70,9 @@
 
       @layout.restaurants_newRegion.show newRegion
 
-    getPanelView: ->
-      new List.Panel
+    getPanelView: (panelnavs) ->
+      new List.Panels
+        collection: panelnavs
 
     getSubNavView: (subnavs) ->
       new List.RestaurantsSubNavs
@@ -94,13 +85,6 @@
     getFilterSlidersView: (sliders) ->
       new List.Sliders
         collection: sliders
-
-    getFilteredListView: (restaurants, sliders) ->
-      console.log(sliders)
-      filtered_restaurants = App.request "restaurants:filtered:entities", restaurants, sliders
-
-      new List.Restaurants
-        collection: filtered_restaurants
 
     getLayoutView: ->
       new List.Layout

@@ -382,7 +382,12 @@
 		tooltip: 'show',
 		handle: 'round',
 		formater: function(value) {
-			return value;
+      if((this.step >= 0.1) && (this.step <= 0.9)) {
+			  return value.toFixed(1);
+      }
+      else {
+        return value;
+      }
 		}
 	};
 

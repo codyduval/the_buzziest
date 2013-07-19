@@ -9,12 +9,6 @@
     listRestaurants: ->
       RestaurantsApp.List.Controller.listRestaurants()
 
-    filterRestaurants: (sliders) ->
-      RestaurantsApp.List.Controller.filterRestaurants(sliders)
-
-    updateFilterValue: (slider) ->
-      RestaurantsApp.List.Controller.updateFilterValue slider
-
     newRestaurant: ->
       RestaurantsApp.New.Controller.newRestaurant()
 
@@ -28,8 +22,7 @@
     App.navigate Routes.edit_restaurant_path(restaurant.id)
     API.editRestaurant restaurant.id, restaurant
 
-  App.vent.on "sliders:slider:clicked",(sliders) ->
-    API.filterRestaurants(sliders)
+  App.vent.on "panel:panelnavs:clicked", (panelnav) ->
 
   App.addInitializer ->
     new RestaurantsApp.Router
