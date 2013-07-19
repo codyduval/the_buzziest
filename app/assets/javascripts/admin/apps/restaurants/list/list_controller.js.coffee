@@ -3,22 +3,30 @@
   List.Controller =
 
     listRestaurants: ->
-      restaurants = App.request "restaurant:entities"
+      allRestaurants = App.request "restaurant:entities"
       subnavs = App.request "restaurant:subnavs"
       sliders = App.request "restaurant:sliders"
 
-      App.execute "when:fetched", restaurants, =>
-        filterParams = App.request "restaurant:filterValues", restaurants
+      App.execute "when:fetched", allRestaurants, =>
+        restaurants = App.request "restaurant:filter:entities", allRestaurants
         @layout = @getLayoutView()
 
         @layout.on "show", =>
           @showSubNavView(subnavs)
-          @showFilterSliders(sliders, filterParams)
+          @showFilterSliders(sliders)
           @showPanel()
-          #@showRestaurants restaurants
-          @showFilteredListView(restaurants, filterParams)
+          @showRestaurants(restaurants, sliders)
 
         App.mainRegion.show @layout
+    
+    updateFilterValue: (slider) ->
+      sliderSelector = slider.get('cssID')
+      sliderValue = $("#"+ sliderSelector).slider('getValue')
+      sliderValueText = sliderValue.val()
+      sliderValueArray = sliderValueText.split(',')
+      slider.set({minValue: sliderValueArray[0], maxValue: sliderValueArray[1]})
+      console.log('updateFilterValue is', slider)
+      @showRestaurants()
 
     showPanel: ->
       restaurantsPanelView = @getPanelView()
@@ -34,45 +42,27 @@
 
       @layout.restaurants_subnavRegion.show subNavView
 
-    showFilterSliders: (sliders, filterParams) ->
-      console.log(sliders)
+    showFilterSliders: (sliders) ->
       filterSlidersView = @getFilterSlidersView(sliders)
      
-      filterSlidersView.on "filter:mentions:slider:clicked", =>
-        sliderValue = $('#mentions-slider').slider('getValue')
+      filterSlidersView.on "itemview:sliders:slider:clicked",
+      (child, slider) ->
+        sliderSelector = slider.get('cssID')
+        sliderValue = $("#"+ sliderSelector).slider('getValue')
         sliderValueText = sliderValue.val()
         sliderValueArray = sliderValueText.split(',')
-        filterParams.mentionLow = sliderValueArray[0]
-        filterParams.mentionHigh = sliderValueArray[1]
-        console.log(filterParams)
-        @showFilteredListView(restaurants, filterParams)
-
-      filterSlidersView.on "filter:age:slider:clicked", =>
-        sliderValue = $('#age-slider').slider('getValue')
-        sliderValueText = sliderValue.val()
-        sliderValueArray = sliderValueText.split(',')
-        filterParams.ageLow = sliderValueArray[0]
-        filterParams.ageHigh = sliderValueArray[1]
-        console.log(filterParams)
-        @showFilteredListView(restaurants, filterParams)
-        
-      filterSlidersView.on "filter:score:slider:clicked", =>
-        sliderValue = $('#score-slider').slider('getValue')
-        sliderValueText = sliderValue.val()
-        sliderValueArray = sliderValueText.split(',')
-        filterParams.scoreLow = sliderValueArray[0]
-        filterParams.scoreHigh = sliderValueArray[1]
-        console.log(filterParams)
-        @showFilteredListView(restaurants, filterParams)
+        slider.set({minValue: sliderValueArray[0], maxValue: sliderValueArray[1]})
+        console.log('updateFilterValue is', slider)
+        console.log('all sliders', sliders)
+        App.vent.trigger "sliders:slider:clicked", sliders
 
       @layout.restaurantsSlidersRegion.show filterSlidersView
 
-    showFilteredListView: (restaurants, filterParams) ->
-      filteredListView = @getFilteredListView(restaurants, filterParams)
+    filterRestaurants: (sliders) ->
+      @showRestaurants(restaurants, sliders)
 
-      @layout.restaurantsListRegion.show filteredListView
-
-    showRestaurants: (restaurants) ->
+    showRestaurants: (restaurants, sliders) ->
+      restaurants.filterBy(sliders)
       restaurantsListView = @getRestaurantsView restaurants
       restaurantsListView.on "itemview:restaurants:restaurant:clicked",
       (child, restaurant) ->
@@ -105,8 +95,9 @@
       new List.Sliders
         collection: sliders
 
-    getFilteredListView: (restaurants, filterParams) ->
-      filtered_restaurants = App.request "restaurants:filtered:entities", restaurants, filterParams
+    getFilteredListView: (restaurants, sliders) ->
+      console.log(sliders)
+      filtered_restaurants = App.request "restaurants:filtered:entities", restaurants, sliders
 
       new List.Restaurants
         collection: filtered_restaurants

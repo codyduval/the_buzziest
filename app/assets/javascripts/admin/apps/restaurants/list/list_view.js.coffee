@@ -48,16 +48,20 @@
     initialize: ->
       @$el.prop("id", "slider-" + this.model.get("cssID"))
 
+    events:
+      "click .slider" : ->
+        @trigger "sliders:slider:clicked", @model
+
   class List.Sliders extends App.Views.CompositeView
     template: "restaurants/list/templates/_sliders"
     itemView: List.Slider
     itemViewContainer: "#sliders-go-here"
 
-    triggers:
-      "click #new-restaurant" : "new:restaurants:button:clicked"
-      "click #slider-score-slider" : "filter:score:slider:clicked"
-      "click #slider-mentions-slider" : "filter:mentions:slider:clicked"
-      "click #slider-age-slider" : "filter:age:slider:clicked"
+    # triggers:
+    #   "click #new-restaurant" : "new:restaurants:button:clicked"
+    #   "click #slider-score-slider" : "filter:score:slider:clicked"
+    #   "click #slider-mentions-slider" : "filter:mentions:slider:clicked"
+    #   "click #slider-age-slider" : "filter:age:slider:clicked"
           
     onShow: ->
       $('#score-slider').slider()

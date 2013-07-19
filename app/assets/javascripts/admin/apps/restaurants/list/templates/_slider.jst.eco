@@ -1,5 +1,5 @@
               <small><%= @name %></small>
               <br/>
               <small class="slider-value-left"><%= @minValue %></small>
-              <input type="text" id=<%= @cssID %> style="display: none" class="" value="" data-slider-min=<%= @minValue %> data-slider-max=<%= @minValue %> data-slider-step="1" data-slider-value=<%= @initialValue %> data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
+              <input type="text" id=<%= @cssID %> style="display: none" class="restaurant-slider" value="" data-slider-min=<%= @minValue %> data-slider-max=<%= @maxValue %> data-slider-step="1" data-slider-value=<%= @initialValue %> data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
               <small class="slider-value-right"><%= @maxValue %></small>

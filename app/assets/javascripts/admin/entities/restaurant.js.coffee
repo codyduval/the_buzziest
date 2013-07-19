@@ -17,21 +17,112 @@
 
   API =
     getRestaurantEntities: ->
-      restaurants = new Entities.RestaurantsCollection
-      restaurants.fetch()
-      restaurants
+      allRestaurants = new Entities.RestaurantsCollection
+      allRestaurants.fetch()
+      allRestaurants
 
-    getFilteredRestaurants: (restaurants, filterParams) ->
+    getFilterRestaurantEntities: (allRestaurants) ->
+      console.log("unfiltered are", allRestaurants)
+      filtered = new allRestaurants.constructor()
+      console.log("to be filtered are", filtered)
+
+      filtered._callbacks = {}
+
+      filtered.filterBy = (sliders) ->
+        restaurants = undefined
+
+        if sliders
+          scoreSlider = sliders.findWhere({cssID: 'score-slider'})
+          mentionsSlider = sliders.findWhere({cssID: 'mentions-slider'})
+          console.log("sliders pres",mentionsSlider)
+          console.log("mentions slider maxval",mentionsSlider.get('maxValue'))
+          ageSlider = sliders.findWhere({cssID: 'age-slider'})
+          console.log("in the if sliders allrests", allRestaurants)
+
+          restaurants = allRestaurants.filter((restaurant) ->
+            restaurant.get('buzz_mention_count_ignored') > mentionsSlider.get('minValue') and
+            restaurant.get('buzz_mention_count_ignored') < mentionsSlider.get('maxValue') and
+            restaurant.get('total_current_buzz_rounded') > scoreSlider.get('minValue') and
+            restaurant.get('total_current_buzz_rounded') < scoreSlider.get('maxValue') and
+            restaurant.get('age_in_days') > ageSlider.get('minValue') and
+            restaurant.get('age_in_days') < ageSlider.get('maxValue')
+          )
+          console.log("sliders present so",restaurants)
+          restaurants
+
+        else
+          console.log("allrest.models", allRestaurants.models)
+          restaurants = allRestaurants.models
+
+        filtered._currentCriteria = sliders
+
+        console.log("filtered before reset are", filtered)
+        filtered.reset restaurants
+        console.log("filtered after reset are", filtered)
+
+      allRestaurants.on "reset", ->
+        filtered.where filtered._currentCriteria
+
+      console.log("filtered are", filtered)
+      filtered
+      console.log("unfiltered are", allRestaurants)
+      filtered = new allRestaurants.constructor()
+      console.log("to be filtered are", filtered)
+
+      filtered._callbacks = {}
+
+      filtered.filterBy = (sliders) ->
+        restaurants = undefined
+
+        if sliders
+          scoreSlider = sliders.findWhere({cssID: 'score-slider'})
+          mentionsSlider = sliders.findWhere({cssID: 'mentions-slider'})
+          console.log("sliders pres",mentionsSlider)
+          console.log("mentions slider maxval",mentionsSlider.get('maxValue'))
+          ageSlider = sliders.findWhere({cssID: 'age-slider'})
+          console.log("in the if sliders allrests", allRestaurants)
+
+          restaurants = allRestaurants.filter((restaurant) ->
+            restaurant.get('buzz_mention_count_ignored') > mentionsSlider.get('minValue') and
+            restaurant.get('buzz_mention_count_ignored') < mentionsSlider.get('maxValue') and
+            restaurant.get('total_current_buzz_rounded') > scoreSlider.get('minValue') and
+            restaurant.get('total_current_buzz_rounded') < scoreSlider.get('maxValue') and
+            restaurant.get('age_in_days') > ageSlider.get('minValue') and
+            restaurant.get('age_in_days') < ageSlider.get('maxValue')
+          )
+          console.log("sliders present so",restaurants)
+          restaurants
+
+        else
+          console.log("allrest.models", allRestaurants.models)
+          restaurants = allRestaurants.models
+
+        filtered._currentCriteria = sliders
+
+        console.log("filtered before reset are", filtered)
+        filtered.reset restaurants
+        console.log("filtered after reset are", filtered)
+
+      allRestaurants.on "reset", ->
+        filtered.where filtered._currentCriteria
+
+      console.log("filtered are", filtered)
+      filtered
+      
+    getFilteredRestaurantsList: (restaurants, sliders) ->
+      scoreSlider = sliders.findWhere({cssID: 'score-slider'})
+      mentionsSlider = sliders.findWhere({cssID: 'mentions-slider'})
+      ageSlider = sliders.findWhere({cssID: 'age-slider'})
       filtered_restaurants_list = restaurants.filter((restaurant) ->
-        restaurant.get('buzz_mention_count_ignored') > filterParams.mentionLow and
-        restaurant.get('buzz_mention_count_ignored') < filterParams.mentionHigh and
-        restaurant.get('total_current_buzz_rounded') > filterParams.scoreLow and
-        restaurant.get('total_current_buzz_rounded') < filterParams.scoreHigh and
-        restaurant.get('age_in_days') > filterParams.ageLow and
-        restaurant.get('age_in_days') < filterParams.ageHigh
+        restaurant.get('buzz_mention_count_ignored') > mentionsSlider.get('minValue') and
+        restaurant.get('buzz_mention_count_ignored') < mentionsSlider.get('maxValue') and
+        restaurant.get('total_current_buzz_rounded') > scoreSlider.get('minValue') and
+        restaurant.get('total_current_buzz_rounded') < scoreSlider.get('maxValue') and
+        restaurant.get('age_in_days') > ageSlider.get('minValue') and
+        restaurant.get('age_in_days') < ageSlider.get('maxValue')
       )
       filtered_restaurants = new Entities.RestaurantsCollection(filtered_restaurants_list)
-
+      console.log("filtered_restaurants are", filtered_restaurants)
       filtered_restaurants
 
     getSubNavs: ->
@@ -44,9 +135,9 @@
 
     getRestaurantSliders: ->
       new Entities.RestaurantsSliders [
-        { name: "Buzz Score", minValue: "0", maxValue: "100", cssID: "score-slider", initialValue: "[0,100]" }
-        { name: "Buzz Mentions", minValue: "0", maxValue: "100", cssID: "mentions-slider", initialValue: "[0,100]" }
-        { name: "Age(Days)", minValue: "0", maxValue: "100", cssID: "age-slider", initialValue: "[0,100]" }
+        { name: "Buzz Score", minValue: "0", maxValue: "1000", cssID: "score-slider", initialValue: "[0,1000]" }
+        { name: "Buzz Mentions", minValue: "0", maxValue: "1000", cssID: "mentions-slider", initialValue: "[0,1000]" }
+        { name: "Age(Days)", minValue: "0", maxValue: "1000", cssID: "age-slider", initialValue: "[0,1000]" }
       ]
 
     newRestaurant: ->
@@ -103,8 +194,8 @@
   App.reqres.setHandler "restaurants:entity", (id) ->
     API.getRestaurant id
 
-  App.reqres.setHandler "restaurants:filtered:entities", (restaurants, filterParams) ->
-    API.getFilteredRestaurants(restaurants, filterParams)
+  App.reqres.setHandler "restaurant:filter:entities", (allRestaurants) ->
+    API.getFilterRestaurantEntities allRestaurants
 
   App.reqres.setHandler "restaurant:subnavs", ->
     API.getSubNavs()
