@@ -43,9 +43,16 @@
         restaurants = undefined
         if panelnav
           name = panelnav.get('name')
+          console.log('this object is', @)
+          one_model = @first()
+          console.log("one model", one_model)
+          city = one_model.get('city')
+          console.log("city is", city)
 
           name = switch
-            when name is 'All' then restaurants = @models
+            when name is 'All' then restaurants = allRestaurants.filter((restaurant) ->
+              restaurant.get('city') is city
+            )
             when name is 'New' then restaurants = @filter((restaurant) ->
               restaurant.get('age_in_days') <= 1.9
             )
@@ -126,6 +133,7 @@
     
     getPanelValues: (restaurants) ->
       panelParams = {}
+      
       panelParams.allRestaurantsCount = restaurants.length
       panelParams.newRestaurantsCount = restaurants.filter((restaurant) ->
         restaurant.get('age_in_days') <= 1.9

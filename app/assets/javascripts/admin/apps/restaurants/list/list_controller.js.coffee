@@ -28,16 +28,12 @@
       @showFilterSliders(restaurants, sliders)
       @showPanel(restaurants, panelnavs)
 
-
     showPanel: (restaurants, panelnavs) ->
       restaurantsPanelView = @getPanelView(panelnavs)
 
       restaurantsPanelView.on "itemview:panel:panelnavs:clicked",
       (child, panelnav) ->
-        console.log("single panelnav", panelnav)
         restaurants.panelSortBy(panelnav)
-        console.log("panel nav panels", panelnavs)
-        console.log("panel nav restaurants", restaurants)
         App.vent.trigger "panel:panelnavs:clicked", restaurants
 
       @layout.restaurantsPanelRegion.show restaurantsPanelView
