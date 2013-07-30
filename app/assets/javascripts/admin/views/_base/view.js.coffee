@@ -5,7 +5,6 @@
   _.extend Marionette.View::,
 
     remove: (args...) ->
-      #console.log "removing", @
       _remove.apply @, args
 
     templateHelpers: ->

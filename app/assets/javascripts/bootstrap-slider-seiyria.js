@@ -383,7 +383,7 @@
 		handle: 'round',
 		formater: function(value) {
       if((this.step >= 0.1) && (this.step <= 0.9)) {
-			  return value.toFixed(1);
+			  return (parseFloat(value)).toFixed(1);
       }
       else {
         return value;

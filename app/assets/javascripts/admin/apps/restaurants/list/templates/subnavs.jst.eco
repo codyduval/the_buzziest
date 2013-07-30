@@ -1,6 +1,6 @@
 <div class="row-fluid">
   <div class="span7">
-    <ul class="nav nav-tabs nav-append-content"></ul>
+    <ul class="nav nav-pills"></ul>
   </div>
   <div class="span5">
     <div class="row-fluid">

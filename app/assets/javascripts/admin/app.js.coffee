@@ -2,7 +2,7 @@
 
   App = new Marionette.Application
 
-  App.rootRoute = Routes.buzz_mentions_path()
+  App.rootRoute = Routes.restaurants_path()
 
   App.addRegions
     mainRegion: "#main-region"

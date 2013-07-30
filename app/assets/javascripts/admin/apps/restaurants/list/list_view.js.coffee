@@ -28,7 +28,8 @@
     tagName: "tr"
 
     events:
-      "click button.edit-restaurant" : -> @trigger "restaurants:restaurant:clicked", @model
+      "click button.edit-restaurant" : ->
+        @trigger "restaurants:restaurant:clicked", @model
 
   class List.Empty extends App.Views.ItemView
     template: "restaurants/list/templates/_empty"
@@ -44,14 +45,19 @@
     template: "restaurants/list/templates/_sub_nav"
     tagName: "li"
 
+    initialize: ->
+      @$el.prop("id", this.model.get("name"))
+
     events:
       "click a" : ->
+        $('.nav-pills li').removeClass("active")
+        @$el.addClass("active")
         @trigger "subnavs:subnav:clicked", @model
 
   class List.RestaurantsSubNavs extends App.Views.CompositeView
     template: "restaurants/list/templates/subnavs"
     itemView: List.RestaurantsSubNav
-    itemViewContainer: "ul.nav-tabs"
+    itemViewContainer: "ul.nav-pills"
 
   class List.Slider extends App.Views.ItemView
     template: "restaurants/list/templates/_slider"

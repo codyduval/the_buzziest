@@ -9,6 +9,9 @@
 
   class Entities.RestaurantsSubNav extends App.Entities.Collection
 
+  class Entities.RestaurantsSubNavs extends App.Entities.Collection
+    model: Entities.RestaurantsSubNav
+
   class Entities.RestaurantsSlider extends App.Entities.Model
 
   class Entities.RestaurantsSliders extends App.Entities.Collection
@@ -23,40 +26,53 @@
       allRestaurants.fetch()
       allRestaurants
 
+    getRestaurantEntitiesByCity: (subnav) ->
+      cityRestaurants = App.request "restaurant:entities"
+      restaurants = undefined
+
+      App.execute "when:fetched", cityRestaurants, =>
+        console.log("by city api method", cityRestaurants)
+      
+        if subnav
+          city = subnav.get('name')
+          console.log("city name is", city)
+          
+          city = switch
+            when city is 'All' then \
+            restaurants = cityRestaurants.models
+
+            when city is 'New York' then \
+            restaurants = cityRestaurants.where({city: "nyc"})
+
+            when city is 'Los Angeles' then \
+            restaurants = cityRestaurants.where({city: "la"})
+
+            when city is 'San Francisco' then \
+            restaurants = cityRestaurants.where({city: "sf"})
+
+        cityRestaurants.reset restaurants
+      cityRestaurants
+
     getFilterRestaurantEntities: (allRestaurants) ->
       filtered = new allRestaurants.constructor()
 
       filtered._callbacks = {}
-      filtered.subNavSortBy = (subnav) ->
-        if subnav
-          city = subnav.get('name')
-          
-          city = switch
-            when city is 'All' then restaurants = allRestaurants.models
-            when city is 'New York' then restaurants = allRestaurants.where({city: "nyc"})
-            when city is 'Los Angeles' then restaurants = allRestaurants.where({city: "la"})
-            when city is 'San Francisco' then restaurants = allRestaurants.where({city: "sf"})
-
-        filtered.reset restaurants
 
       filtered.panelSortBy = (panelnav) ->
         restaurants = undefined
         if panelnav
           name = panelnav.get('name')
-          console.log('this object is', @)
-          one_model = @first()
-          console.log("one model", one_model)
-          city = one_model.get('city')
-          console.log("city is", city)
 
           name = switch
-            when name is 'All' then restaurants = allRestaurants.filter((restaurant) ->
-              restaurant.get('city') is city
-            )
-            when name is 'New' then restaurants = @filter((restaurant) ->
+            when name is 'All' then \
+            restaurants = allRestaurants.models
+
+            when name is 'New' then \
+            restaurants = @filter((restaurant) ->
               restaurant.get('age_in_days') <= 1.9
             )
-            when name is 'Expiring' then restaurants = @filter((restaurant) ->
+            when name is 'Expiring' then \
+            restaurants = @filter((restaurant) ->
               restaurant.get('age_in_days') >= 90 and
               restaurant.get('total_current_buzz_rounded') <= 0.5
             )
@@ -78,12 +94,18 @@
           console.log("AgeMax:", ageSlider.get('maxValue'))
 
           restaurants = allRestaurants.filter((restaurant) ->
-            restaurant.get('buzz_mention_count_ignored') >= mentionsSlider.get('minValue') and
-            restaurant.get('buzz_mention_count_ignored') <= mentionsSlider.get('maxValue') and
-            restaurant.get('total_current_buzz_rounded') >= scoreSlider.get('minValue') and
-            restaurant.get('total_current_buzz_rounded') <= scoreSlider.get('maxValue') and
-            restaurant.get('age_in_days') >= ageSlider.get('minValue') and
-            restaurant.get('age_in_days') <= ageSlider.get('maxValue')
+            restaurant.get('buzz_mention_count_ignored') >=
+              mentionsSlider.get('minValue') and
+            restaurant.get('buzz_mention_count_ignored') <=
+              mentionsSlider.get('maxValue') and
+            restaurant.get('total_current_buzz_rounded') >=
+              scoreSlider.get('minValue') and
+            restaurant.get('total_current_buzz_rounded') <=
+              scoreSlider.get('maxValue') and
+            restaurant.get('age_in_days') >=
+              ageSlider.get('minValue') and
+            restaurant.get('age_in_days') <=
+              ageSlider.get('maxValue')
           )
           restaurants
 
@@ -101,10 +123,10 @@
       
     getSubNavs: ->
       new Entities.RestaurantsSubNav [
+        { name: "All" }
         { name: "New York" }
         { name: "San Francisco" }
         { name: "Los Angeles" }
-        { name: "All" }
       ]
 
     getPanelNavs: (panelParams) ->
@@ -117,9 +139,30 @@
     getRestaurantSliders: (filterParams) ->
       console.log("filterParams",filterParams)
       new Entities.RestaurantsSliders [
-        { name: "Buzz Score", minValue: filterParams.scoreLow, maxValue: filterParams.scoreHigh, cssID: "score-slider", initialValue: filterParams.scoreStartRange, step:"0.1" }
-        { name: "Buzz Mentions", minValue: filterParams.mentionLow, maxValue: filterParams.mentionHigh, cssID: "mentions-slider", initialValue: filterParams.mentionStartRange, step:"1" }
-        { name: "Age(Days)", minValue: filterParams.ageLow, maxValue: filterParams.ageHigh, cssID: "age-slider", initialValue: filterParams.ageStartRange, step:"1" }
+        {
+        name: "Buzz Score"
+        minValue: filterParams.scoreLow
+        maxValue: filterParams.scoreHigh
+        cssID: "score-slider"
+        initialValue: filterParams.scoreStartRange
+        step:"0.1"
+        }
+        {
+        name: "Buzz Mentions"
+        minValue: filterParams.mentionLow
+        maxValue: filterParams.mentionHigh
+        cssID: "mentions-slider"
+        initialValue: filterParams.mentionStartRange
+        step:"1"
+        }
+        {
+        name: "Age(Days)"
+        minValue: filterParams.ageLow
+        maxValue: filterParams.ageHigh
+        cssID: "age-slider"
+        initialValue: filterParams.ageStartRange
+        step:"1"
+        }
       ]
 
     newRestaurant: ->
@@ -146,43 +189,73 @@
 
       panelParams
 
-
     getRestaurantFilterValues: (restaurants) ->
       filterParams = {}
-      lowestMention = restaurants.min((restaurant) ->
-        restaurant.get('buzz_mention_count_ignored')
-      )
-      highestMention = restaurants.max((restaurant) ->
-        restaurant.get('buzz_mention_count_ignored')
-      )
-      filterParams.mentionHigh = highestMention.get('buzz_mention_count_ignored')
-      filterParams.mentionLow = lowestMention.get('buzz_mention_count_ignored')
-      filterParams.mentionStartRange = ("[" + filterParams.mentionLow + "," + filterParams.mentionHigh + "]")
+      if (restaurants.length > 0)
+        lowestMention = restaurants.min((restaurant) ->
+          restaurant.get('buzz_mention_count_ignored')
+        )
 
-      lowestScore = restaurants.min((restaurant) ->
-        restaurant.get('total_current_buzz_rounded')
-      )
-      highestScore = restaurants.max((restaurant) ->
-        restaurant.get('total_current_buzz_rounded')
-      )
-      filterParams.scoreHigh = highestScore.get('total_current_buzz_rounded')
-      filterParams.scoreLow = lowestScore.get('total_current_buzz_rounded')
-      filterParams.scoreStartRange = ("[" + filterParams.scoreLow + "," + filterParams.scoreHigh + "]")
+        highestMention = restaurants.max((restaurant) ->
+          restaurant.get('buzz_mention_count_ignored')
+        )
 
-      lowestAge = restaurants.min((restaurant) ->
-        restaurant.get('age_in_days')
-      )
-      highestAge = restaurants.max((restaurant) ->
-        restaurant.get('age_in_days')
-      )
-      filterParams.ageHigh = highestAge.get('age_in_days')
-      filterParams.ageLow = lowestAge.get('age_in_days')
-      filterParams.ageStartRange = ("[" + filterParams.ageLow + "," + filterParams.ageHigh + "]")
+        filterParams.mentionHigh =
+        highestMention.get('buzz_mention_count_ignored')
+
+        filterParams.mentionLow =
+        lowestMention.get('buzz_mention_count_ignored')
+
+        filterParams.mentionStartRange =
+        ("[" + filterParams.mentionLow + "," + filterParams.mentionHigh + "]")
+
+        lowestScore = restaurants.min((restaurant) ->
+          restaurant.get('total_current_buzz_rounded')
+        )
+
+        highestScore = restaurants.max((restaurant) ->
+          restaurant.get('total_current_buzz_rounded')
+        )
+
+        filterParams.scoreHigh = highestScore.get('total_current_buzz_rounded')
+
+        filterParams.scoreLow = lowestScore.get('total_current_buzz_rounded')
+
+        filterParams.scoreStartRange =
+        ("[" + filterParams.scoreLow + "," + filterParams.scoreHigh + "]")
+
+        lowestAge = restaurants.min((restaurant) ->
+          restaurant.get('age_in_days')
+        )
+
+        highestAge = restaurants.max((restaurant) ->
+          restaurant.get('age_in_days')
+        )
+
+        filterParams.ageHigh = highestAge.get('age_in_days')
+
+        filterParams.ageLow = lowestAge.get('age_in_days')
+
+        filterParams.ageStartRange =
+        ("[" + filterParams.ageLow + "," + filterParams.ageHigh + "]")
+      else
+        filterParams.mentionHigh = 1
+        filterParams.mentionLow = 0
+        filterParams.mentionStartRange = "[0,1]"
+        filterParams.scoreHigh = 0.1
+        filterParams.scoreLow = 0
+        filterParams.scoreStartRange = "[0,0.1]"
+        filterParams.ageHigh = 1
+        filterParams.ageLow = 0
+        filterParams.ageStartRange = "[0,1]"
 
       filterParams
 
   App.reqres.setHandler "restaurant:entities", ->
     API.getRestaurantEntities()
+
+  App.reqres.setHandler "restaurant:entities:city", (subnav) ->
+    API.getRestaurantEntitiesByCity(subnav)
 
   App.reqres.setHandler "restaurant:sliders", (restaurants) ->
     filterParams = API.getRestaurantFilterValues(restaurants)

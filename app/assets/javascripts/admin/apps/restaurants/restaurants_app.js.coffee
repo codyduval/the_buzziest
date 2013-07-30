@@ -9,8 +9,8 @@
     listRestaurants: ->
       RestaurantsApp.List.Controller.listRestaurants()
 
-    listCityRestaurants:(restaurants) ->
-      RestaurantsApp.List.Controller.listCityRestaurants(restaurants)
+    listCityRestaurants:(subnav) ->
+      RestaurantsApp.List.Controller.listCityRestaurants(subnav)
 
     newRestaurant: ->
       RestaurantsApp.New.Controller.newRestaurant()
@@ -25,11 +25,11 @@
     App.navigate Routes.edit_restaurant_path(restaurant.id)
     API.editRestaurant restaurant.id, restaurant
 
-  App.vent.on "subnavs:subnav:clicked", (restaurants) ->
-    API.listCityRestaurants(restaurants) 
+  App.vent.on "subnavs:subnav:clicked", (subnav) ->
+    API.listCityRestaurants(subnav)
 
   App.vent.on "panel:panelnavs:clicked", (restaurants) ->
-    API.listCityRestaurants(restaurants) 
+    API.listCityRestaurants(restaurants)
 
   App.addInitializer ->
     new RestaurantsApp.Router

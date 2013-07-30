@@ -1,7 +1,7 @@
 @Admin.module "RestaurantsApp.List", (List, App, Backbone, Marionette, $, _) ->
 
   List.Controller =
-
+    
     listRestaurants: ->
       allRestaurants = App.request "restaurant:entities"
       subnavs = App.request "restaurant:subnavs"
@@ -10,23 +10,28 @@
         restaurants = App.request "restaurant:filter:entities", allRestaurants
         sliders = App.request "restaurant:sliders", allRestaurants
         panelnavs = App.request "restaurant:panelnavs", allRestaurants
-        @layout = @getLayoutView()
 
+        @layout = @getLayoutView()
         @layout.on "show", =>
-          @showSubNavView(restaurants, subnavs)
+          @showSubNavView(subnavs)
           @showFilterSliders(restaurants, sliders)
           @showPanel(restaurants, panelnavs)
           @showRestaurants(restaurants, sliders)
 
         App.mainRegion.show @layout
-    
-    listCityRestaurants: (restaurants) ->
 
-      sliders = App.request "restaurant:sliders", restaurants
-      panelnavs = App.request "restaurant:panelnavs", restaurants
+    listCityRestaurants: (subnav) ->
+      console.log("subnav in list city is", subnav)
+      cityRestaurants = App.request "restaurant:entities:city", subnav
 
-      @showFilterSliders(restaurants, sliders)
-      @showPanel(restaurants, panelnavs)
+      App.execute "when:fetched", cityRestaurants, =>
+        restaurants = App.request "restaurant:filter:entities", cityRestaurants
+        sliders = App.request "restaurant:sliders", cityRestaurants
+        panelnavs = App.request "restaurant:panelnavs", cityRestaurants
+
+        @showFilterSliders(restaurants, sliders)
+        @showPanel(restaurants, panelnavs)
+        @showRestaurants(restaurants, sliders)
 
     showPanel: (restaurants, panelnavs) ->
       restaurantsPanelView = @getPanelView(panelnavs)
@@ -34,19 +39,18 @@
       restaurantsPanelView.on "itemview:panel:panelnavs:clicked",
       (child, panelnav) ->
         restaurants.panelSortBy(panelnav)
-        App.vent.trigger "panel:panelnavs:clicked", restaurants
+        #App.vent.trigger "panel:panelnavs:clicked", restaurants
 
       @layout.restaurantsPanelRegion.show restaurantsPanelView
 
-    showSubNavView: (restaurants, subnavs) ->
+    showSubNavView: (subnavs) ->
       subNavView = @getSubNavView subnavs
       subNavView.on "new:restaurants:button:clicked", =>
         @showNewRegion()
 
       subNavView.on "itemview:subnavs:subnav:clicked",
       (child, subnav) ->
-        restaurants.subNavSortBy(subnav)
-        App.vent.trigger "subnavs:subnav:clicked", restaurants
+        App.vent.trigger "subnavs:subnav:clicked", subnav
 
       @layout.restaurants_subnavRegion.show subNavView
 
