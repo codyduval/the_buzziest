@@ -30,21 +30,29 @@ class BuzzPost < ActiveRecord::Base
   end
 
   def self.create_from_feed(feed, source)
-    feed.entries.each do |entry|
-      unless BuzzPost.exists?(:post_guid => entry.id) || 
-                             (entry.published < 25.day.ago)
-        content = entry.content ||= entry.summary 
-        sanitized_content = Sanitize.clean(content)
-        BuzzPost.create(
-          :buzz_source_id => source[:id],
-          :post_title => entry.title,
-          :post_content => sanitized_content,
-          :post_uri => entry.url,
-          :post_date_time => entry.published,
-          :post_guid => entry.id ||= entry.url,
-          :post_weight => source[:buzz_weight],
-          :city => source[:city]
-        )
+    if feed
+      feed.entries.compact.each do |entry|
+        if entry.published
+          entry_published = entry.published
+        else
+          entry_published = Time.now
+          puts "WARNING: Couldn't parse date, so assigning today as publish date"
+        end
+        unless BuzzPost.exists?(:post_guid => entry.id) || 
+                               (entry_published < 25.day.ago)
+          content = entry.content ||= entry.summary 
+          sanitized_content = Sanitize.clean(content)
+          BuzzPost.create(
+            :buzz_source_id => source[:id],
+            :post_title => entry.title,
+            :post_content => sanitized_content,
+            :post_uri => entry.url,
+            :post_date_time => entry_published,
+            :post_guid => entry.id ||= entry.url,
+            :post_weight => source[:buzz_weight],
+            :city => source[:city]
+          )
+        end
       end
     end
   end

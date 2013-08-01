@@ -90,6 +90,8 @@ describe BuzzPost do
   describe "#self.create_from_feed" do
     let(:source) {FactoryGirl.build(:feed_source)}
     let(:feed_client) {Fetch::RemoteBuzzPosts::FeedClient.new(source[:uri])}
+    let(:empty_source) {FactoryGirl.build(:empty_feed_source)}
+    let(:empty_feed_client) {Fetch::RemoteBuzzPosts::FeedClient.new(empty_source[:uri])}
 
     it "creates new BuzzPosts from feed" do
       feed_client.fetch_and_parse
@@ -149,6 +151,33 @@ describe BuzzPost do
       posts = BuzzPost.all
       posts.wont_be_empty
     end
+
+    it "doesn't crash if feed is bad" do
+      BuzzPost.destroy_all
+      empty_feed_client.fetch_and_parse
+      feed = empty_feed_client.feed
+
+      BuzzPost.create_from_feed(feed, source)
+
+      posts = BuzzPost.all
+      posts.must_be_empty
+    end
+
+    it "doesn't crash if a feed entry is blank" do
+      BuzzPost.destroy_all
+      feed_client.fetch_and_parse
+      feed = feed_client.feed
+      feed.entries << nil
+
+      Timecop.freeze(2013, 6, 04) do
+        puts Date.today
+        BuzzPost.create_from_feed(feed, source)
+      end
+
+      posts = BuzzPost.all
+      posts.wont_be_empty
+    end
+
   end
 
   describe "#self.search_for_mentions(restaurants)" do

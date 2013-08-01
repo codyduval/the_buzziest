@@ -30,6 +30,12 @@ FactoryGirl.define do
       name "Eater NY"
       uri "file://#{URI.escape(File.join(File.dirname(File.expand_path(__FILE__, Dir.getwd)), "fixtures", "eater_rss.rss"))}"
     end
+
+    factory :empty_feed_source do
+      buzz_source_type "feed"
+      name "404 Feed"
+      uri "http://www.kathyylchan.com/blog/format/rss"
+    end
   end
 
   factory :buzz_post do
