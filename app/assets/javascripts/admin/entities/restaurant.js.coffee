@@ -68,15 +68,16 @@
             restaurants = allRestaurants.models
 
             when name is 'New' then \
-            restaurants = @filter((restaurant) ->
+            restaurants = allRestaurants.filter((restaurant) ->
               restaurant.get('age_in_days') <= 1.9
             )
             when name is 'Expiring' then \
-            restaurants = @filter((restaurant) ->
+            restaurants = allRestaurants.filter((restaurant) ->
               restaurant.get('age_in_days') >= 90 and
               restaurant.get('total_current_buzz_rounded') <= 0.5
             )
 
+        filtered._currentCriteria = panelnav
         filtered.reset restaurants
 
       filtered.filterBy = (sliders) ->
@@ -118,6 +119,7 @@
 
       allRestaurants.on "reset", ->
         filtered.where filtered._currentCriteria
+        console.log("here is filtered on reset", filtered)
 
       filtered
       

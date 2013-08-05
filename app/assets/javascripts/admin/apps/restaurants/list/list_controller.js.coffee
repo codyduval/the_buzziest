@@ -21,7 +21,6 @@
         App.mainRegion.show @layout
 
     listCityRestaurants: (subnav) ->
-      console.log("subnav in list city is", subnav)
       cityRestaurants = App.request "restaurant:entities:city", subnav
 
       App.execute "when:fetched", cityRestaurants, =>
@@ -39,7 +38,7 @@
       restaurantsPanelView.on "itemview:panel:panelnavs:clicked",
       (child, panelnav) ->
         restaurants.panelSortBy(panelnav)
-        #App.vent.trigger "panel:panelnavs:clicked", restaurants
+        #App.vent.trigger "panel:panelnavs:clicked", panelnav
 
       @layout.restaurantsPanelRegion.show restaurantsPanelView
 

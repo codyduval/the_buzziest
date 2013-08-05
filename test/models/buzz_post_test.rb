@@ -218,6 +218,25 @@ describe BuzzPost do
       hits.last[:buzz_post_id].must_equal buzz_post.id
       hits.count.must_equal 1
     end
+
+    it "finds posts that mention restaurant AND an extra filter word" do
+      restaurant = FactoryGirl.create(:restaurant, name: "Generic Name")
+      restaurant.filter_words = "Gazebo"
+      buzz_post_no_match = FactoryGirl.create(:buzz_post, 
+                                     post_title: "Generic Name is in the title", 
+                                     post_content: "But there is no filter word.") 
+      
+      buzz_post_match = FactoryGirl.create(:buzz_post, 
+                                     post_title: "Generic Name is in the title", 
+                                     post_content: "And Gazebo is in the content.") 
+      Sunspot.commit
+
+      hits = BuzzPost.search_for_mention_of(restaurant)
+
+      hits.last[:buzz_post_id].wont_equal buzz_post_no_match.id
+      hits.last[:buzz_post_id].must_equal buzz_post_match.id
+      
+    end
   end
   
 

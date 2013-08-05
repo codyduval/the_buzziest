@@ -22,7 +22,6 @@ if File.exist?(secret_file)
   ENV['RAILS_SECRET_TOKEN'] = APP_CONFIG['application']['config_secret_token']
 else
   yaml_data = YAML.load(File.read(example_file))
-  $stderr.puts "WARNING: No config/app_secrets.yml found! Look at config/app_secrets_example.yml for help."
 end
 
 

@@ -3,7 +3,7 @@ require 'simplecov'
 SimpleCov.start 'rails'
 
 require File.expand_path("../../config/environment", __FILE__)
-require "minitest/autorun"
+#require "minitest/autorun"
 require "vcr"
 require "database_cleaner"
 require "webmock/minitest"
