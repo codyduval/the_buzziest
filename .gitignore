@@ -14,8 +14,8 @@
 /log/*.log
 /tmp
 /solr/data/development/index
-/solr/data/test/*
-/solr/pids/test/*
+/solr/pids/*
+/solr/data/*
 
 # Ignore app keys and secrets
 /config/app_secrets.yml
