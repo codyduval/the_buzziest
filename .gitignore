@@ -13,9 +13,15 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+#Ignore local solr index 
 /solr/data/development/index
 /solr/pids/*
 /solr/data/*
+
+#Ignore coverage html and json
+/coverage/*
+
 
 # Ignore app keys and secrets
 /config/app_secrets.yml
