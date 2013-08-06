@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130531163640) do
+ActiveRecord::Schema.define(:version => 20130805163722) do
 
   create_table "buzz_mention_highlights", :force => true do |t|
     t.integer  "buzz_mention_id"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(:version => 20130531163640) do
     t.string   "city",                       :default => "nyc"
     t.decimal  "total_current_buzz",         :default => 0.0
     t.integer  "buzz_mention_count_ignored", :default => 0,     :null => false
+    t.text     "filter_words"
   end
 
   create_table "users", :force => true do |t|

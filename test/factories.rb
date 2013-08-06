@@ -68,6 +68,7 @@ FactoryGirl.define do
 
   factory :restaurant do
     name 
+    filter_words ""
     twitter_handle "@"+Faker::Lorem.word
     city "nyc"
     skip_scan false
