@@ -1,5 +1,7 @@
 class Restaurant < ActiveRecord::Base
-  attr_accessible :description, :name, :neighborhood, :twitter_handle, :reserve, :style, :skip_scan, :exact_match, :total_current_buzz, :city
+  attr_accessible :description, :name, :neighborhood, :twitter_handle, :reserve, 
+                  :style, :skip_scan, :exact_match, :total_current_buzz, :city, 
+                  :filter_words
 
   has_many :buzz_mentions, :dependent => :destroy
   has_many :buzz_posts, :through => :buzz_mentions

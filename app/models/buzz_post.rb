@@ -112,13 +112,45 @@ class BuzzPost < ActiveRecord::Base
 
   private
 
+  def self.filter_words_as_array(restaurant)
+    if restaurant.filter_words
+      filter_words = restaurant.filter_words.split(',')
+      filter_words.collect! do |word|
+        word.lstrip!
+        word.rstrip!
+        word = %Q/"#{word}"/ 
+      end
+    else
+      return []
+    end
+  end
+
+  def self.all_words_to_search(restaurant)
+    exact_name = [%Q/"#{restaurant.name}"/] 
+    filter_words = filter_words_as_array(restaurant)
+    word_array = exact_name + filter_words
+  end
+
+  def self.search_string(word_array)
+    word_array.reject!(&:empty?) 
+    search_for_string = word_array.join(' ')
+  end
+
   def self.search_for_mention_of(restaurant)
     hits = []
+    search_words = all_words_to_search(restaurant)
+    search_string = search_string(search_words)
     buzz_post_search_results = self.search do
       with(:city, restaurant.city)
-      fulltext %Q/"#{restaurant.name}"/ do
+      fulltext search_string do
+        minimum_match search_words.count
         highlight :post_content
       end
+    # buzz_post_search_results = self.search do
+    #   with(:city, restaurant.city)
+    #   fulltext %Q/"#{restaurant.name}"/ do
+    #     highlight :post_content
+    #   end
     end
     buzz_post_search_results.hits.each do |hit|
       search_hit = {}
